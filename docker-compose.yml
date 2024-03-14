@@ -1,0 +1,43 @@
+# Build the docker images using docker compose and the command below
+#     docker-compose build
+# Run the services in the docker compose using the command below
+#     docker-compose up
+# Remove the services in the docker compose using the command below
+#     docker-compose down
+
+# Specify the version of the Docker Compose.
+version: "3.9"
+
+# Define the services and applications that make up your application.
+services:
+  frontend-app:
+    build: ./frontend # Path to the directory containing the Dockerfile for the frontend application
+    container_name: frontend_app
+    ports:
+      - 3000:3000 # Maps ports
+    networks:
+      - peerprep-network # Connects the frontend-app to the 'peerprep-network' network.
+
+  user-service-app:
+    build: ./backend/user-service # Path to the directory containing the Dockerfile
+    container_name: user_service
+    ports:
+      - 3001:3001 # Maps ports
+    env_file:
+      - ./backend/user-service/.env
+    networks:
+      - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+  # matching-service-app:
+  #   build: ./backend/matching-service # Path to the directory containing the Dockerfile
+  #   container_name: matching_service
+  #   ports:
+  #     - 3002:3002 # Maps ports
+  #   env_file:
+  #     - ./backend/matching-service/.env
+  #   networks:
+  #     - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+networks:
+  peerprep-network: # Defines a network named 'peerprep-network'.
+    driver: bridge # Uses the bridge driver for the network, which is the default and most common network type in Docker.
