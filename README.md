@@ -1,6 +1,6 @@
 # Peerprep G05
 
-![Peerprep logo](frontend\public\static\peerprep_logo_white.png)
+![Peerprep logo](frontend/public/static/peerprep_logo_white.png)
 
 ## Team members
 - [Melvin](https://github.com/gweemelvin)

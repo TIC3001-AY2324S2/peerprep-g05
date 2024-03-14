@@ -28,13 +28,33 @@ services:
     networks:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
+  # question-service-app:
+  #   build: ./backend/question-service # Path to the directory containing the Dockerfile
+  #   container_name: question_service
+  #   ports:
+  #     - 3002:3002 # Maps ports
+  #   env_file:
+  #     - ./backend/question-service/.env
+  #   networks:
+  #     - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
   # matching-service-app:
   #   build: ./backend/matching-service # Path to the directory containing the Dockerfile
   #   container_name: matching_service
   #   ports:
-  #     - 3002:3002 # Maps ports
+  #     - 3003:3003 # Maps ports
   #   env_file:
   #     - ./backend/matching-service/.env
+  #   networks:
+  #     - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+  # collaboration-service-app:
+  #   build: ./backend/collaboration-service # Path to the directory containing the Dockerfile
+  #   container_name: collaboration_service
+  #   ports:
+  #     - 3004:3004 # Maps ports
+  #   env_file:
+  #     - ./backend/collaboration-service/.env
   #   networks:
   #     - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
