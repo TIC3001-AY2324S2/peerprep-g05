@@ -168,7 +168,7 @@ export default function EditQuestion(props) {
                     <Select
                         isMulti
                         name="categories"
-                        options={categories}
+                        options={categoryList}
                         className="basic-multi-select"
                         classNamePrefix="select"
                         onChange={handleCategoryChange}
