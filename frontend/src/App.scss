@@ -1,13 +1,8 @@
 body {
-    background-color: #eef3f6;
-}
-
-.main-logo {
-    width: 136px;
-}
-
-.main-deco {
-    width: 350px;
+    background-color: #F7F7FC;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 .full-height {
@@ -22,7 +17,7 @@ body {
 .app-bar-logo {
     margin-left: 16px;
     margin-right: 16px;
-    height: 48px;
+    height: 38px;
     cursor: pointer;
 }
 
@@ -87,7 +82,7 @@ body {
 .post-image {
     border: solid 1px  rgb(0, 178, 210);
     border-radius: 5px;
-    width: 560;
+    width: 560px;
     height: 315px;
     margin: auto;
     object-fit: contain;

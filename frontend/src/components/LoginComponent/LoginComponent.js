@@ -339,7 +339,7 @@ class LoginComponent extends React.Component {
                             className={'main-logo'}
                             alt=""
                         />
-                        <inline style={{ fontWeight: 'bold', marginTop: '16px', fontSize: '24px' }}>
+                        <inline style={{ fontWeight: 'bold', marginTop: '16px', fontSize: '31px' }}>
                             Elevate Interviews Together!
                         </inline>
                     </div>

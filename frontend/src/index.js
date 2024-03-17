@@ -7,7 +7,9 @@ import { SnackbarProvider } from 'notistack';
 import { Provider } from 'react-redux';
 import store from './state/store';
 import { StyledMaterialDesignContent } from './constants/snack-bar';
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <SnackbarProvider
@@ -24,4 +26,5 @@ root.render(
             </BrowserRouter>
         </Provider>
     </SnackbarProvider>,
+
 );
