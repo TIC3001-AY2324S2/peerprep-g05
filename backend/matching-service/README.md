@@ -33,7 +33,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 ```
 DB_CLOUD_URI=<CONNECTION_STRING>
 DB_LOCAL_URI=mongodb://localhost/${KEY_IN_YOUR_DB_HERE}
-PORT=3001
+PORT=3003
 ENV=PROD
 JWT_SECRET=you-can-replace-this-with-your-own-secret
 ```
@@ -46,7 +46,7 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 3. Run the command `npm start` to start the Matching Service.
 
-4. Using applications like Postman, you can interact with the User Service on port **8081**. If you wish to change this, please update the `.env` file.
+4. Using applications like Postman, you can interact with the User Service on port **3003**. If you wish to change this, please update the `.env` file.
 
 ## User Service API Guide
 
