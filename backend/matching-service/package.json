@@ -1,0 +1,22 @@
+{
+  "name": "matching-service",
+  "version": "1.0.0",
+  "description": "## Setting up local mongoDB container",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.0",
+    "mongoose": "^8.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
