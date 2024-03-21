@@ -32,6 +32,8 @@ export async function handleLogin(req, res) {
         token: accessToken,
         userInfo: {
           username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin,
         },
       });
     } catch (err) {
