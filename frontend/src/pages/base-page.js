@@ -135,9 +135,11 @@ class BasePage extends React.Component {
                                     {/*>*/}
                                     {/*    <AccountBoxIcon style={{ marginRight: '8px' }} /> Profile*/}
                                     {/*</MenuItem>*/}
-                                    <MenuItem onClick={() => this.goToAdminDashboard()}>
-                                        <SettingsIcon style={{ marginRight: '8px' }} /> Admin Dashboard
-                                    </MenuItem>
+                                    {this.props.userInfo?.isAdmin && (
+                                        <MenuItem onClick={this.goToAdminDashboard}>
+                                            <SettingsIcon style={{ marginRight: '8px' }} /> Admin Dashboard
+                                        </MenuItem>
+                                    )}
                                     <MenuItem onClick={() => this.logoutUser()}>
                                         <LogoutIcon style={{ marginRight: '8px' }} /> Logout
                                     </MenuItem>
