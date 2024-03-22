@@ -20,7 +20,10 @@ export async function getAllQuestion(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({message: `No Question In Repository`});
+        return res.status(200).json({
+            message: `No Question In Repository`,
+            questions: []
+        });
     } else if (response.err) {
         return res.status(400).json({message: "Error With Question Repository"});
     } else {
@@ -68,7 +71,9 @@ export async function getQuestionById(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({message: `Question Not Found`});
+        return res.status(404).json({
+            message: `Question Not Found`
+        });
     } else if (response.err) {
         return res.status(400).json({message: "Error With Question Repository"});
     } else {
@@ -89,7 +94,9 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({message: `Question Not Found`});
+        return res.status(404).json({
+            message: `Question Not Found`
+        });
     } else if (response.err) {
         return res.status(400).json({message: "Error With Question Repository"});
     } else {
@@ -103,11 +110,11 @@ export async function getOneQuestionByComplexity(req, res) {
 
 export async function createQuestion(req, res) {
     try {
-        const {title, description, category, complexity, testCase} = req.body;
-        const newQuestion = {title, description, category, complexity, testCase}
+        const {title, description, categories, complexity, testCase} = req.body;
+        const newQuestion = {title, description, categories, complexity, testCase}
         if (newQuestion) {
             console.log(`Adding new question: ${title}`);
-            const resp = await _createQuestion(title, description, category, complexity, testCase);
+            const resp = await _createQuestion(title, description, categories, complexity, testCase);
             console.log(resp);
             if (resp.err) {
                 console.log(resp.err.message);
@@ -168,8 +175,8 @@ export async function deleteQuestionById(req, res) {
 export async function updateQuestionById(req, res) {
     try {
         const id = req.params.id;
-        const {title, description, category, complexity, testCase} = req.body;
-        const questionInfo = {title, description, category, complexity, testCase}
+        const {title, description, categories, complexity, testCase} = req.body;
+        const questionInfo = {title, description, categories, complexity, testCase}
         if (questionInfo) {
             console.log(`Updating Question: ${id}`);
             const resp = await _updateQuestion(id, questionInfo);
