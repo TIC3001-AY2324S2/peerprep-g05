@@ -87,15 +87,13 @@ label {
 }
 
 .remove-testcase {
-  padding: 5px 20px;
-  border-radius: 5px;
+  padding: 10px 25px;
+  border-radius: 8px;
   background: none;
   border: 1px solid #5541D7;
   cursor: pointer;
   margin-bottom: 10px;
   font-weight: 400;
-
-
 }
 
 .remove-testcase:hover {
@@ -104,7 +102,7 @@ label {
 
 .add-testcase {
   padding: 10px 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   background: #5541D7;
   border: 1px solid #DBD7F4;
   cursor: pointer;
@@ -165,12 +163,12 @@ label {
 }
 
 .form-buttons button {
-  padding: 10px 20px;
+  padding: 10px 30px;
   border-radius: 10px;
   background: none;
-  border: 2px solid #5541D7;
+  border: 1.5px solid #5541D7;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   margin: 0 0 20px 20px;
   color: #5541D7;
@@ -192,7 +190,9 @@ label {
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-  border: 1px solid #DBD7F4;
+  border: 1px dashed #DBD7F4;
+  border-collapse: separate;
+
 }
 
 .form-section-testcase-2 {
