@@ -78,7 +78,8 @@ Make sure your username and password is entered correctly.
 
 - Endpoint: http://localhost:3002//api/question/create
 
-- Body: Required: title (string), description (string), category (string), complexity (['Easy', 'Medium', 'Hard'])
+- Body: Required: title (string), description (string), categories (array of strings), 
+complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of objects)
 
 ```json
 {
@@ -101,11 +102,11 @@ Make sure your username and password is entered correctly.
 
 - <a name="auth-header">Headers:</a> Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
 
-  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the user's data.
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the question data.
 
   - Auth Rules:
 
-    - Admin users: Can retrieve any user's data. The server verifies the user associated with the JWT token is an admin user and allows access to the requested user's data.
+    - Admin users: Can retrieve any question data. The server verifies the user associated with the JWT token is an admin user and allows access to the requested question data.
 
     - Non-admin users: Can only retrieve their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server returns the user's own data.
 
@@ -140,14 +141,14 @@ Make sure your username and password is entered correctly.
 
 | Response Code               | Result                                                   |
 | --------------------------- | -------------------------------------------------------- |
-| 200 (OK)                    | User Data Obtained                                       |
+| 200 (OK)                    | Question Data Obtained                                   |
 | 400 (Bad Request)           | Missing ID in request body                               |
 | 404 (Not Found)             | No Question Found With Given ID                          |
 | 500 (Internal Server Error) | Database or Server Error                                 |
 
 ### Get All Questions
 
-- This endpoint allows one to retrieve the data of all the users from the database.
+- This endpoint allows one to retrieve the data of all the questions from the database.
 
 - HTTP Method: `GET`
 
@@ -163,11 +164,11 @@ Make sure your username and password is entered correctly.
 
 - Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
 
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the question data.
 
   - Auth Rules:
 
-    - Admin users: Can retrieve all users' data. The server verifies the user associated with the JWT token is an admin user and allows access to all users' data.
+    - Admin users: Can retrieve all questions' data. The server verifies the user associated with the JWT token is an admin user and allows access to all questions' data.
 
     - Non-admin users: Not allowed access.
 
@@ -183,7 +184,7 @@ Make sure your username and password is entered correctly.
 
 ### Delete Question
 
-- This endpoint allows one to delete a user and their related data in the database via user's email.
+- This endpoint allows one to delete a question and their related data in the database via question id.
 
 - HTTP Method: `DELETE`
 
@@ -198,11 +199,11 @@ Make sure your username and password is entered correctly.
 
 - Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
 
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the question data.
 
   - Auth Rules:
 
-    - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
+    - Admin users: Can delete any question data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested question data.
 
     - Non-admin users: Can only delete their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server deletes the user's own data.
 
@@ -217,15 +218,16 @@ Make sure your username and password is entered correctly.
 | 404 (Not Found)             | No Question Found With Given ID                         |
 | 500 (Internal Server Error) | Database or Server Error                                |
 
-### Update User
+### Update Question
 
-- This endpoint allows one to update user and their related data in the database via user's id.
+- This endpoint allows one to update question and their related data in the database via question's id.
 
 - HTTP Method: `PATCH`
 
 - Endpoint: http://localhost:3002/api/question/:id
 
-- Body: Required: title (string), description (string), category (string), complexity (['Easy', 'Medium', 'Hard'])
+- Body: Required: title (string), description (string), categories (array of strings), 
+complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of objects)
 
 ```json
 {
@@ -248,11 +250,11 @@ Make sure your username and password is entered correctly.
 
 - Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
 
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the question data.
 
   - Auth Rules:
 
-    - Admin users: Can update any user's data. The server verifies the user associated with the JWT token is an admin user and allows the update of requested user's data.
+    - Admin users: Can update any question data. The server verifies the user associated with the JWT token is an admin user and allows the update of requested question data.
 
     - Non-admin users: Can only update their own data. The server checks if the id in the request body matches the id of the user associated with the JWT token. If it matches, the server updates the user's own data.
 
