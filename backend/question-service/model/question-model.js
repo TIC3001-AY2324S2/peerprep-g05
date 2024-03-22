@@ -35,4 +35,4 @@ let QuestionModelSchema = new Schema({
 
 });
 
-export default mongoose.model("QuestionModel", QuestionModelSchema, "question_repo");
+export default mongoose.model("QuestionModel", QuestionModelSchema, "Question");
