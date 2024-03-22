@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Mulish', sans-serif !important;
+    font-size: 16px;
 }
 
 .full-height {
@@ -25,9 +27,6 @@ body {
     margin: 20px 20px 20px 260px;
 }
 
-.full-width-class {
-    width: 100% !important;
-}
 
 .app-error-container {
     display: flex;

@@ -1,5 +1,4 @@
 .login-container {
-  text-align: center;
   display: flex;
 }
 
@@ -26,8 +25,8 @@
   font-family: 'Mulish', sans-serif !important;
   text-align: left;
   padding: 18px 36px 36px 36px;
-  color: black;
-  font-size: 31px !important;
+  color: #11142D;
+  font-size: 35px !important;
   font-weight: bold !important;
 }
 
@@ -35,45 +34,40 @@
   flex: 8;
   background-color: white;
   display: flex;
-  align-items: center;
   flex-direction: column;
 }
 
 .sub-right-panel {
-  width: 80%;
-  margin-top: 110px;
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 150px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.full-width-class input {
+.form-login-control input {
   background-color: white;
-  border-radius: 10px;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
   text-align: start;
-  font-size: 16px;
-  border: 1px solid #5541D7;
+  padding: 20px;
 }
 
-.full-width-class{
-  background-color: white;
 
+.from-login-panel {
+  background-color: white;
 }
 
 .main-panel-error {
   margin: 0px 32px 16px 32px;
 }
 
-.login-panel-main-title {
-  text-align: left;
-  padding: 18px 36px 36px 36px;
-  color: black;
-  font-size: 30px !important;
-  font-weight: bold;
-}
 
 .helper-text-field {
   border-radius: 8px !important;
   margin: 0 32px 16px 32px !important;
-  background-color: #f8fdff;
+  background-color: white;
 
   .MuiFormHelperText-root {
     background-color: white;
@@ -95,6 +89,15 @@
 
 .login-panel-main-button {
   background-color: #5541D7 !important;
-  width: 160px;
-  right: 0px !important;
+  color: white;
+  border-radius: 8px !important;
+  font-size: 18px !important;
+  display: flex;
+  width: 192px;
+  height: 48px;
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }

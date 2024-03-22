@@ -57,9 +57,9 @@ export async function ormFindOneQuestionByComplexity(complexity) {
   }
 }
 
-export async function ormCreateQuestion(title, description, category, complexity, testCase) {
+export async function ormCreateQuestion(title, description, categories, complexity, testCase) {
   try {
-    await createQuestion({ title, description, category, complexity, testCase });
+    await createQuestion({ title, description, categories, complexity, testCase });
     return true;
   } catch (err) {
     console.log("ERROR: Could create question in repository!");
