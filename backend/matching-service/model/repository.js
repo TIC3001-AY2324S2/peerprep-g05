@@ -35,3 +35,7 @@ export async function createOngoingMatchRecord(params) {
 
   return new OngoingMatchModel(params);
 }
+
+export async function findMatchRecord(recordId) {
+  return await MatchingModel.findOne({ _id: recordId });
+}
