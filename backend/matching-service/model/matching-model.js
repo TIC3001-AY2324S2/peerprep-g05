@@ -18,6 +18,6 @@ let MatchingModelSchema = new Schema({
     }
     });
 
-MatchingModelSchema.index({createdAt: 1}, {expireAfterSeconds: 15})
+MatchingModelSchema.index({createdAt: 1})
 
 export default mongoose.model("MatchingModel", MatchingModelSchema);

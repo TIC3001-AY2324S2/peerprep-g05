@@ -24,3 +24,7 @@ export async function createFindMatchRecord(params) {
 
   return new MatchingModel(params);
 }
+
+export async function findIfMatchRecordExists(userId, createdAt) {
+  return await MatchingModel.findOne({"createdAt":{"$gte": new Date() - 1000 * 10, "$lte": new Date()}})
+}

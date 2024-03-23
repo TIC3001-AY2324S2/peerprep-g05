@@ -1,4 +1,7 @@
-import { ormCreateFindMatchRecord } from "../model/matching-orm.js";
+import {
+  ormCreateFindMatchRecord,
+  ormfindIfMatchRecordExists
+} from "../model/matching-orm.js";
 
 export async function respHelloWorld(req, res) {
   try {
@@ -13,16 +16,38 @@ export async function findMatch(req, res) {
   const { userId, level } = req.body;
   if (userId && level) {
     console.log(`FIND MATCH: User ID: ${userId}, Level: ${level}`);
+    //   try {
+
+    //     const response = await ormCreateFindMatchRecord(userId, level);
+    //     if (response.err) {
+    //       return res.status(400).json({ message: "Could not create the match!" });
+    //     } else {
+    //       console.log(`Match created successfully!`);
+    //       return res.status(200).json({ message: "Match created successfully!" });
+    //     }
+    //   } catch (err) {
+    //     return res.status(500).json({ message: "Database failure when creating match!" });
+    //   }
+    // } else {
+    //   return res.status(400).json({ message: "User ID or Level is missing!" });
+    // }
+
     try {
-      const response = await ormCreateFindMatchRecord(userId, level);
-      if (response.err) {
-        return res.status(400).json({ message: "Could not create the match!" });
+      const response = await ormfindIfMatchRecordExists(userId, Date.now());
+      if (response) {
+        return res.status(400).json({ message: "Existing Record is not expired!" });
       } else {
-        console.log(`Match created successfully!`);
-        return res.status(200).json({ message: "Match created successfully!" });
+        const response = await ormCreateFindMatchRecord(userId, level);
+        if (response.err) {
+          return res.status(400).json({ message: "Could not create the match!" });
+        } else {
+          console.log(`Match created successfully!`);
+          return res.status(200).json({ message: "Match created successfully!" });
+        }
       }
     } catch (err) {
-      return res.status(500).json({ message: "Database failure when creating match!" });
+      console.log(err);
+      return res.status(500).json({ message: "Database failure when finding match!" });
     }
   } else {
     return res.status(400).json({ message: "User ID or Level is missing!" });
