@@ -15,9 +15,14 @@ let MatchingModelSchema = new Schema({
     level: {
         type: Number,
         required: true,
-    }
-    });
+    },
+    matchId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        default: null,
+    },
+});
 
-MatchingModelSchema.index({createdAt: 1})
+MatchingModelSchema.index({ createdAt: -1 })
 
 export default mongoose.model("MatchingModel", MatchingModelSchema);

@@ -1,4 +1,5 @@
 import MatchingModel from "./matching-model.js";
+import OngoingMatchModel from "./ongoing-match-model.js";
 import "dotenv/config";
 
 //Set up mongoose connection
@@ -26,5 +27,11 @@ export async function createFindMatchRecord(params) {
 }
 
 export async function findIfMatchRecordExists(userId, createdAt) {
-  return await MatchingModel.findOne({"createdAt":{"$gte": new Date() - 1000 * 10, "$lte": new Date()}})
+  return await MatchingModel.findOne({"createdAt":{"$gte": createdAt - 1000 * 30, "$lte": createdAt}, userId: userId});
+}
+
+export async function createOngoingMatchRecord(params) {
+  params._id = new mongoose.Types.ObjectId();
+
+  return new OngoingMatchModel(params);
 }

@@ -33,16 +33,22 @@ export async function findMatch(req, res) {
     // }
 
     try {
-      const response = await ormfindIfMatchRecordExists(userId, Date.now());
+      const response = await ormfindIfMatchRecordExists(userId, new Date());
       if (response) {
-        return res.status(400).json({ message: "Existing Record is not expired!" });
+        return res.status(400).json({ 
+          message: "Existing Record is not expired!", 
+          recordId: response._id, 
+          matchId: response.matchId });
       } else {
         const response = await ormCreateFindMatchRecord(userId, level);
         if (response.err) {
           return res.status(400).json({ message: "Could not create the match!" });
         } else {
           console.log(`Match created successfully!`);
-          return res.status(200).json({ message: "Match created successfully!" });
+          return res.status(200).json({ 
+            message: "Match created successfully!", 
+            recordId: response._id,
+            matchId: response.matchId });
         }
       }
     } catch (err) {

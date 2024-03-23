@@ -4,7 +4,7 @@ export async function ormCreateFindMatchRecord(userId, level) {
   try {
     const newRecord = await createFindMatchRecord({ userId, level });
     await newRecord.save();
-    return true;
+    return newRecord;
   } catch (err) {
     console.log(err);
     return { err };
@@ -16,7 +16,7 @@ export async function ormfindIfMatchRecordExists(userId, createdAt) {
     const response = await findIfMatchRecordExists(userId, createdAt);
     console.log(response);
     if (response) {
-      return true;
+      return response;
     } else {
       return false;
     }
