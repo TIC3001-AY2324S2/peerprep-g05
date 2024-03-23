@@ -11,3 +11,16 @@
 5. Run User Service using `npm run dev`.
 
 ### Complete User Service Guide: [User Service Guide](./user-service/README.md)
+
+
+## Question Service
+
+### Quick Start
+1. Rename `.env.sample` file to `.env`.
+2. Create a Cloud DB URL using Mongo Atlas.
+3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
+4. Navigate to ./question-service directory
+5. Install npm packages using `npm i`.
+6. Run Question Service using `npm start`
+
+### Complete Question Service Guide: [Question Service Guide](./question-service/README.md)
