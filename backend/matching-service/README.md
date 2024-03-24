@@ -50,251 +50,201 @@ JWT_SECRET=you-can-replace-this-with-your-own-secret
 
 ## User Service API Guide
 
-### Create User
+## POST Find a peer
 
-- This endpoint allows one to add a user and their related data into the database.
+POST /api/match/find
 
-- HTTP Method: `POST`
-
-- Endpoint: http://localhost:3001/users/
-
-- Body: Required: username (string), email (string), password (string)
+> Body Parameters
 
 ```json
 {
-  "username": "SampleUserName",
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
+  "userId": "string",
+  "level": 0
 }
 ```
 
-- Responses:
+### Params
 
-| Response Code               | Result                     |
-| --------------------------- | -------------------------- |
-| 201 (Created)               | User Added Successfully    |
-| 400 (Bad Request)           | Missing Fields             |
-| 409 (Conflict)              | Duplicate Data Encountered |
-| 500 (Internal Server Error) | Database or Server Error   |
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» userId|body|string| yes |none|
+|» level|body|integer| yes |none|
 
-### Get User
+> Response Examples
 
-- This endpoint allows one to retrieve user related data from the database via user's email.
+> 200 Response
 
-- HTTP Method: `GET`
+```json
+{}
+```
 
-- Endpoint: http://localhost:3001/users/
+### Responses
 
-- Body: Required: email (string)
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+
+### Responses Data Schema
+
+## GET Get match record
+
+GET /api/match/find
+
+> Body Parameters
 
 ```json
 {
-  "email": "sample@gmail.com"
+  "recordId": "string"
 }
 ```
 
-- <a name="auth-header">Headers:</a> Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+### Params
 
-  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the user's data.
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|body|body|object| no |none|
+|» recordId|body|string| yes |none|
 
-  - Auth Rules:
+> Response Examples
 
-    - Admin users: Can retrieve any user's data. The server verifies the user associated with the JWT token is an admin user and allows access to the requested user's data.
+> 200 Response
 
-    - Non-admin users: Can only retrieve their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server returns the user's own data.
+```json
+{}
+```
 
-- Responses:
+### Responses
 
-| Response Code               | Result                                                   |
-| --------------------------- | -------------------------------------------------------- |
-| 200 (OK)                    | User Data Obtained                                       |
-| 400 (Bad Request)           | Missing Fields                                           |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT         |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Accessing Others' Data |
-| 404 (Not Found)             | No Such User Exists                                      |
-| 500 (Internal Server Error) | Database or Server Error                                 |
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
 
-### Get All Users
+### Responses Data Schema
 
-- This endpoint allows one to retrieve the data of all the users from the database.
+## GET Hello
 
-- HTTP Method: `GET`
+GET /api/match
 
-- Endpoint: http://localhost:3001/users/
+> Response Examples
 
-- Body: Not Required
+> 200 Response
 
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+```json
+{}
+```
 
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
+### Responses
 
-  - Auth Rules:
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
 
-    - Admin users: Can retrieve all users' data. The server verifies the user associated with the JWT token is an admin user and allows access to all users' data.
+### Responses Data Schema
 
-    - Non-admin users: Not allowed access.
+## GET Find room
 
-- Responses:
+GET /api/ongoing
 
-| Response Code      | Result                                           |
-| ------------------ | ------------------------------------------------ |
-| 200 (OK)           | Users Data Obtained                              |
-| 400 (Bad Request)  | Database or Server Error                         |
-| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
-| 403 (Forbidden)    | Access Denied for Non-admin Users                |
-| 404 (Not Found)    | No Users Exist                                   |
+### Params
 
-### Delete User
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|roomId|query|string| no |none|
 
-- This endpoint allows one to delete a user and their related data in the database via user's email.
+> Response Examples
 
-- HTTP Method: `DELETE`
+> 200 Response
 
-- Endpoint: http://localhost:3001/users/
+```json
+{}
+```
 
-- Body: Required: email (string)
+### Responses
+
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+
+### Responses Data Schema
+
+## DELETE Delete a room
+
+DELETE /api/ongoing
+
+### Params
+
+|Name|Location|Type|Required|Description|
+|---|---|---|---|---|
+|roomId|query|string| no |none|
+
+> Response Examples
+
+> 成功
 
 ```json
 {
-  "email": "sample@gmail.com"
+  "message": "Room deleted!"
 }
 ```
 
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
-
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
-
-  - Auth Rules:
-
-    - Admin users: Can delete any user's data. The server verifies the user associated with the JWT token is an admin user and allows the deletion of requested user's data.
-
-    - Non-admin users: Can only delete their own data. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server deletes the user's own data.
-
-- Responses:
-
-| Response Code               | Result                                                  |
-| --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User Deleted Successfully                               |
-| 400 (Bad Request)           | Missing Fields                                          |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Deleting Others' Data |
-| 404 (Not Found)             | No Such User Exists                                     |
-| 500 (Internal Server Error) | Database or Server Error                                |
-
-### Update User
-
-- This endpoint allows one to update user and their related data in the database via user's id.
-
-- HTTP Method: `PATCH`
-
-- Endpoint: http://localhost:3001/users/
-
-- Body: Required: id (string), username (string), email (string), password (string)
+> 请求有误
 
 ```json
 {
-  "id": "SampleId",
-  "username": "SampleUserName",
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
+  "message": "Room ID is missing!"
 }
 ```
 
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
-
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
-
-  - Auth Rules:
-
-    - Admin users: Can update any user's data. The server verifies the user associated with the JWT token is an admin user and allows the update of requested user's data.
-
-    - Non-admin users: Can only update their own data. The server checks if the id in the request body matches the id of the user associated with the JWT token. If it matches, the server updates the user's own data.
-
-- Responses:
-
-| Response Code               | Result                                                  |
-| --------------------------- | ------------------------------------------------------- |
-| 200 (OK)                    | User Updated Successfully                               |
-| 400 (Bad Request)           | Missing Fields                                          |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Updating Others' Data |
-| 404 (Not Found)             | No Such User Exists                                     |
-| 409 (Conflict)              | Duplicate Data Encountered                              |
-| 500 (Internal Server Error) | Database or Server Error                                |
-
-### Update User Privilege
-
-- This endpoint allows one to update a user’s privilege, i.e., promote or demote them from admin status.
-
-- HTTP Method: `PATCH`
-
-- Endpoint: http://localhost:3001/users/
-
-- Body: Required: email (string), isAdmin (boolean)
+> 记录不存在
 
 ```json
 {
-  "email": "sample@gmail.com",
-  "isAdmin": "true"
+  "message": "Room not found!"
 }
 ```
 
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
-
-  - Refer to the [Authorization header section in the Get User endpoint](#auth-header) for an explanation.
-
-  - Auth Rules:
-
-    - Admin users: Can update any user's privilege. The server verifies the user associated with the JWT token is an admin user and allows the privilege update.
-
-    - Non-admin users: Not allowed access.
-
-- Responses:
-
-| Response Code               | Result                                           |
-| --------------------------- | ------------------------------------------------ |
-| 200 (OK)                    | User Privilege Updated Successfully              |
-| 400 (Bad Request)           | Missing Fields                                   |
-| 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT |
-| 403 (Forbidden)             | Access Denied for Non-admin Users                |
-| 404 (Not Found)             | No Such User Exists                              |
-| 500 (Internal Server Error) | Database or Server Error                         |
-
-### Login
-
-- This endpoint allows a user to authenticate with an email and password and returns a JWT access token. The token is valid for 1 day and can be used subsequently to access protected resources. For example usage, refer to the [Authorization header section in the Get User endpoint](#auth-header).
-- HTTP Method: `POST`
-- Endpoint: http://localhost:3001/auth/login/
-- Body: Required: email (string), password (string)
+> 服务器错误
 
 ```json
 {
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
+  "message": "Database failure when deleting room!"
 }
 ```
 
-- Responses:
+### Responses
 
-| Response Code               | Result                      |
-| --------------------------- | --------------------------- |
-| 200 (OK)                    | Login Successful            |
-| 400 (Bad Request)           | Missing Fields              |
-| 401 (Unauthorized)          | Incorrect Email or Password |
-| 500 (Internal Server Error) | Database or Server Error    |
+|HTTP Status Code |Meaning|Description|Data schema|
+|---|---|---|---|
+|200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|请求有误|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|记录不存在|Inline|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|服务器错误|Inline|
 
-### Verify Token
+### Responses Data Schema
 
-- This endpoint allows one to verify a JWT access token to authenticate and retrieve the user's data associated with the token.
-- HTTP Method: `GET`
-- Endpoint: http://localhost:3001/auth/verify-token/
-- Body: Not Required
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+HTTP Status Code **200**
 
-- Responses:
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
 
-| Response Code               | Result                                                |
-| --------------------------- | ----------------------------------------------------- |
-| 200 (OK)                    | Token Verified and Authenticated User's Data Obtained |
-| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
-| 500 (Internal Server Error) | Database or Server Error                              |
+HTTP Status Code **400**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
+
+HTTP Status Code **404**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
+
+HTTP Status Code **500**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
+
+# Data Schema
