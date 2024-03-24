@@ -7,6 +7,7 @@ import {deleteQuestion, getQuestions} from "../../apis/crud-question";
 import Modal from 'react-modal';
 import EditQuestion from "../EditQuestion/EditQuestion";
 import {Pagination} from "@mui/material";
+import {showSuccessBar, showErrorBar} from "../../constants/snack-bar";
 
 export default function AdminDashboard(props) {
 
@@ -76,12 +77,16 @@ export default function AdminDashboard(props) {
         }
         console.log("callDeleteQuestion", id)
         deleteQuestion(id).then((response) => {
+            console.log('deleteQuestion response: ', response)
             if (response.error) {
-                console.error('Failed to delete question:', response.data);
+
+                showErrorBar('Failed to delete question');
                 return;
             }
+            showSuccessBar('Question deleted successfully');
             refreshQuestions(page, size);
         });
+
     }
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editQuestionId, setEditQuestionId] = useState(null);
