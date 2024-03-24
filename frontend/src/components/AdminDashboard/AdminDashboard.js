@@ -218,7 +218,8 @@ export default function AdminDashboard(props) {
                 style={modalStyles}
             >
                 <EditQuestion id={editQuestionId} closeModal={closeModal}
-                              refreshQuestions={() => refreshQuestions(page, size)}/>
+                              refreshQuestions={() => refreshQuestions(page, size)}
+                />
             </Modal>
         </>
     )

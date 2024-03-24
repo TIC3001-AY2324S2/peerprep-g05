@@ -5,6 +5,8 @@ import {useParams} from 'react-router-dom';
 import {createOrUpdateQuestion, getQuestionById} from "../../apis/crud-question";
 import Select from 'react-select';
 
+import {showSuccessBar, showErrorBar} from '../../constants/snack-bar';
+
 export default function EditQuestion(props) {
 
     const categoryList = [
@@ -109,11 +111,12 @@ export default function EditQuestion(props) {
         };
         createOrUpdateQuestion(questionData)
             .then(resp => {
-                if (resp.error) {
-                    console.error('Failed to create or update question:', resp.data);
+                console.log('createOrUpdateQuestion response:', resp);
+                if (resp.error && resp.status !== 304) {
+                    showErrorBar('Failed to save question');
                     return;
                 }
-                alert('Question created or updated successfully');
+                showSuccessBar('Question saved successfully');
                 props.closeModal();
                 props.refreshQuestions();
             })
@@ -192,6 +195,5 @@ export default function EditQuestion(props) {
                 <button className={'submit-btn'} type="submit">Save</button>
             </div>
         </form>
-
     );
 }
