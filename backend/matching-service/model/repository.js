@@ -35,7 +35,7 @@ export async function findMatchRecord(recordId) {
 }
 
 export async function findMatchPartner(userId, level) {
-  return await MatchingModel.findOne({ userId: { "$ne": userId }, level: level, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() } });
+  return await MatchingModel.findOne({ userId: { "$ne": userId }, level: level, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() }, roomId: null });
 }
 
 export async function createRoom(params) {

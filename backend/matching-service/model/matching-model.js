@@ -16,7 +16,7 @@ let MatchingModelSchema = new Schema({
         type: Number,
         required: true,
     },
-    matchId: {
+    roomId: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
         default: null,
