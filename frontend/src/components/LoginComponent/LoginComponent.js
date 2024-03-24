@@ -369,9 +369,9 @@ class LoginComponent extends React.Component {
                         )}
                         <form
                             onSubmit={this.handleSubmit}
-                            className={'full-width-class'}
+                            className={'from-login-panel'}
                         >
-                            <FormControl className={'full-width-class'}>
+                            <FormControl className={'form-login-control'}>
                                 {this.props.isRegisterPage
                                     ? this.renderRegisterForm()
                                     : this.renderLoginForm()}
