@@ -11,7 +11,7 @@ export async function verifyIfRecordExists(req, res, next) {
         return res.status(400).json({ 
           message: "Existing Record is not expired!", 
           recordId: response._id, 
-          matchId: response.matchId });
+          roomId: response.roomId });
       } else {
         next();
       }

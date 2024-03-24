@@ -77,10 +77,12 @@ table {
 }
 
 th, td {
-  border-top: 1px solid #DBD7F4;
-  padding: 8px;
+  //border-top: 1px solid #DBD7F4;
+  padding: 10px 20px;
   text-align: left;
   font-size: 16px;
+  border: 1px dashed #DBD7F4;
+  border-collapse: collapse;
 }
 
 th {
@@ -88,6 +90,7 @@ th {
   color: black;
   text-align: center;
   text-transform: uppercase;
+
 }
 
 tr:hover {
@@ -102,8 +105,11 @@ tr:hover {
 .question-id, .question-difficulty, .question-category, .question-title {
   text-transform: capitalize;
 }
+.question-id{
+  width: 20/3%;
+}
 .question-title{
-  padding-left: 20px;
+    width: 35%;
 }
 .question-edit:hover {
   background-color: #DBD7F4;
@@ -111,7 +117,14 @@ tr:hover {
 }
 
 .question-edit {
-  width: 50px;
+  width: 20/3%;
+}
+
+.question-category{
+  width: 40%;
+}
+.question-difficulty{
+  width: 10%;
 }
 
 .question-edit button {

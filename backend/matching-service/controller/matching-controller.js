@@ -3,6 +3,7 @@ import {
   ormCreateFindMatchRecord,
   ormGetMatchPartner,
   ormCreateRoom,
+  ormUpdateMatchRecordRoomId,
 } from "../model/matching-orm.js";
 
 export async function respHelloWorld(req, res) {
@@ -33,11 +34,43 @@ export async function getMatchRecord(req, res) {
   }
 }
 
-async function findMatchPartner(userId, level) {
+async function findMatchPartner(matchRecord, level) {
   try {
-    const response = await ormGetMatchPartner(userId, level);
+    const partner = await ormGetMatchPartner(matchRecord.userId, level);
+    if (partner) {
+      const room = await createRoom([matchRecord.userId, partner.userId], level);
+      await updateRoomId(partner._id, room._id);
+      await updateRoomId(matchRecord._id, room._id);
+      matchRecord.roomId = room._id;
+      partner.roomId = room._id;
+      return partner;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
+}
+
+async function createRoom(userIds, level) {
+  try {
+    const newRoom = await ormCreateRoom(userIds, level);
+    if (newRoom) {
+      return newRoom;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
+}
+
+async function updateRoomId(recordId, roomId) {
+  try {
+    const response = await ormUpdateMatchRecordRoomId(recordId, roomId);
     if (response) {
-      await ormCreateRoom([userId, response.userId], level);
       return response;
     } else {
       return false;
@@ -53,8 +86,9 @@ export async function createMatchRecord(req, res) {
   if (userId && level) {
     try {
       const newRecord = await ormCreateFindMatchRecord(userId, level);
-      const matchPartner = await findMatchPartner(userId, level);
-      if (matchPartner) {
+      const matchPartner = await findMatchPartner(newRecord, level);
+      console.log(matchPartner)
+      if (matchPartner) {        
         return res.status(200).json({ message: "Match found!", record: newRecord, partner: matchPartner });
       } else {
         return res.status(200).json({ message: "Match not found!", record: newRecord });

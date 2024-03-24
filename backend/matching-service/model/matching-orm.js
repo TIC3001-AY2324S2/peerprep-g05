@@ -20,7 +20,6 @@ export async function ormCreateFindMatchRecord(userId, level) {
 export async function ormfindIfMatchRecordExists(userId, createdAt) {
   try {
     const response = await findIfMatchRecordExists(userId, createdAt);
-    console.log(response);
     if (response) {
       return response;
     } else {
@@ -69,5 +68,20 @@ export async function ormGetMatchPartner(userId, level) {
     console.log(err);
     return { err };
   }
+}
 
+export async function ormUpdateMatchRecordRoomId(recordId, roomId) {
+  try {
+    const response = await findMatchRecord(recordId);
+    if (response) {
+      response.roomId = roomId;
+      await response.save();
+      return response;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
 }

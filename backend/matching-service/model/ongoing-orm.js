@@ -17,7 +17,6 @@ export async function ormGetRoom(roomId) {
 export async function ormDeleteRoom(roomId) {
     try {
         const response = await findRoom(roomId);
-        console.log(response);
         if (response) {
             response.isActive = false;
             await response.save();
