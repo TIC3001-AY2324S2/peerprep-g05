@@ -96,7 +96,8 @@ export default function EditQuestion(props) {
         e.preventDefault();
         console.log('submitting', id, title, description, testCases, categories, difficulty);
         if (!title || !description || !testCases.length || !categories.length || !difficulty) {
-            alert('All fields are required');
+            showErrorBar('All fields are required to save question');
+            // alert('All fields are required');
             return;
         }
 
