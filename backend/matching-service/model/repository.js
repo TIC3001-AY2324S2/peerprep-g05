@@ -1,5 +1,5 @@
 import MatchingModel from "./matching-model.js";
-import OngoingMatchModel from "./ongoing-match-model.js";
+import OngoingModel from "./ongoing-model.js";
 import "dotenv/config";
 
 //Set up mongoose connection
@@ -27,15 +27,23 @@ export async function createFindMatchRecord(params) {
 }
 
 export async function findIfMatchRecordExists(userId, createdAt) {
-  return await MatchingModel.findOne({"createdAt":{"$gte": createdAt - 1000 * 30, "$lte": createdAt}, userId: userId});
-}
-
-export async function createOngoingMatchRecord(params) {
-  params._id = new mongoose.Types.ObjectId();
-
-  return new OngoingMatchModel(params);
+  return await MatchingModel.findOne({ "createdAt": { "$gte": createdAt - 1000 * 30, "$lte": createdAt }, userId: userId });
 }
 
 export async function findMatchRecord(recordId) {
-  return await MatchingModel.findOne({ _id: recordId });
+  return await MatchingModel.findOne({ _id: recordId, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() } });
+}
+
+export async function findMatchPartner(userId, level) {
+  return await MatchingModel.findOne({ userId: { "$ne": userId }, level: level, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() } });
+}
+
+export async function createRoom(params) {
+  params._id = new mongoose.Types.ObjectId();
+
+  return new OngoingModel(params);
+}
+
+export async function findRoom(roomId) {
+  return await OngoingModel.findOne({ _id: roomId });
 }

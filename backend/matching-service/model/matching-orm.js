@@ -1,7 +1,9 @@
 import {
   createFindMatchRecord,
   findIfMatchRecordExists,
-  findMatchRecord
+  findMatchRecord,
+  findMatchPartner,
+  createRoom,
 } from "./repository.js"
 
 export async function ormCreateFindMatchRecord(userId, level) {
@@ -42,4 +44,30 @@ export async function ormGetMatchRecord(recordId) {
     console.log(err);
     return { err };
   }
+}
+
+export async function ormCreateRoom(userIds, level) {
+  try {
+    const newRoom = await createRoom({ userIds, level });
+    await newRoom.save();
+    return newRoom;
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
+}
+
+export async function ormGetMatchPartner(userId, level) {
+  try {
+    const response = await findMatchPartner(userId, level);
+    if (response) {
+      return response;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
+
 }

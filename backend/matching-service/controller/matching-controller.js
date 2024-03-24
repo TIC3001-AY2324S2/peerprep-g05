@@ -1,7 +1,8 @@
 import {
+  ormGetMatchRecord,
   ormCreateFindMatchRecord,
-  ormfindIfMatchRecordExists,
-  ormGetMatchRecord
+  ormGetMatchPartner,
+  ormCreateRoom,
 } from "../model/matching-orm.js";
 
 export async function respHelloWorld(req, res) {
@@ -10,38 +11,6 @@ export async function respHelloWorld(req, res) {
     return res.status(200).json({ message: `Hello World! Email:` });
   } catch (err) {
     return res.status(500).json({ message: "Internal Server Error!" });
-  }
-}
-
-export async function findMatch(req, res) {
-  const { userId, level } = req.body;
-  if (userId && level) {
-    console.log(`FIND MATCH: User ID: ${userId}, Level: ${level}`);
-    try {
-      const response = await ormfindIfMatchRecordExists(userId, new Date());
-      if (response) {
-        return res.status(400).json({ 
-          message: "Existing Record is not expired!", 
-          recordId: response._id, 
-          matchId: response.matchId });
-      } else {
-        const response = await ormCreateFindMatchRecord(userId, level);
-        if (response.err) {
-          return res.status(400).json({ message: "Could not create the match!" });
-        } else {
-          console.log(`Match created successfully!`);
-          return res.status(200).json({ 
-            message: "Match created successfully!", 
-            recordId: response._id,
-            matchId: response.matchId });
-        }
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Database failure when finding match!" });
-    }
-  } else {
-    return res.status(400).json({ message: "User ID or Level is missing!" });
   }
 }
 
@@ -61,5 +30,40 @@ export async function getMatchRecord(req, res) {
     }
   } else {
     return res.status(400).json({ message: "Record ID is missing!" });
+  }
+}
+
+async function findMatchPartner(userId, level) {
+  try {
+    const response = await ormGetMatchPartner(userId, level);
+    if (response) {
+      await ormCreateRoom([userId, response.userId], level);
+      return response;
+    } else {
+      return false;
+    }
+  } catch (err) {
+    console.log(err);
+    return { err };
+  }
+}
+
+export async function createMatchRecord(req, res) {
+  const { userId, level } = req.body;
+  if (userId && level) {
+    try {
+      const newRecord = await ormCreateFindMatchRecord(userId, level);
+      const matchPartner = await findMatchPartner(userId, level);
+      if (matchPartner) {
+        return res.status(200).json({ message: "Match found!", record: newRecord, partner: matchPartner });
+      } else {
+        return res.status(200).json({ message: "Match not found!", record: newRecord });
+      }
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: "Database failure when creating match record!" });
+    }
+  } else {
+    return res.status(400).json({ message: "User ID or level is missing!" });
   }
 }

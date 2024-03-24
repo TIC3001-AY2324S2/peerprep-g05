@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 var Schema = mongoose.Schema;
 
-let OngoingMatchModelSchema = new Schema({
+let OngoingModelSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     userIds: [
         {
@@ -21,9 +21,13 @@ let OngoingMatchModelSchema = new Schema({
     level: {
         type: Number,
         required: true,
-    }
+    },
+    isActive: {
+        type: Boolean,
+        default: true,
+    },
 });
 
-OngoingMatchModelSchema.index({ createdAt: 1 })
+OngoingModelSchema.index({ createdAt: -1, isActive: 1 })
 
-export default mongoose.model("OngoingMatchModel", OngoingMatchModelSchema);
+export default mongoose.model("OngoingModel", OngoingModelSchema);
