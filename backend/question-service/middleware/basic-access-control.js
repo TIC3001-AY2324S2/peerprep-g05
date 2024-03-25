@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
-import { ormFindUserByEmail } from "../model/-orm.js";
-
+import { ormFindUserByEmail } from "../../user-service/model/user-orm.js";
+//C:\Users\Gwee\Desktop\TIC3001\ProjectGrp5\backend\user-service\model\user-orm.js
 export function verifyAccessToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
@@ -29,6 +29,7 @@ export function verifyIsAdmin(req, res, next) {
   if (req.user.isAdmin) {
     next();
   } else {
+    console.log("Not authorized to access this resource");
     return res.status(403).json({ message: "Not authorized to access this resource" });
   }
 }

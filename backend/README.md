@@ -23,11 +23,11 @@
 5. Install npm packages using `npm i`.
 6. Run Question Service using `npm start`
 
-### Complete Question Service Guide: [Question Service Guide](./question-service/README.md)
-
-### Sample Data Quick Start (via MongoDBCompass)
+### Upload Sample Qns Data for Qns Service (via MongoDBCompass)
 1. Connect the MongoDB Cloud deployment you've created on MongoDB.
 2. Access "test" database, then access "questionmodels" collection
 3. Click "Add Data"
 4. Select "Import JSON or CSV file"
 5. Load the CSV file @ [Sample Qns Repo CSV](.\question-service\data\sampleqnsrepo.csv)
+
+### Complete Question Service Guide: [Question Service Guide](./question-service/README.md)
