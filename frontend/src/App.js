@@ -11,6 +11,8 @@ import { MainActions } from './state/actions';
 import axios from 'axios';
 import { verifyToken } from './apis/app-api';
 import { showErrorBar } from './constants/snack-bar';
+import EditQuestion from "./components/EditQuestion/EditQuestion";
+import AdminPage from "./pages/admin-dashboard";
 
 const App = (props) => {
     let navigate = useNavigate();
@@ -88,6 +90,16 @@ const App = (props) => {
                 path="/home"
                 exact
                 element={<HomePage {...mainProps} />}
+            />
+            <Route
+                path="/admin-dashboard"
+                exact
+                element={<AdminPage {...mainProps} />}
+            />
+            <Route
+                path="/questions/edit/:id"
+                exact
+                element={<EditQuestion {...mainProps} />}
             />
             <Route path="*" element={<ErrorPage {...mainProps} />} />
         </Routes>

@@ -1,59 +1,103 @@
 .login-container {
-    text-align: center;
-    display: flex;
+  display: flex;
 }
 
 .main-left-panel {
-    flex: 4;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
+  flex: 4;
+  display: flex;
+  flex-direction: column;
+  padding: 80px;
 }
 
-.main-right-panel {
-    flex: 6;
-    background-color: white;
+.main-left-panel .main-logo {
+  width: 200px;
+  height: auto;
 }
 
-.main-panel-error {
-    margin: 0px 32px 16px 32px;
+.main-left-panel .main-deco {
+  width: 80%;
+  height: auto;
+  margin: auto;
+
 }
 
 .login-panel-main-title {
-    text-align: left;
-    padding: 18px 36px 36px 36px;
-    color: black;
-    font-size: 30px !important;
-    font-weight: bold;
+  font-family: 'Mulish', sans-serif !important;
+  text-align: left;
+  padding: 18px 36px 36px 36px;
+  color: #11142D;
+  font-size: 35px !important;
+  font-weight: bold !important;
 }
 
-.helper-text-field {
-    border-radius: 8px !important;
-    margin: 0 32px 16px 32px !important;
-    background-color: #f8fdff;
-    .MuiFormHelperText-root {
-        background-color: white;
-    }
-    div {
-        border-radius: 8px !important;
-    }
-}
-
-.standard-panel-text-field {
-    margin: 0 32px 32px 32px !important;
-    background-color: #f8fdff;
-    div {
-        border-radius: 8px !important;
-    }
-}
-
-.login-panel-main-button {
-    background-color: #5541D7 !important;
-    width: 160px;
-    right: 0px !important;
+.main-right-panel {
+  flex: 8;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .sub-right-panel {
-    margin: 96px;
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form-login-control input {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  padding: 20px;
+}
+
+
+.from-login-panel {
+  background-color: white;
+}
+
+.main-panel-error {
+  margin: 0px 32px 16px 32px;
+}
+
+
+.helper-text-field {
+  border-radius: 8px !important;
+  margin: 0 32px 16px 32px !important;
+  background-color: white;
+
+  .MuiFormHelperText-root {
+    background-color: white;
+  }
+
+  div {
+    border-radius: 8px !important;
+  }
+}
+
+.standard-panel-text-field {
+  margin: 0 32px 32px 32px !important;
+  background-color: #f8fdff;
+
+  div {
+    border-radius: 8px !important;
+  }
+}
+
+.login-panel-main-button {
+  background-color: #5541D7 !important;
+  color: white;
+  border-radius: 8px !important;
+  font-size: 18px !important;
+  display: flex;
+  width: 192px;
+  height: 48px;
+  padding: 14px 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }

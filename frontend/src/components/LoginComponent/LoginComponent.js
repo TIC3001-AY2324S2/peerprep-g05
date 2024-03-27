@@ -339,7 +339,7 @@ class LoginComponent extends React.Component {
                             className={'main-logo'}
                             alt=""
                         />
-                        <inline style={{ fontWeight: 'bold', marginTop: '16px', fontSize: '24px' }}>
+                        <inline style={{ fontWeight: 'bold', marginTop: '16px', fontSize: '31px' }}>
                             Elevate Interviews Together!
                         </inline>
                     </div>
@@ -369,9 +369,9 @@ class LoginComponent extends React.Component {
                         )}
                         <form
                             onSubmit={this.handleSubmit}
-                            className={'full-width-class'}
+                            className={'from-login-panel'}
                         >
-                            <FormControl className={'full-width-class'}>
+                            <FormControl className={'form-login-control'}>
                                 {this.props.isRegisterPage
                                     ? this.renderRegisterForm()
                                     : this.renderLoginForm()}

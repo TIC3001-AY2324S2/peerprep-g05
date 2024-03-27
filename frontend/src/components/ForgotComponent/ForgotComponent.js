@@ -60,14 +60,10 @@ class ForgotComponent extends React.Component {
                     <NavigateButton
                         url="/login"
                         disableRipple
-                        style={{
-                            backgroundColor: 'transparent',
-                            color: 'grey',
-                            fontWeight: 'bold',
-                        }}
+                        style={{ marginBottom: '40px', display: 'flex', fontWeight: 'bold', justifyContent: 'flex-start', padding: '0px'}}
                         text={
-                            <inline style={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-                                <ArrowBackIosIcon/>
+                            <inline className={'forgot-button-back-inline'}>
+                                <ArrowBackIosIcon style={{color: '#5541D7', marginRight: '10px'}}/>
                                 <Typography className={'forgot-panel-main-title'}>
                                     Peer
                                     <inline style={{ color: '#5541D7' }}>Prep</inline>
@@ -75,7 +71,7 @@ class ForgotComponent extends React.Component {
                             </inline>
                         }
                     />
-                    <div>
+                    <div className={'forgot-panel-title'}>
                         <div style={{ fontWeight: 'bold', fontSize: '30px', textAlign: 'left' }}>
                             Forgot Password
                         </div>
@@ -85,9 +81,9 @@ class ForgotComponent extends React.Component {
                     </div>
                     <form
                         onSubmit={this.handleSubmit}
-                        className={'full-width-class'}
+                        className={'from-forgot-panel'}
                     >
-                        <FormControl className={'full-width-class'}>
+                        <FormControl className={'from-forgot-control'}>
                             <TextField
                                 size="medium"
                                 className={'forgot-panel-text-field'}
