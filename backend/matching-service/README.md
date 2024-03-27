@@ -3,7 +3,7 @@
 ## Setting up local mongoDB container
 
 1. Install Docker
-2. Run `docker compose -f docker-compose.mongo.yml up` to start the mongoDB container. Default username and password are `root` and `example` respectively.
+2. Run `docker compose -f docker-compose.mongo.yaml up` to start the mongoDB container. Default username and password are `root` and `example` respectively.
 
 
 ## Setting-up
