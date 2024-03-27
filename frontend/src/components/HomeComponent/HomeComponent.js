@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './HomeComponent.scss';
-import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper } from '@mui/material';
+import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -45,6 +45,9 @@ function HomeComponent() {
         }
     };
 
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
     return (
         <div className={"home-container"}>
             <Container style={{maxWidth: "85%", padding: "25px 0"}}>
@@ -77,7 +80,7 @@ function HomeComponent() {
                         <ListItemText primary="Algorithm Virtuoso" style={complexity === "hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
                     </ListItemButton>
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
-                        <InputLabel>Category</InputLabel>
+                        <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
                         <Select
                             disabled={match}
                             style={{textAlign: "left"}}
@@ -182,7 +185,36 @@ function HomeComponent() {
                         </Item>
                     </Grid>
                     <Grid item lg={6} style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
-                        <Item style={{height: "550px"}}></Item>
+                        <Item style={{height: "550px"}}>
+                            <Container style={{margin: "30px 0"}}>
+                                <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
+                                    Session History
+                                </Typography>
+                                <div className="section-2">
+                                    <table>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Partner</th>
+                                            <th>Category</th>
+                                            <th>Complexity</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        {/* {sessions.map((session) => (
+                                            <Container></Container>
+                                        ))} */}
+                                    </table>
+                                    <div className={'pagination'}>
+                                        <Pagination
+                                            count={totalPages}
+                                            page={page}
+                                            onChange={(event, value) => setPage(value)}
+                                            color="secondary"
+                                            className="pagination-active"
+                                        />
+                                    </div>
+                                </div>
+                            </Container>
+                        </Item>
                     </Grid>
                 </Grid>
             </Container>
