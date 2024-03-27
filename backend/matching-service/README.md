@@ -73,10 +73,30 @@ POST /api/match/find
 
 > Response Examples
 
-> 200 Response
+> 成功
 
 ```json
-{}
+{
+  "message": "Match not found!",
+  "record": {
+    "_id": "660412a1498bacb518629fa5",
+    "userId": "6604129c9b59f7ac3d1bf031",
+    "level": 2,
+    "roomId": null,
+    "createdAt": "2024-03-27T12:35:45.551Z",
+    "__v": 0
+  }
+}
+```
+
+> 请求有误
+
+```json
+{
+  "message": "Existing Record is not expired!",
+  "recordId": "6604125a498bacb518629fa0",
+  "roomId": null
+}
 ```
 
 ### Responses
@@ -84,8 +104,29 @@ POST /api/match/find
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|请求有误|Inline|
 
 ### Responses Data Schema
+
+HTTP Status Code **200**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||Record status|
+|» record|object|true|none||none|
+|»» _id|string|true|none||none|
+|»» userId|string|true|none||none|
+|»» level|integer|true|none||none|
+|»» roomId|string¦null|true|none||none|
+|»» createdAt|string|true|none||none|
+
+HTTP Status Code **400**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
+|» recordId|string|true|none||none|
+|» roomId|string¦null|true|none||none|
 
 ## GET Get match record
 
@@ -108,10 +149,28 @@ GET /api/match/find
 
 > Response Examples
 
-> 200 Response
+> 成功
 
 ```json
-{}
+{
+  "message": "Match record found!",
+  "record": {
+    "_id": "66041395498bacb518629fb9",
+    "userId": "6604138cbca669f1897eb014",
+    "level": 2,
+    "roomId": null,
+    "createdAt": "2024-03-27T12:39:49.178Z",
+    "__v": 0
+  }
+}
+```
+
+> 请求有误
+
+```json
+{
+  "message": "Match record not found!"
+}
 ```
 
 ### Responses
@@ -119,8 +178,27 @@ GET /api/match/find
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+|400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|请求有误|Inline|
 
 ### Responses Data Schema
+
+HTTP Status Code **200**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
+|» record|object|true|none||none|
+|»» _id|string|true|none||none|
+|»» userId|string|true|none||none|
+|»» level|integer|true|none||none|
+|»» roomId|string|true|none||none|
+|»» createdAt|string|true|none||none|
+
+HTTP Status Code **400**
+
+|Name|Type|Required|Restrictions|Title|description|
+|---|---|---|---|---|---|
+|» message|string|true|none||none|
 
 ## GET Hello
 
@@ -154,10 +232,31 @@ GET /api/ongoing
 
 > Response Examples
 
-> 200 Response
+> 成功
 
 ```json
-{}
+{
+  "message": "Room found!",
+  "room": {
+    "_id": "6600b8ab6a2206ed960b6b5c",
+    "userIds": [
+      "6600b8a825297a286d0d6d2a",
+      "6600b69499b10db462f32795"
+    ],
+    "level": 1,
+    "isActive": true,
+    "createdAt": "2024-03-24T23:35:07.821Z",
+    "__v": 0
+  }
+}
+```
+
+> 记录不存在
+
+```json
+{
+  "message": "Room not found!"
+}
 ```
 
 ### Responses
@@ -165,6 +264,7 @@ GET /api/ongoing
 |HTTP Status Code |Meaning|Description|Data schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|成功|Inline|
+|404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|记录不存在|Inline|
 
 ### Responses Data Schema
 
