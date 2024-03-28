@@ -29,6 +29,6 @@
 2. Access "test" database, then access "questionmodels" collection
 3. Click "Add Data"
 4. Select "Import JSON or CSV file"
-5. Load the CSV file @ [Sample Qns Repo CSV](.\question-service\data\sampleqnsrepo.csv)
+5. Load the CSV file @ [Sample Qns Repo CSV](./question-service/data)
 
 ### Complete Question Service Guide: [Question Service Guide](./question-service/README.md)

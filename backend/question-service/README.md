@@ -52,15 +52,15 @@ Make sure your username and password is entered correctly.
 ![enter URI](./guide_assets/URI.png)
 ![connect compass](./guide_assets/connect_compass.png)
 
-3. Create a new database + collection
+3. Locate  `test` Database
 
-![create database](./guide_assets/create_database.png)
+![select test database](./guide_assets/select_test_database.png)
 
-4. Access your new collection, click "Add Data" and then "Import JSON or CSV file"
+4. Access `test` > `questionmodels` collection, click "Add Data" and then "Import JSON or CSV file"
 
 ![add data](./guide_assets/add_data.png)
 
-5. Select the CSV sample questions file
+5. Select the CSV sample questions file located in [./question-service/data](./data)
 
 ![select csv](./guide_assets/select_csv.png)
 
@@ -267,7 +267,6 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | 304 (Not Modified)          | Question is not modified                                |
 | 400 (Bad Request)           | Missing ID in request body                              |
 | 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Editing Question      |
 | 404 (Not Found)             | No Question Found With Given ID                         |
 | 409 (Conflict)              | Duplicate Data Encountered                              |
 | 500 (Internal Server Error) | Database or Server Error                                |
