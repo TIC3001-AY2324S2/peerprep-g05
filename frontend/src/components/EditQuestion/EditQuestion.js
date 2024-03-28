@@ -130,12 +130,12 @@ export default function EditQuestion(props) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={'question-form'}>
             <h2 className={'from-header'}>{id !== null ? 'Edit Question' : 'Add New Question'}</h2>
             <label>Question Title * </label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
             <label>Question Description * </label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required/>
 
             {/* handle test cases, category and difficulty inputs similarly */}
             {testCases.map((testCase, index) => (
@@ -177,6 +177,7 @@ export default function EditQuestion(props) {
                         classNamePrefix="select"
                         onChange={handleCategoryChange}
                         value={getCategoryByValue(categories)}
+                        required
                     />
                 </div>
                 <div className={'form-difficulty'}>
@@ -188,6 +189,7 @@ export default function EditQuestion(props) {
                         classNamePrefix="select"
                         onChange={handleDifficultyChange}
                         value={getDifficultyByValue(difficulty)}
+                        required
                     />
                 </div>
             </div>
