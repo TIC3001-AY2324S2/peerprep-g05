@@ -1,48 +1,48 @@
 import './EditQuestion.scss'
-import {useState, useEffect} from "react";
-import {useNavigate} from 'react-router-dom';
-import {useParams} from 'react-router-dom';
-import {createOrUpdateQuestion, getQuestionById} from "../../apis/crud-question";
+import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { createOrUpdateQuestion, getQuestionById } from "../../apis/crud-question";
 import Select from 'react-select';
 
-import {showSuccessBar, showErrorBar} from '../../constants/snack-bar';
+import { showSuccessBar, showErrorBar } from '../../constants/snack-bar';
 
 export default function EditQuestion(props) {
 
     const categoryList = [
-        {value: 'Strings', label: 'Strings'},
-        {value: 'Algorithms', label: 'Algorithms'},
-        {value: 'Brainteaser', label: 'Brainteaser'},
-        {value: 'Data Structure', label: 'Data Structure'},
-        {value: 'Databases', label: 'Databases'},
-        {value: 'Recursion', label: 'Recursion'},
-        {value: 'Bit Manipulation', label: 'Bit Manipulation'},
+        { value: 'Strings', label: 'Strings' },
+        { value: 'Algorithms', label: 'Algorithms' },
+        { value: 'Brainteaser', label: 'Brainteaser' },
+        { value: 'Data Structure', label: 'Data Structure' },
+        { value: 'Databases', label: 'Databases' },
+        { value: 'Recursion', label: 'Recursion' },
+        { value: 'Bit Manipulation', label: 'Bit Manipulation' },
     ];
     const getCategoryByValue = (values) => {
         return categoryList.filter(categories => values.includes(categories.value));
     }
     const difficulties = [
-        {value: 'Easy', label: 'Easy'},
-        {value: 'Medium', label: 'Medium'},
-        {value: 'Hard', label: 'Hard'},
+        { value: 'Easy', label: 'Easy' },
+        { value: 'Medium', label: 'Medium' },
+        { value: 'Hard', label: 'Hard' },
     ];
     const getDifficultyByValue = (value) => {
         return difficulties.find(difficulty => difficulty.value === value);
     }
 
-    const {id: pathId} = useParams();
+    const { id: pathId } = useParams();
 
     const qId = pathId || props.id;
 
     const [id, setId] = useState(qId);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [testCases, setTestCases] = useState([{input: '', result: ''}]);
+    const [testCases, setTestCases] = useState([{ input: '', result: '' }]);
     const [categories, setCategory] = useState([]);
     const [difficulty, setDifficulty] = useState('');
 
     const handleAddTestCase = () => {
-        setTestCases([...testCases, {input: '', result: ''}]);
+        setTestCases([...testCases, { input: '', result: '' }]);
     };
     const handleRemoveTestCase = (index) => {
         const newTestCases = [...testCases];
@@ -86,7 +86,7 @@ export default function EditQuestion(props) {
             setId(null);
             setTitle('');
             setDescription('');
-            setTestCases([{input: '', result: ''}]);
+            setTestCases([{ input: '', result: '' }]);
             setCategory([]);
             setDifficulty('easy');
         }
@@ -113,11 +113,17 @@ export default function EditQuestion(props) {
         createOrUpdateQuestion(questionData)
             .then(resp => {
                 console.log('createOrUpdateQuestion response:', resp);
-                if (resp.error && resp.status !== 304) {
+                if (resp.status === 409) {
+                    showErrorBar('Duplicate question titles are not allowed');
+                    return;
+                } else if (resp.status === 304) {
+                    showSuccessBar('Saved with no changes');
+                } else if (resp.error) {
                     showErrorBar('Failed to save question');
                     return;
+                } else {
+                    showSuccessBar('Question saved successfully');
                 }
-                showSuccessBar('Question saved successfully');
                 props.closeModal();
                 props.refreshQuestions();
             })
@@ -133,9 +139,9 @@ export default function EditQuestion(props) {
         <form onSubmit={handleSubmit} className={'question-form'}>
             <h2 className={'from-header'}>{id !== null ? 'Edit Question' : 'Add New Question'}</h2>
             <label>Question Title * </label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
             <label>Question Description * </label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required/>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required />
 
             {/* handle test cases, category and difficulty inputs similarly */}
             {testCases.map((testCase, index) => (
@@ -145,17 +151,17 @@ export default function EditQuestion(props) {
                         <div className={'test-case'}>
                             <label>Test Case</label>
                             <textarea value={testCase.input}
-                                      onChange={(e) => handleTestCaseChange(index, 'input', e.target.value)}/>
+                                onChange={(e) => handleTestCaseChange(index, 'input', e.target.value)} />
                         </div>
                         <div className={'test-result'}>
                             <label>Test Result</label>
                             <textarea value={testCase.result}
-                                      onChange={(e) => handleTestCaseChange(index, 'result', e.target.value)}/>
+                                onChange={(e) => handleTestCaseChange(index, 'result', e.target.value)} />
                         </div>
                     </div>
 
                     <button className={'remove-testcase'} type={'button'}
-                            onClick={() => handleRemoveTestCase(index)}>Remove
+                        onClick={() => handleRemoveTestCase(index)}>Remove
                     </button>
 
                 </div>
