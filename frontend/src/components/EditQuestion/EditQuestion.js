@@ -5,6 +5,8 @@ import {useParams} from 'react-router-dom';
 import {createOrUpdateQuestion, getQuestionById} from "../../apis/crud-question";
 import Select from 'react-select';
 
+import {showSuccessBar, showErrorBar} from '../../constants/snack-bar';
+
 export default function EditQuestion(props) {
 
     const categoryList = [
@@ -94,7 +96,8 @@ export default function EditQuestion(props) {
         e.preventDefault();
         console.log('submitting', id, title, description, testCases, categories, difficulty);
         if (!title || !description || !testCases.length || !categories.length || !difficulty) {
-            alert('All fields are required');
+            showErrorBar('All fields are required to save question');
+            // alert('All fields are required');
             return;
         }
 
@@ -109,11 +112,12 @@ export default function EditQuestion(props) {
         };
         createOrUpdateQuestion(questionData)
             .then(resp => {
-                if (resp.error) {
-                    console.error('Failed to create or update question:', resp.data);
+                console.log('createOrUpdateQuestion response:', resp);
+                if (resp.error && resp.status !== 304) {
+                    showErrorBar('Failed to save question');
                     return;
                 }
-                alert('Question created or updated successfully');
+                showSuccessBar('Question saved successfully');
                 props.closeModal();
                 props.refreshQuestions();
             })
@@ -126,12 +130,12 @@ export default function EditQuestion(props) {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={'question-form'}>
             <h2 className={'from-header'}>{id !== null ? 'Edit Question' : 'Add New Question'}</h2>
             <label>Question Title * </label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}/>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
             <label>Question Description * </label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)}/>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} required/>
 
             {/* handle test cases, category and difficulty inputs similarly */}
             {testCases.map((testCase, index) => (
@@ -173,6 +177,7 @@ export default function EditQuestion(props) {
                         classNamePrefix="select"
                         onChange={handleCategoryChange}
                         value={getCategoryByValue(categories)}
+                        required
                     />
                 </div>
                 <div className={'form-difficulty'}>
@@ -184,6 +189,7 @@ export default function EditQuestion(props) {
                         classNamePrefix="select"
                         onChange={handleDifficultyChange}
                         value={getDifficultyByValue(difficulty)}
+                        required
                     />
                 </div>
             </div>
@@ -192,6 +198,5 @@ export default function EditQuestion(props) {
                 <button className={'submit-btn'} type="submit">Save</button>
             </div>
         </form>
-
     );
 }

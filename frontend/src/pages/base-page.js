@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import { MainActions } from '../state/actions';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import SettingsIcon from '@mui/icons-material/Settings';
 class BasePage extends React.Component {
     constructor(props) {
