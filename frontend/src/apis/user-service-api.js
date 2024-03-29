@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const USER_SVC_HOST = 'http://user-service-app:3001';
-const MATCHING_SVC_HOST = 'http://user-service-app:3002';
+const HOST = process.env.DOCKER_USER_SVC_URL || 'http://localhost:3001';
+
 const CONTENT_TYPE_JSON = 'application/json';
 
 export function registerAccount(credentials) {
     return axios
-        .post(`${USER_SVC_HOST}/api/user/register`, {
+        .post(`${HOST}/api/user/register`, {
             username: credentials.username,
             password: credentials.password,
             email: credentials.email,
@@ -24,7 +24,7 @@ export function registerAccount(credentials) {
 
 export function loginAccount(credentials) {
     return axios
-        .post(`${USER_SVC_HOST}/api/auth/login`, {
+        .post(`${HOST}/api/auth/login`, {
             email: credentials.email,
             password: credentials.password,
             headers: {
@@ -41,7 +41,7 @@ export function loginAccount(credentials) {
 
 export function forgotPassword(email) {
     return axios
-        .post(`${USER_SVC_HOST}/api/auth/reset`, {
+        .post(`${HOST}/api/auth/reset`, {
             email,
             headers: {
                 Accept: CONTENT_TYPE_JSON,
@@ -57,7 +57,7 @@ export function forgotPassword(email) {
 
 export function verifyToken(token) {
     return axios
-        .get(`${USER_SVC_HOST}/api/auth/verify`, {
+        .get(`${HOST}/api/auth/verify`, {
             headers: {
                 Accept: CONTENT_TYPE_JSON,
                 authorization: token,

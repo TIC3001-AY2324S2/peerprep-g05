@@ -16,7 +16,7 @@ RUN npm ci
 COPY . .
 
 # Expose the port your application is running on
-EXPOSE 3001
+EXPOSE 3002
 
 # Start the application
 CMD ["npm", "run", "dev"]

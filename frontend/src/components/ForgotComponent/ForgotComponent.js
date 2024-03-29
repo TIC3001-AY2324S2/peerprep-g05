@@ -5,7 +5,7 @@ import {
     Typography,
 } from '@mui/material';
 import React from 'react';
-import { forgotPassword } from '../../apis/app-api';
+import { forgotPassword } from '../../apis/user-service-api';
 import './ForgotComponent.scss';
 import NavigateButton from '../NavigateButton';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
