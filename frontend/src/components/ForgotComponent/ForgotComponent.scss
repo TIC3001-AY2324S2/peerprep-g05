@@ -1,47 +1,75 @@
 .forgot-container {
-    text-align: center;
-    display: flex;
+  display: flex;
 }
 
 .forgot-left-panel {
-    flex: 6;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: 48px 0px 0px 96px;
+  flex: 6;
+  display: flex;
+  flex-direction: column;
+  padding: 80px;
+  justify-content: flex-start;
+  justify-items: start;
+  background-color: white;
 }
 
 .forgot-right-panel {
-    flex: 5;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    display: flex;
+  flex: 5;
+  align-items: center;
+  justify-content: center;
+  background-color: #E2E2EA;
+  display: flex;
 }
 
 .forgot-deco {
-    width: 350px;
+  width: 60%;
 }
 
 .forgot-panel-main-title {
-    text-align: left;
-    color: black;
-    font-size: 30px !important;
-    font-weight: bold;
+  text-align: left;
+  color: black;
+  font-size: 30px !important;
+  font-weight: 500 !important;
 }
 
 .forgot-panel-text-field {
-    margin: 0px 64px 32px 0px !important;
-    background-color: #f8fdff;
-    div {
-        border-radius: 8px !important;
-    }
+  margin: 0px 64px 32px 0px !important;
+  background-color: #f8fdff;
+
+  div {
+    border-radius: 8px !important;
+  }
 }
 
 .forgot-panel-main-button {
-    background-color: #5541D7 !important;
-    width: 160px;
-    right: 0px !important;
-    margin-bottom: 320px !important;
+  background-color: #5541D7 !important;
+  width: 160px;
+  right: 0px !important;
+  margin-bottom: 320px !important;
 }
+
+.forgot-button-back-inline {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.forgot-panel-title {
+  text-align: left;
+  color: black;
+  font-size: 30px !important;
+  font-weight: 500 !important;
+  padding: 30px;
+
+}
+
+.from-forgot-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: white;
+}
+

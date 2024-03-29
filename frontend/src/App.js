@@ -10,10 +10,13 @@ import { MainActions } from './state/actions';
 import axios from 'axios';
 import { verifyToken } from './apis/app-api';
 import { showErrorBar } from './constants/snack-bar';
+import EditQuestion from "./components/EditQuestion/EditQuestion";
+import AdminPage from "./pages/admin-dashboard";
 
 const App = (props) => {
     let navigate = useNavigate();
     let location = useLocation();
+    let userInfo = props.userInfo;
 
     useEffect(() => {
         const isLoginPage =
@@ -62,6 +65,7 @@ const App = (props) => {
     const mainProps = {
         location: location,
         navigate: navigate,
+        userInfo: userInfo,
     };
     return (
         <Routes>
@@ -83,6 +87,16 @@ const App = (props) => {
                 exact
                 element={<ForgotPage {...mainProps} />}
             />
+            <Route
+                path="/admin-dashboard"
+                exact
+                element={<AdminPage {...mainProps} />}
+            />
+            <Route
+                path="/questions/edit/:id"
+                exact
+                element={<EditQuestion {...mainProps} />}
+            />
             <Route path="*" element={<ErrorPage {...mainProps} />} />
         </Routes>
     );
@@ -91,6 +105,7 @@ const App = (props) => {
 const mapStateToProps = (state) => ({
     token: MainSelectors.getToken(state),
     isLoading: MainSelectors.getIsLoading(state),
+    userInfo: MainSelectors.getUserInfo(state),
 });
 
 const mapDispatchToProps = {
