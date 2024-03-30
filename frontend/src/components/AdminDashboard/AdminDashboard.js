@@ -18,7 +18,15 @@ export default function AdminDashboard(props) {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
 
+
     const refreshQuestions = (page, size) => {
+        console.log("admin-dashboard props", props)
+        console.log(props.isVerifyDone)
+        //check isVerifyDone and userInfo.isAdmin
+        if (!props.isVerifyDone || !(props.userInfo && props.userInfo.isAdmin)) {
+            return;
+        }
+
         try {
             setLoading(true);
             console.log("refreshQuestions", page, size)
@@ -40,9 +48,10 @@ export default function AdminDashboard(props) {
         }
     };
 
+
     useEffect(() => {
         refreshQuestions(page, size);
-    }, [page, size]);
+    }, [page, size, props.isVerifyDone]);
 
     const handleFirstPage = () => {
         setPage(1);
