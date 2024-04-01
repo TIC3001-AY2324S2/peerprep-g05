@@ -77,7 +77,7 @@ Make sure your username and password is entered correctly.
 
 - HTTP Method: `POST`
 
-- Endpoint: http://localhost:3002//api/question/create
+- Endpoint: http://localhost:3002/api/question/create
 
 - Body: Required: title (string), description (string), categories (array of strings), 
 complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of objects)
@@ -178,10 +178,32 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | Response Code      | Result                                           |
 | ------------------ | ------------------------------------------------ |
 | 200 (OK)           | All Questions Data Obtained                      |
+| 204 (No Content)   | No Question In Database                          |
 | 400 (Bad Request)  | Database or Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 | 403 (Forbidden)    | Access Denied for Non-admin Users                |
-| 404 (Not Found)    | No Question In Database                          |
+
+### Get All Questions Of A Given Complexity
+
+- This endpoint allows one to retrieve the data of all the questions of a given complexity from the database.
+- HTTP Method: `GET`
+
+- Endpoint: http://localhost:3002/api/question/all/:complexity
+
+- Example: http://localhost:3002/api/question/all/Easy
+
+- Body: Not Required
+
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+- Responses:
+
+| Response Code      | Result                                           |
+| ------------------ | ------------------------------------------------ |
+| 200 (OK)           | All Questions Data Obtained                      |
+| 204 (No Content)   | No Question In Database                          |
+| 400 (Bad Request)  | Database or Server Error                         |
+| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 
 ### Delete Question
 
@@ -189,7 +211,6 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 
 - HTTP Method: `DELETE`
 
-3002
 - Body: Required: id (number)
 
 ```json
@@ -267,6 +288,7 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | 304 (Not Modified)          | Question is not modified                                |
 | 400 (Bad Request)           | Missing ID in request body                              |
 | 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
+| 403 (Forbidden)             | Access Denied for Non-admin Users Deleting Question     |
 | 404 (Not Found)             | No Question Found With Given ID                         |
 | 409 (Conflict)              | Duplicate Data Encountered                              |
 | 500 (Internal Server Error) | Database or Server Error                                |

@@ -19,7 +19,7 @@ export async function getAllQuestion(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(200).json({
+        return res.status(204).json({
             message: `No Question In Repository`,
             questions: []
         });
@@ -94,7 +94,7 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({
+        return res.status(204).json({
             message: `Question Not Found`
         });
     } else if (response.err) {
@@ -117,7 +117,7 @@ export async function getAllQuestionByComplexity(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({
+        return res.status(204).json({
             message: `Question Not Found`
         });
     } else if (response.err) {
