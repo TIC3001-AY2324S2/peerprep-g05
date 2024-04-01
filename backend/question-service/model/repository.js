@@ -37,6 +37,12 @@ export async function findOneQuestionByComplexity(complexity) {
   ]);
 }
 
+export async function findAllQuestionByComplexity(complexity) {
+  return QuestionModel.find(
+    {complexity: complexity }
+  );
+}
+
 export async function createQuestion({ title, description, categories, complexity, testCase }) {
   const lastQuestion = await QuestionModel.findOne().sort('-id');
   const highestId = lastQuestion ? lastQuestion.id : 0;

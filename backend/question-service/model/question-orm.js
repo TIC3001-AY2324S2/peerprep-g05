@@ -4,6 +4,7 @@ import {
     findAllQuestion,
     getTotalQuestionCount,
     findOneQuestionByComplexity,
+    findAllQuestionByComplexity,
     createQuestion,
     deleteQuestion,
     updateQuestion
@@ -44,6 +45,22 @@ export async function ormFindQuestionByID(id) {
 export async function ormFindOneQuestionByComplexity(complexity) {
   try {
     const result = await findOneQuestionByComplexity(complexity);
+
+    // Checking if question exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not load question from repository!");
+    return { err };
+  }
+}
+
+export async function ormFindAllQuestionByComplexity(complexity) {
+  try {
+    const result = await findAllQuestionByComplexity(complexity);
 
     // Checking if question exist
     if (result.length !== 0) {

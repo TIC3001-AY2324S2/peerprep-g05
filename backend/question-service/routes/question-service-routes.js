@@ -15,6 +15,9 @@ router.get('/api/question/:id', verifyAccessToken, getQuestionById);
 //return one question of complexity
 router.get('/api/question/complexity/:complexity', verifyAccessToken, getOneQuestionByComplexity);
 
+//return all question with complexity
+router.get('/api/question/complexity/all/:complexity', verifyAccessToken, getAllQuestion);
+
 //create a single question and store in collection
 router.post('/api/question/create', verifyAccessToken, verifyIsAdmin, createQuestion);
 

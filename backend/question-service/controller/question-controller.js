@@ -5,6 +5,7 @@ import {
     ormCreateQuestion as _createQuestion,
     ormDeleteQuestion as _deleteQuestion,
     ormUpdateQuestion as _updateQuestion,
+    ormFindAllQuestionByComplexity as _findAllQuestionByComplexity,
 } from "../model/question-orm.js";
 
 export async function getAllQuestion(req, res) {
@@ -89,6 +90,29 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(`GET A QUESITON OF COMPLEXTY : ${complexity}`);
 
     const response = await _findOneQuestionByComplexity(complexity);
+
+    console.log(response);
+
+    if (response === null) {
+        return res.status(404).json({
+            message: `Question Not Found`
+        });
+    } else if (response.err) {
+        return res.status(400).json({message: "Error With Question Repository"});
+    } else {
+        console.log(`Questions loaded!`);
+        return res.status(200).json({
+            message: `Questions loaded!`,
+            question: response,
+        });
+    }
+}
+
+export async function getAllQuestionByComplexity(req, res) {
+    const complexity = req.params.complexity;
+    console.log(`GET A QUESITON OF COMPLEXTY : ${complexity}`);
+
+    const response = await _findAllQuestionByComplexity(complexity);
 
     console.log(response);
 
