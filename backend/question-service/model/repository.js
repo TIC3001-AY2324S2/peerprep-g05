@@ -37,6 +37,13 @@ export async function findOneQuestionByComplexity(complexity) {
   ]);
 }
 
+export async function findOneQuestionByComplexityAndCategory(complexity,category) {
+  return QuestionModel.aggregate([
+    { $match: { complexity: complexity, categories: category } },
+    { $sample: { size: 1 } }
+  ]);
+}
+
 export async function findAllQuestionByComplexity(complexity) {
   return QuestionModel.find(
     {complexity: complexity }

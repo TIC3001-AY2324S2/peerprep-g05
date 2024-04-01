@@ -5,7 +5,8 @@ import {
     getAllQuestion, getQuestionById, getAllQuestionByComplexity,
     createQuestion, getAllCategoryByComplexity,
     //getTotalQuestionCount,getOneQuestionByComplexity,
-    deleteQuestionById, updateQuestionById
+    deleteQuestionById, updateQuestionById,
+    getOneRandomQuestionByComplexityAndCategory
 } from "../controller/question-controller.js";
 
 //return all question given active login + admin user
@@ -22,7 +23,10 @@ router.get('/api/question/:id', verifyAccessToken, getQuestionById);
 router.get('/api/question/all/:complexity', verifyAccessToken, getAllQuestionByComplexity);
 
 //return all categories of a given complexity
-router.get('/api/question/categories/:complexity', getAllCategoryByComplexity);
+router.get('/api/question/categories/:complexity', verifyAccessToken, getAllCategoryByComplexity);
+
+//return all question of a given complexity and category
+router.get('/api/question/:complexity/:category', verifyAccessToken, getOneRandomQuestionByComplexityAndCategory);
 
 //create a single question and store in collection
 router.post('/api/question/create', verifyAccessToken, verifyIsAdmin, createQuestion);
