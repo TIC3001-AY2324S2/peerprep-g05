@@ -178,7 +178,6 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | Response Code      | Result                                           |
 | ------------------ | ------------------------------------------------ |
 | 200 (OK)           | All Questions Data Obtained                      |
-| 204 (No Content)   | No Question In Database                          |
 | 400 (Bad Request)  | Database or Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 | 403 (Forbidden)    | Access Denied for Non-admin Users                |
@@ -201,7 +200,6 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | Response Code      | Result                                           |
 | ------------------ | ------------------------------------------------ |
 | 200 (OK)           | All Questions Data Obtained                      |
-| 204 (No Content)   | No Question In Database                          |
 | 400 (Bad Request)  | Database or Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 
