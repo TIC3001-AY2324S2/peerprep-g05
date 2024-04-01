@@ -19,7 +19,7 @@ export async function getAllQuestion(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(204).json({
+        return res.status(200).json({
             message: `No Question In Repository`,
             questions: []
         });
@@ -94,7 +94,7 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(204).json({
+        return res.status(200).json({
             message: `Question Not Found`
         });
     } else if (response.err) {
@@ -110,14 +110,14 @@ export async function getOneQuestionByComplexity(req, res) {
 
 export async function getAllQuestionByComplexity(req, res) {
     const complexity = req.params.complexity;
-    console.log(`GET A QUESITON OF COMPLEXTY : ${complexity}`);
+    console.log(`GET ALL QUESITON OF COMPLEXTY : ${complexity}`);
 
     const response = await _findAllQuestionByComplexity(complexity);
 
     console.log(response);
 
     if (response === null) {
-        return res.status(204).json({
+        return res.status(200).json({
             message: `Question Not Found`
         });
     } else if (response.err) {
