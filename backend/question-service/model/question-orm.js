@@ -5,6 +5,7 @@ import {
     getTotalQuestionCount,
     findOneQuestionByComplexity,
     findAllQuestionByComplexity,
+    findAllCategoryByComplexity,
     createQuestion,
     deleteQuestion,
     updateQuestion
@@ -70,6 +71,22 @@ export async function ormFindAllQuestionByComplexity(complexity) {
     return null;
   } catch (err) {
     console.log("ERROR: Could not load question from repository!");
+    return { err };
+  }
+}
+
+export async function ormFindAllCategoryByComplexity(complexity) {
+  try {
+    const result = await findAllCategoryByComplexity(complexity);
+
+    // Checking if data exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not load category from repository!");
     return { err };
   }
 }

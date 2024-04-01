@@ -43,6 +43,17 @@ export async function findAllQuestionByComplexity(complexity) {
   );
 }
 
+export async function findAllCategoryByComplexity(complexity) {
+  const result = await QuestionModel.aggregate([
+    { $match: { complexity: complexity } },
+    { $unwind: "$categories" },
+    { $group: { _id: "$categories" } },
+    { $project: { _id: 0, category: "$_id" } }
+  ]);
+
+  return result.map(item => item.category);
+}
+
 export async function createQuestion({ title, description, categories, complexity, testCase }) {
   const lastQuestion = await QuestionModel.findOne().sort('-id');
   const highestId = lastQuestion ? lastQuestion.id : 0;

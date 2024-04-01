@@ -1,9 +1,12 @@
 import express from "express";
 const router = express.Router();
 import { verifyAccessToken, verifyIsAdmin } from "../middleware/basic-access-control.js";
-import { getAllQuestion, getQuestionById, getAllQuestionByComplexity, createQuestion,
+import {
+    getAllQuestion, getQuestionById, getAllQuestionByComplexity,
+    createQuestion, getAllCategoryByComplexity,
     //getTotalQuestionCount,getOneQuestionByComplexity,
-     deleteQuestionById, updateQuestionById } from "../controller/question-controller.js";
+    deleteQuestionById, updateQuestionById
+} from "../controller/question-controller.js";
 
 //return all question given active login + admin user
 router.get('/api/question/all', verifyAccessToken, verifyIsAdmin, getAllQuestion);
@@ -17,6 +20,9 @@ router.get('/api/question/:id', verifyAccessToken, getQuestionById);
 
 //return all question with complexity
 router.get('/api/question/all/:complexity', verifyAccessToken, getAllQuestionByComplexity);
+
+//return all categories of a given complexity
+router.get('/api/question/categories/:complexity', getAllCategoryByComplexity);
 
 //create a single question and store in collection
 router.post('/api/question/create', verifyAccessToken, verifyIsAdmin, createQuestion);
