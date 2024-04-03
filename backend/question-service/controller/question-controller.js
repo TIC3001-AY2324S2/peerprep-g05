@@ -5,14 +5,13 @@ import {
     ormCreateQuestion as _createQuestion,
     ormDeleteQuestion as _deleteQuestion,
     ormUpdateQuestion as _updateQuestion,
+    ormFindAllQuestionByComplexity as _findAllQuestionByComplexity,
 } from "../model/question-orm.js";
-
 
 export async function getAllQuestion(req, res) {
     const page = req.query.page;
     const limit = req.query.limit;
     const totalPage = req.query.totalPage;
-
     console.log(`GET ${limit} QUESTIONS FOR PAGE ${page} OUT OF ${totalPage} PAGES`);
 
     const response = await _findAllQuestion();
@@ -40,6 +39,7 @@ export async function getAllQuestion(req, res) {
             totalPages: totalPages,
         });
     }
+
 }
 
 // export async function getTotalQuestionCount(req, res) {
@@ -94,7 +94,30 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(response);
 
     if (response === null) {
-        return res.status(404).json({
+        return res.status(200).json({
+            message: `Question Not Found`
+        });
+    } else if (response.err) {
+        return res.status(400).json({message: "Error With Question Repository"});
+    } else {
+        console.log(`Questions loaded!`);
+        return res.status(200).json({
+            message: `Questions loaded!`,
+            question: response,
+        });
+    }
+}
+
+export async function getAllQuestionByComplexity(req, res) {
+    const complexity = req.params.complexity;
+    console.log(`GET ALL QUESITON OF COMPLEXTY : ${complexity}`);
+
+    const response = await _findAllQuestionByComplexity(complexity);
+
+    console.log(response);
+
+    if (response === null) {
+        return res.status(200).json({
             message: `Question Not Found`
         });
     } else if (response.err) {
