@@ -2,7 +2,12 @@ import http from "http";
 import index from "./index.js";
 import "dotenv/config";
 
-const port = process.env.PORT || 3001;
+// Read .env from root parent folder if docker is not used
+if (process.env.IS_DOCKER != "true") {
+    dotenv.config({ path: '../../.env' });
+}
+
+const port = process.env.USER_SVC_PORT || 3001;
 
 const server = http.createServer(index);
 

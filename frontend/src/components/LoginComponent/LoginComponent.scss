@@ -56,7 +56,15 @@
 
 
 .from-login-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
   background-color: white;
+
 }
 
 .main-panel-error {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HOST = 'http://localhost:3002';
+const HOST = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
 
 export function createOrUpdateQuestion(question) {
     // Send a POST request to the server to create a new question

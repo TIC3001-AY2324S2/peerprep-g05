@@ -20,18 +20,6 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 ![alt text](./GuideAssets/ConnectionString.png)
 
-5. Rename the `.env.sample` file to `.env` in the `user-service` directory.
-
-6. Update the `DB_CLOUD_URI` of the `.env` file, and paste the string we copied earlier in step 4. Also remember to replace the `<password>` placeholder with the actual password.
-
-```
-DB_CLOUD_URI=<CONNECTION_STRING>
-DB_LOCAL_URI=mongodb://localhost/${KEY_IN_YOUR_DB_HERE}
-PORT=3001
-ENV=PROD
-JWT_SECRET=you-can-replace-this-with-your-own-secret
-```
-
 ## Running User Service
 
 1. Open Command Line/Terminal and navigate into the `user-service` directory.

@@ -7,12 +7,10 @@ import {
     ormUpdateQuestion as _updateQuestion,
 } from "../model/question-orm.js";
 
-
 export async function getAllQuestion(req, res) {
     const page = req.query.page;
     const limit = req.query.limit;
     const totalPage = req.query.totalPage;
-
     console.log(`GET ${limit} QUESTIONS FOR PAGE ${page} OUT OF ${totalPage} PAGES`);
 
     const response = await _findAllQuestion();
@@ -40,6 +38,7 @@ export async function getAllQuestion(req, res) {
             totalPages: totalPages,
         });
     }
+
 }
 
 // export async function getTotalQuestionCount(req, res) {

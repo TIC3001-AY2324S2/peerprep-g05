@@ -1,27 +1,13 @@
-//.form-container {
-//  display: flex;
-//  flex-direction: column;
-//  justify-content: center;
-//  align-items: center;
-//  margin: auto;
-//  background: gray;
-//  padding: 30px;
-//  width: 50%;
-//  border-radius: 10px;
-//}
 
-form {
+.question-form{
   display: flex;
   flex-direction: column;
   gap: 5px;
   background: #F7F7FC;
-  //width: 60%;
   padding: 30px;
   border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
-  //margin-bottom: 20px;
-  //margin-top: 50px;
 }
 
 .from-header {
@@ -30,7 +16,7 @@ form {
   margin: 5px 0 20px 0;
 }
 
-input, textarea {
+.question-form input, textarea {
   padding: 10px;
   border-radius: 5px;
   background: white;
