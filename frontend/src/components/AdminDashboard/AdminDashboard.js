@@ -6,7 +6,7 @@ import {IoTrash} from "react-icons/io5";
 import {deleteQuestion, getQuestions} from "../../apis/crud-question";
 import Modal from 'react-modal';
 import EditQuestion from "../EditQuestion/EditQuestion";
-import {Pagination} from "@mui/material";
+import {Pagination, Tooltip} from "@mui/material";
 import {showSuccessBar, showErrorBar} from "../../constants/snack-bar";
 
 export default function AdminDashboard(props) {
@@ -18,7 +18,15 @@ export default function AdminDashboard(props) {
     const [totalPages, setTotalPages] = useState(0);
     const [loading, setLoading] = useState(true);
 
+
     const refreshQuestions = (page, size) => {
+        console.log("admin-dashboard props", props)
+        console.log(props.isVerifyDone)
+        //check isVerifyDone and userInfo.isAdmin
+        if (!props.isVerifyDone || !(props.userInfo && props.userInfo.isAdmin)) {
+            return;
+        }
+
         try {
             setLoading(true);
             console.log("refreshQuestions", page, size)
@@ -40,9 +48,10 @@ export default function AdminDashboard(props) {
         }
     };
 
+
     useEffect(() => {
         refreshQuestions(page, size);
-    }, [page, size]);
+    }, [page, size, props.isVerifyDone]);
 
     const handleFirstPage = () => {
         setPage(1);
@@ -115,10 +124,12 @@ export default function AdminDashboard(props) {
             <div className="container">
                 <div className="section-1">
                     <h2>Question repository</h2>
-                    <button className="add-button"
-                            onClick={() => openModal(null)}
-                    ><IoMdAdd className="add-icon"/>Add
-                    </button>
+                    <Tooltip title={'Add new question'} placement="top" arrow>
+                        <button className="add-button"
+                                onClick={() => openModal(null)}
+                        ><IoMdAdd className="add-icon"/>Add
+                        </button>
+                    </Tooltip>
                 </div>
 
                 <div className="section-2">
@@ -170,14 +181,18 @@ export default function AdminDashboard(props) {
                                             setCurrentSelectId(question.id)
                                         }}
                                     >{question.complexity}</td>
-                                    <td className={'question-edit'} onClick={goToEditQuestion(question.id)}>
-                                        <button ><FiEdit3/></button>
-                                    </td>
-                                    <td className={'question-delete'}>
-                                        <button onClick={callDeleteQuestion(question.id)}>
-                                            <IoTrash/>
-                                        </button>
-                                    </td>
+                                    <Tooltip title={'Edit'} placement="top" arrow>
+                                        <td className={'question-edit'} onClick={goToEditQuestion(question.id)}>
+                                            <button><FiEdit3/></button>
+                                        </td>
+                                    </Tooltip>
+                                    <Tooltip title={'Delete'} placement="top" arrow>
+                                        <td className={'question-delete'} onClick={callDeleteQuestion(question.id)}>
+                                            <button>
+                                                <IoTrash/>
+                                            </button>
+                                        </td>
+                                    </Tooltip>
                                 </tr>
                                 {currentSelectId === question.id && (
                                     <tr className={'question-description'}>

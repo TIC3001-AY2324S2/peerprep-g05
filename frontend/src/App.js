@@ -106,6 +106,7 @@ const mapStateToProps = (state) => ({
     token: MainSelectors.getToken(state),
     isLoading: MainSelectors.getIsLoading(state),
     userInfo: MainSelectors.getUserInfo(state),
+    isVerifyDone: MainSelectors.getIsVerifyDone(state),
 });
 
 const mapDispatchToProps = {
