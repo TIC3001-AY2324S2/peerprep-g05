@@ -1,28 +1,25 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/jhSo0Xzm)
-# CS3219-AY22-23-Project-Skeleton
+# Peerprep-G05 Backend
+
+# Prerequisite
+1. Create a Cloud DB URL using Mongo Atlas.
+2. Rename [./../.env.sample](./../.env.sample) file to `.env`.
+3. Enter the DB URL created as `DB_URI` in `.env` file.
 
 ## User Service
 
 ### Quick Start
-1. Rename `.env.sample` file to `.env`.
-2. Create a Cloud DB URL using Mongo Atlas.
-3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
-4. Install npm packages using `npm i`.
-5. Run User Service using `npm run dev`.
+1. Navigate to [./user-service/](./user-service/) directory
+2. Install npm packages using `npm ci`.
+3. Run User Service using `npm run dev`.
 
 ### Complete User Service Guide: [User Service Guide](./user-service/README.md)
-
 
 ## Question Service
 
 ### Quick Start
-1. Rename `.env.sample` file to `.env`.
-2. Make sure JWT_Secret in `.env` is the same with User-Service's `.env`
-3. Create a Cloud DB URL using Mongo Atlas.
-4. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
-5. Navigate to ./question-service directory
-6. Install npm packages using `npm i`.
-7. Run Question Service using `npm start`
+1. Navigate to [./question-service](./question-service/) directory
+2. Install npm packages using `npm ci`.
+3. Run Question Service using `npm start`
 
 ### Upload Sample Qns Data for Qns Service (via MongoDBCompass)
 1. Connect the MongoDB Cloud deployment you've created on MongoDB.
