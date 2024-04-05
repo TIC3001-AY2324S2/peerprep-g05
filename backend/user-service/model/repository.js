@@ -1,13 +1,18 @@
 import UserModel from "./user-model.js";
+import dotenv from "dotenv";
 import "dotenv/config";
 
 //Set up mongoose connection
 import mongoose from "mongoose";
 
-let mongoDBUri =
-  process.env.ENV == "PROD"
-    ? process.env.DB_CLOUD_URI
-    : process.env.DB_LOCAL_URI;
+// Read .env from root parent folder if docker is not used
+if (process.env.IS_DOCKER != "true") {
+    dotenv.config({ path: '../../.env' });
+}
+
+let mongoDBUri = process.env.DB_URI;
+
+mongoose.set('strictQuery', true);
 
 mongoose.connect(mongoDBUri, {
   useNewUrlParser: true,
