@@ -3,7 +3,7 @@
 # Prerequisite
 1. Create a Cloud DB URL using Mongo Atlas.
 2. Rename [./../.env.sample](./../.env.sample) file to `.env`.
-3. Enter the DB URL created as `DB_CLOUD_URI` in `.env` file.
+3. Enter the DB URL created as `DB_URI` in `.env` file.
 
 ## User Service
 
