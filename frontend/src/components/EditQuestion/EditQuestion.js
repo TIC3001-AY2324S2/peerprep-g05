@@ -1,6 +1,5 @@
 import './EditQuestion.scss'
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { createOrUpdateQuestion, getQuestionById } from "../../apis/crud-question";
 import Select from 'react-select';
@@ -70,7 +69,7 @@ export default function EditQuestion(props) {
             getQuestionById(qId)
                 .then(resp => {
                     if (resp.error) {
-                        console.error('Failed to fetch question:', data.data);
+                        console.error('Failed to fetch question:', resp.error);
                         return;
                     }
                     console.log("get question by id", resp.data)
@@ -128,8 +127,6 @@ export default function EditQuestion(props) {
                 props.refreshQuestions();
             })
     };
-
-    const navigate = useNavigate();
 
     const handleCancel = () => {
         props.closeModal();

@@ -2,6 +2,8 @@
 #     docker-compose build
 # Run the services in the docker compose using the command below
 #     docker-compose up
+# Run the services in the docker compose with hot reload using the command below
+#     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 # Remove the services in the docker compose using the command below
 #     docker-compose down
 
