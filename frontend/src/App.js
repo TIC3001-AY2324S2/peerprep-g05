@@ -17,6 +17,7 @@ import AdminPage from "./pages/admin-dashboard";
 const App = (props) => {
     let navigate = useNavigate();
     let location = useLocation();
+    let userInfo = props.userInfo;
 
     useEffect(() => {
         const isLoginPage =
@@ -65,6 +66,7 @@ const App = (props) => {
     const mainProps = {
         location: location,
         navigate: navigate,
+        userInfo: userInfo,
     };
     return (
         <Routes>
@@ -109,6 +111,8 @@ const App = (props) => {
 const mapStateToProps = (state) => ({
     token: MainSelectors.getToken(state),
     isLoading: MainSelectors.getIsLoading(state),
+    userInfo: MainSelectors.getUserInfo(state),
+    isVerifyDone: MainSelectors.getIsVerifyDone(state),
 });
 
 const mapDispatchToProps = {

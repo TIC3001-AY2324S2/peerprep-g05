@@ -4,6 +4,9 @@ import {
     findAllQuestion,
     getTotalQuestionCount,
     findOneQuestionByComplexity,
+    findAllQuestionByComplexity,
+    findAllCategoryByComplexity,
+    findOneQuestionByComplexityAndCategory,
     createQuestion,
     deleteQuestion,
     updateQuestion
@@ -53,6 +56,53 @@ export async function ormFindOneQuestionByComplexity(complexity) {
     return null;
   } catch (err) {
     console.log("ERROR: Could not load question from repository!");
+    return { err };
+  }
+}
+export async function ormFindOneQuestionByComplexityAndCategory(complexity,category) {
+  try {
+    const result = await findOneQuestionByComplexityAndCategory(complexity,category);
+
+    // Checking if question exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not load question from repository!");
+    return { err };
+  }
+}
+
+export async function ormFindAllQuestionByComplexity(complexity) {
+  try {
+    const result = await findAllQuestionByComplexity(complexity);
+
+    // Checking if question exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not load question from repository!");
+    return { err };
+  }
+}
+
+export async function ormFindAllCategoryByComplexity(complexity) {
+  try {
+    const result = await findAllCategoryByComplexity(complexity);
+
+    // Checking if data exist
+    if (result.length !== 0) {
+      return result;
+    }
+
+    return null;
+  } catch (err) {
+    console.log("ERROR: Could not load category from repository!");
     return { err };
   }
 }

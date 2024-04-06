@@ -22,6 +22,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 6. Update the `DB_CLOUD_URI` of the `.env` file, and paste the string we copied earlier in step 4. Also remember to replace the `<password>` placeholder with the actual password.
 
+7. Make sure `JWT_SECRET` is the same as User-Service's `.env`
 ```
 DB_CLOUD_URI=<CONNECTION_STRING>
 DB_LOCAL_URI=mongodb://localhost/${KEY_IN_YOUR_DB_HERE}
@@ -51,15 +52,15 @@ Make sure your username and password is entered correctly.
 ![enter URI](./guide_assets/URI.png)
 ![connect compass](./guide_assets/connect_compass.png)
 
-3. Create a new database + collection
+3. Locate  `test` Database
 
-![create database](./guide_assets/create_database.png)
+![select test database](./guide_assets/select_test_database.png)
 
-4. Access your new collection, click "Add Data" and then "Import JSON or CSV file"
+4. Access `test` > `questionmodels` collection, click "Add Data" and then "Import JSON or CSV file"
 
 ![add data](./guide_assets/add_data.png)
 
-5. Select the CSV sample questions file
+5. Select the CSV sample questions file located in [./question-service/data](./data)
 
 ![select csv](./guide_assets/select_csv.png)
 
@@ -76,7 +77,7 @@ Make sure your username and password is entered correctly.
 
 - HTTP Method: `POST`
 
-- Endpoint: http://localhost:3002//api/question/create
+- Endpoint: http://localhost:3002/api/question/create
 
 - Body: Required: title (string), description (string), categories (array of strings), 
 complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of objects)
@@ -180,7 +181,27 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | 400 (Bad Request)  | Database or Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 | 403 (Forbidden)    | Access Denied for Non-admin Users                |
-| 404 (Not Found)    | No Question In Database                          |
+
+### Get All Questions Of A Given Complexity
+
+- This endpoint allows one to retrieve the data of all the questions of a given complexity from the database.
+- HTTP Method: `GET`
+
+- Endpoint: http://localhost:3002/api/question/all/:complexity
+
+- Example: http://localhost:3002/api/question/all/Easy
+
+- Body: Not Required
+
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+- Responses:
+
+| Response Code      | Result                                           |
+| ------------------ | ------------------------------------------------ |
+| 200 (OK)           | All Questions Data Obtained                      |
+| 400 (Bad Request)  | Database or Server Error                         |
+| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 
 ### Delete Question
 
@@ -188,7 +209,6 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 
 - HTTP Method: `DELETE`
 
-3002
 - Body: Required: id (number)
 
 ```json
@@ -266,7 +286,7 @@ complexity (String) : (enum - 'Easy', 'Medium', 'Hard') , testCase (array of obj
 | 304 (Not Modified)          | Question is not modified                                |
 | 400 (Bad Request)           | Missing ID in request body                              |
 | 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT        |
-| 403 (Forbidden)             | Access Denied for Non-admin Users Editing Question      |
+| 403 (Forbidden)             | Access Denied for Non-admin Users Deleting Question     |
 | 404 (Not Found)             | No Question Found With Given ID                         |
 | 409 (Conflict)              | Duplicate Data Encountered                              |
 | 500 (Internal Server Error) | Database or Server Error                                |
