@@ -1,5 +1,5 @@
 import './AdminDashboard.scss'
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {IoMdAdd} from "react-icons/io";
 import {FiEdit3} from "react-icons/fi";
 import {IoTrash} from "react-icons/io5";
@@ -16,67 +16,39 @@ export default function AdminDashboard(props) {
     const [questions, setQuestions] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const [loading, setLoading] = useState(true);
 
+    const { userInfo, isVerifyDone } = props;
 
-    const refreshQuestions = (page, size) => {
-        console.log("admin-dashboard props", props)
-        console.log(props.isVerifyDone)
+    const refreshQuestions = useCallback((page, size) => {
         //check isVerifyDone and userInfo.isAdmin
-        if (!props.isVerifyDone || !(props.userInfo && props.userInfo.isAdmin)) {
+        if (!isVerifyDone || !(userInfo && userInfo.isAdmin)) {
             return;
         }
 
         try {
-            setLoading(true);
             console.log("refreshQuestions", page, size)
             getQuestions(page, size).then((response) => {
                 console.log("response", response)
                 if (response.error) {
                     console.error('Failed to fetch questions:', response.data);
-                    setLoading(false);
                     return;
                 }
 
                 setQuestions(response.data.questions);
                 setTotalPages(response.data.totalPages);
-                setLoading(false);
             });
         } catch (error) {
             console.error('Failed to fetch questions:', error);
-            setLoading(false);
         }
-    };
-
+    }, [isVerifyDone, userInfo]);
 
     useEffect(() => {
         refreshQuestions(page, size);
-    }, [page, size, props.isVerifyDone]);
-
-    const handleFirstPage = () => {
-        setPage(1);
-    };
-
-    const handlePrevPage = () => {
-        if (page > 1) {
-            setPage(page - 1);
-        }
-    };
-
-    const handleNextPage = () => {
-        if (page < totalPages) {
-            setPage(page + 1);
-        }
-    };
-
-    const handleLastPage = () => {
-        setPage(totalPages);
-    };
+    }, [page, size, refreshQuestions]);
 
     const [currentSelectId, setCurrentSelectId] = useState(-1);
 
     const goToEditQuestion = (id) => () => {
-        // props.navigate(`/questions/edit/${id}`)
         openModal(id)
     }
     const callDeleteQuestion = (id) => () => {
