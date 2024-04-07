@@ -6,9 +6,9 @@ import {
   createRoom,
 } from "./repository.js"
 
-export async function ormCreateFindMatchRecord(userId, level) {
+export async function ormCreateFindMatchRecord(userId, level, category) {
   try {
-    const newRecord = await createFindMatchRecord({ userId, level });
+    const newRecord = await createFindMatchRecord({ userId, level, category});
     await newRecord.save();
     return newRecord;
   } catch (err) {
@@ -45,9 +45,9 @@ export async function ormGetMatchRecord(recordId) {
   }
 }
 
-export async function ormCreateRoom(userIds, level) {
+export async function ormCreateRoom(userIds, level, category) {
   try {
-    const newRoom = await createRoom({ userIds, level });
+    const newRoom = await createRoom({ userIds, level, category});
     await newRoom.save();
     return newRoom;
   } catch (err) {
@@ -56,9 +56,9 @@ export async function ormCreateRoom(userIds, level) {
   }
 }
 
-export async function ormGetMatchPartner(userId, level) {
+export async function ormGetMatchPartner(userId, level, category) {
   try {
-    const response = await findMatchPartner(userId, level);
+    const response = await findMatchPartner(userId, level, category);
     if (response) {
       return response;
     } else {

@@ -34,11 +34,11 @@ export async function getMatchRecord(req, res) {
   }
 }
 
-async function findMatchPartner(matchRecord, level) {
+async function findMatchPartner(matchRecord, level, category) {
   try {
-    const partner = await ormGetMatchPartner(matchRecord.userId, level);
+    const partner = await ormGetMatchPartner(matchRecord.userId, level, category);
     if (partner) {
-      const room = await createRoom([matchRecord.userId, partner.userId], level);
+      const room = await createRoom([matchRecord.userId, partner.userId], level, category);
       await updateRoomId(partner._id, room._id);
       await updateRoomId(matchRecord._id, room._id);
       matchRecord.roomId = room._id;
@@ -53,9 +53,9 @@ async function findMatchPartner(matchRecord, level) {
   }
 }
 
-async function createRoom(userIds, level) {
+async function createRoom(userIds, level, category) {
   try {
-    const newRoom = await ormCreateRoom(userIds, level);
+    const newRoom = await ormCreateRoom(userIds, level, category);
     if (newRoom) {
       return newRoom;
     } else {
@@ -82,11 +82,11 @@ async function updateRoomId(recordId, roomId) {
 }
 
 export async function createMatchRecord(req, res) {
-  const { userId, level } = req.body;
+  const { userId, level, category } = req.body;
   if (userId && level) {
     try {
-      const newRecord = await ormCreateFindMatchRecord(userId, level);
-      const matchPartner = await findMatchPartner(newRecord, level);
+      const newRecord = await ormCreateFindMatchRecord(userId, level, category);
+      const matchPartner = await findMatchPartner(newRecord, level, category);
       console.log(matchPartner)
       if (matchPartner) {        
         return res.status(200).json({ message: "Match found!", record: newRecord, partner: matchPartner });
