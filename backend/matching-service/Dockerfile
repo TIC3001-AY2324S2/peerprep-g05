@@ -3,6 +3,9 @@
 # Use a base image
 FROM node:18.18.2-alpine
 
+ARG MATCHING_SVC_PORT=3003
+ENV MATCHING_SVC_PORT=${MATCHING_SVC_PORT}
+
 # Set the working directory
 WORKDIR /app
 
@@ -16,7 +19,7 @@ RUN npm ci
 COPY . .
 
 # Expose the port your application is running on
-EXPOSE 3003
+EXPOSE $MATCHING_SVC_PORT
 
 # Start the application
 CMD ["npm", "run", "dev"]

@@ -38,4 +38,4 @@ services:
       - ./backend/matching-service/model:/app/model
       - ./backend/matching-service/routes:/app/routes
       - ./backend/matching-service/index.js:/app/index.js
-      - ./backend/matching-service/server.js:/app/server.js    
+      - ./backend/matching-service/server.js:/app/server.js
