@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { getCategoriesByComplexity } from '../../apis/matching-service-api';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -14,11 +15,32 @@ const Item = styled(Paper)(({ theme }) => ({
 let currLevel = "EASY MODE";
 
 function HomeComponent() {
-    const [complexity, setComplexity] = useState('easy');
+    const [complexity, setComplexity] = useState('Easy');
+    const [categoryList, setCategoryList] = useState([]);
     const [category, setCategory] = useState(0);
     const [match, setMatch] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [timer, setTimer] = useState(15);
+
+    useEffect(() => {
+        let token = localStorage.getItem('token');
+        if (token) {
+            getCategoriesByComplexity(`Bearer ${token}`, complexity).then((response) => {
+                console.log("categories", response)
+                if (response.error) {
+                    console.error('Failed to fetch questions:', response.data);
+                    return;
+                }
+                response.data.categories.forEach(category => {
+                    if (!categoryList.includes(category)) {
+                        categoryList.push(category)
+                    }
+                });
+                setCategoryList(categoryList);
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [complexity]);
 
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
@@ -60,24 +82,24 @@ function HomeComponent() {
                 <Stack direction="row" spacing={3} style={{padding: "35px 0 25px 0"}}>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "easy" ? {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", backgroundColor: "#3CAA91", borderRadius: "5px"} : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "easy")}
+                        style={complexity === "Easy" ? {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", backgroundColor: "#3CAA91", borderRadius: "5px"} : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
+                        onClick={(event) => complexityHandler(event, "Easy")}
                     >
-                        <ListItemText primary="Interview Apprentice" style={complexity === "easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
+                        <ListItemText primary="Interview Apprentice" style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
                     </ListItemButton>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "medium" ? {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", backgroundColor: "#FFA800", borderRadius: "5px"} : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "medium")}
+                        style={complexity === "Medium" ? {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", backgroundColor: "#FFA800", borderRadius: "5px"} : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
+                        onClick={(event) => complexityHandler(event, "Medium")}
                     >
-                        <ListItemText primary="Coding Maestro" style={complexity === "medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
+                        <ListItemText primary="Coding Maestro" style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
                     </ListItemButton>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "hard" ? {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", backgroundColor: "#F04461", borderRadius: "5px"} : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "hard")}
+                        style={complexity === "Hard" ? {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", backgroundColor: "#F04461", borderRadius: "5px"} : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
+                        onClick={(event) => complexityHandler(event, "Hard")}
                     >
-                        <ListItemText primary="Algorithm Virtuoso" style={complexity === "hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
+                        <ListItemText primary="Algorithm Virtuoso" style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
                     </ListItemButton>
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
                         <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
@@ -88,13 +110,14 @@ function HomeComponent() {
                             label="Category"
                             onChange={categoryHandler}
                         >
-                            <MenuItem value={0}>Category 1</MenuItem>
-                            <MenuItem value={1}>Category 2</MenuItem>
+                            {categoryList.map((category, index) => (
+                                <MenuItem key={index} value={index}>{category}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                 </Stack>
                 <Grid container justifyContent="center" spacing={0} style={{position: "relative"}}>
-                    {complexity === "easy" && (
+                    {complexity === "Easy" && (
                         <img
                             draggable={false}
                             src="/static/easy_label.png"
@@ -102,7 +125,7 @@ function HomeComponent() {
                             alt=""
                         />
                     )}
-                    {complexity === "medium" && (
+                    {complexity === "Medium" && (
                         <img
                             draggable={false}
                             src="/static/medium_label.png"
@@ -110,7 +133,7 @@ function HomeComponent() {
                             alt=""
                         />
                     )}
-                    {complexity === "hard" && (
+                    {complexity === "Hard" && (
                         <img
                             draggable={false}
                             src="/static/hard_label.png"
