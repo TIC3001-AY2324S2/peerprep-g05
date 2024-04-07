@@ -1,15 +1,18 @@
 import dotenv from "dotenv";
+import "dotenv/config";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
-dotenv.config()
+// Read .env from root parent folder if docker is not used
+if (process.env.IS_DOCKER != "true") {
+    dotenv.config({ path: '../../.env' });
+}
 
-const port = process.env.PORT || 3003;
+const port = process.env.COLLABORATION_SVC_PORT || 3009;
 const httpServer = createServer();
 const io = new Server(httpServer, {
     cors: {
-        origin: process.env.NODE_ENV === "PROD" ? false : 
-        ["http://127.0.0.1:5500"] // to add frontend URL e.g [..., "http://localhost:3001"]
+        origin: ["http://127.0.0.1:5500"] // to add frontend URL e.g [..., "http://localhost:3001"]
     }
 });
 

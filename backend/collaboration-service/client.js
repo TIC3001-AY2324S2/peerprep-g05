@@ -1,5 +1,7 @@
+const port = 3004
+
 // Connect to the server
-const socket = io("http://localhost:3003");
+const socket = io(`http://localhost:${port}`);
 
 const form = document.getElementById('code-container');
 const input = document.getElementById('code-input');
