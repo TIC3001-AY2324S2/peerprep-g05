@@ -87,3 +87,12 @@ export async function handleVerifyToken(req, res) {
     return res.status(500).json({ message: err.message });
   }
 }
+
+export async function handleIsAdmin(req, res) {
+  try {
+    const userInfo = req.userInfo;
+    return res.status(200).json({ isAdmin: userInfo.isAdmin });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+}

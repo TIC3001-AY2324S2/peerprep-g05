@@ -9,7 +9,7 @@ import HomePage from './pages/home-page';
 import { MainSelectors } from './state/selectors';
 import { MainActions } from './state/actions';
 import axios from 'axios';
-import { verifyToken } from './apis/app-api';
+import { verifyToken } from './apis/user-service-api';
 import { showErrorBar } from './constants/snack-bar';
 import EditQuestion from "./components/EditQuestion/EditQuestion";
 import AdminPage from "./pages/admin-dashboard";
