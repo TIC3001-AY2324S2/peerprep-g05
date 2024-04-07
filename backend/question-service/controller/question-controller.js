@@ -13,8 +13,7 @@ import {
 export async function getAllQuestion(req, res) {
     const page = req.query.page;
     const limit = req.query.limit;
-    const totalPage = req.query.totalPage;
-    console.log(`GET ${limit} QUESTIONS FOR PAGE ${page} OUT OF ${totalPage} PAGES`);
+    console.log(`GET ${limit} QUESTIONS FOR PAGE ${page}`);
 
     const response = await _findAllQuestion();
 

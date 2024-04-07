@@ -18,20 +18,6 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 ![alt text](../user-service/GuideAssets/ConnectionString.png)
 
-5. Rename the `.env.sample` file to `.env` in the `question-service` directory.
-
-6. Update the `DB_CLOUD_URI` of the `.env` file, and paste the string we copied earlier in step 4. Also remember to replace the `<password>` placeholder with the actual password.
-
-7. Make sure `JWT_SECRET` is the same as User-Service's `.env`
-```
-DB_CLOUD_URI=<CONNECTION_STRING>
-DB_LOCAL_URI=mongodb://localhost/${KEY_IN_YOUR_DB_HERE}
-PORT=3002
-ENV=PROD
-JWT_SECRET=you-can-replace-this-with-your-own-secret
-```
-
-
 ## Running Question Service
 
 1. Open Command Line/Terminal and navigate into the `question-service` directory.

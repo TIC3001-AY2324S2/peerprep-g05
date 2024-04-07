@@ -8,7 +8,7 @@ import {
     Typography,
 } from '@mui/material';
 import React from 'react';
-import { loginAccount, registerAccount } from '../../apis/app-api';
+import { loginAccount, registerAccount } from '../../apis/user-service-api';
 import './LoginComponent.scss';
 import NavigateButton from '../NavigateButton';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
