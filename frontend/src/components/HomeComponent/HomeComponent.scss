@@ -1,0 +1,18 @@
+.home-container {
+    text-align: center;
+    display: flex;
+}
+
+.complexity-label {
+    position: absolute;
+    left: -3px;
+}
+
+.match-ellipse {
+    position: absolute;
+    top: 40%;
+    transform: translate(-50%, -50%);
+}
+.Mui-selected {
+    color: white !important;
+}

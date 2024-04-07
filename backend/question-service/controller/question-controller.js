@@ -6,6 +6,8 @@ import {
     ormDeleteQuestion as _deleteQuestion,
     ormUpdateQuestion as _updateQuestion,
     ormFindAllQuestionByComplexity as _findAllQuestionByComplexity,
+    ormFindAllCategoryByComplexity as _findAllCategoryByComplexity,
+    ormFindOneQuestionByComplexityAndCategory as _findOneQuestionByComplexityAndCategory
 } from "../model/question-orm.js";
 
 export async function getAllQuestion(req, res) {
@@ -86,7 +88,7 @@ export async function getQuestionById(req, res) {
 
 export async function getOneQuestionByComplexity(req, res) {
     const complexity = req.params.complexity;
-    console.log(`GET A QUESITON OF COMPLEXTY : ${complexity}`);
+    console.log(`GET A QUESITON OF COMPLEXITY : ${complexity}`);
 
     const response = await _findOneQuestionByComplexity(complexity);
 
@@ -107,9 +109,33 @@ export async function getOneQuestionByComplexity(req, res) {
     }
 }
 
+export async function getOneRandomQuestionByComplexityAndCategory(req, res) {
+    const complexity = req.params.complexity;
+    const category = req.params.category;
+    console.log(`GET A QUESITON OF COMPLEXITY : ${complexity} AND CATEGORY : ${category}`);
+
+    const response = await _findOneQuestionByComplexityAndCategory(complexity,category);
+
+    console.log(response);
+
+    if (response === null) {
+        return res.status(404).json({
+            message: `Question Not Found`
+        });
+    } else if (response.err) {
+        return res.status(400).json({message: "Error With Question Repository"});
+    } else {
+        console.log(`Questions loaded!`);
+        return res.status(200).json({
+            message: `Questions loaded!`,
+            question: response,
+        });
+    }
+}
+
 export async function getAllQuestionByComplexity(req, res) {
     const complexity = req.params.complexity;
-    console.log(`GET ALL QUESITON OF COMPLEXTY : ${complexity}`);
+    console.log(`GET ALL QUESITON OF COMPLEXITY : ${complexity}`);
 
     const response = await _findAllQuestionByComplexity(complexity);
 
@@ -126,6 +152,29 @@ export async function getAllQuestionByComplexity(req, res) {
         return res.status(200).json({
             message: `Questions loaded!`,
             question: response,
+        });
+    }
+}
+
+export async function getAllCategoryByComplexity(req, res) {
+    const complexity = req.params.complexity;
+    console.log(`GET ALL QUESITON CATEGORIES OF COMPLEXITY : ${complexity}`);
+
+    const response = await _findAllCategoryByComplexity(complexity);
+
+    console.log(response);
+
+    if (response === null) {
+        return res.status(404).json({
+            message: `No Category Found For Given Complexity`
+        });
+    } else if (response.err) {
+        return res.status(400).json({message: "Error With Question Repository"});
+    } else {
+        console.log(`Categories loaded!`);
+        return res.status(200).json({
+            message: `Categories loaded!`,
+            categories: response,
         });
     }
 }
