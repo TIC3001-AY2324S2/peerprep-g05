@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 let currLevel = "EASY MODE";
 
-function HomeComponent() {
+function HomeComponent(props) {
     const [complexity, setComplexity] = useState('Easy');
     const [categoryList, setCategoryList] = useState([]);
     const [category, setCategory] = useState('');
@@ -23,23 +23,19 @@ function HomeComponent() {
     const [timer, setTimer] = useState(15);
     const [partner, setPartner] = useState('');
 
+    const isVerifyDone = props.isVerifyDone;
+
     useEffect(() => {
-        let token = localStorage.getItem('token');
-        if (token) {
-            getCategoriesByComplexity(`Bearer ${token}`, complexity).then((response) => {
+        if (isVerifyDone) {
+            getCategoriesByComplexity(complexity).then((response) => {
                 console.log("categories", response)
                 if (response.error) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
                 }
-                response.data.categories.forEach(category => {
-                    if (!categoryList.includes(category)) {
-                        categoryList.push(category)
-                    }
-                });
-                setCategoryList(categoryList);
+                setCategoryList(response.data.categories);
             });
-            getQuestionsByCategory(`Bearer ${token}`, complexity, category).then((response) => {
+            getQuestionsByCategory(complexity, category).then((response) => {
                 console.log("questions", response)
                 if (response.error) {
                     console.error('Failed to fetch questions:', response.data);
@@ -48,7 +44,7 @@ function HomeComponent() {
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [complexity]);
+    }, [complexity, isVerifyDone]);
 
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";

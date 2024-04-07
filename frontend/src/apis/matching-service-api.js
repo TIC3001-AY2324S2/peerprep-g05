@@ -1,12 +1,15 @@
 import axios from 'axios';
 
-const HOST = 'http://localhost:3002';
+const QUESTION_SVC_HOST = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
+const MATCHING_SVC_HOST = process.env.DOCKER_MATCHING_SVC_URL || 'http://localhost:3003';
 
-export function getCategoriesByComplexity(token, complexity) {
+const CONTENT_TYPE_JSON = 'application/json';
+
+export function getCategoriesByComplexity(complexity) {
     return axios
-        .get(`${HOST}/api/question/categories/${complexity}`, {
+        .get(`${QUESTION_SVC_HOST}/api/question/categories/${complexity}`, {
             headers: {
-                authorization: token,
+                Accept: CONTENT_TYPE_JSON,
             },
         })
         .then((resp) => ({ data: resp.data, error: false }))
@@ -17,11 +20,11 @@ export function getCategoriesByComplexity(token, complexity) {
         }));
 }
 
-export function getQuestionsByCategory(token, complexity, category) {
+export function getQuestionsByCategory(complexity, category) {
     return axios
-        .get(`${HOST}/api/question/${complexity}/${category}`, {
+        .get(`${QUESTION_SVC_HOST}/api/question/complexity/${complexity}/category/${category}`, {
             headers: {
-                authorization: token,
+                Accept: CONTENT_TYPE_JSON,
             },
         })
         .then((resp) => ({ data: resp.data, error: false }))
