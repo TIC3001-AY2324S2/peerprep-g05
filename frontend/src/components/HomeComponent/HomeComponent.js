@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { getCategoriesByComplexity } from '../../apis/matching-service-api';
+import { getCategoriesByComplexity, getQuestionsByCategory } from '../../apis/matching-service-api';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -17,10 +17,11 @@ let currLevel = "EASY MODE";
 function HomeComponent() {
     const [complexity, setComplexity] = useState('Easy');
     const [categoryList, setCategoryList] = useState([]);
-    const [category, setCategory] = useState(0);
+    const [category, setCategory] = useState('');
     const [match, setMatch] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [timer, setTimer] = useState(15);
+    const [partner, setPartner] = useState('');
 
     useEffect(() => {
         let token = localStorage.getItem('token');
@@ -28,7 +29,7 @@ function HomeComponent() {
             getCategoriesByComplexity(`Bearer ${token}`, complexity).then((response) => {
                 console.log("categories", response)
                 if (response.error) {
-                    console.error('Failed to fetch questions:', response.data);
+                    console.error('Failed to fetch categories:', response.data);
                     return;
                 }
                 response.data.categories.forEach(category => {
@@ -37,6 +38,13 @@ function HomeComponent() {
                     }
                 });
                 setCategoryList(categoryList);
+            });
+            getQuestionsByCategory(`Bearer ${token}`, complexity, category).then((response) => {
+                console.log("questions", response)
+                if (response.error) {
+                    console.error('Failed to fetch questions:', response.data);
+                    return;
+                }
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,6 +73,9 @@ function HomeComponent() {
             }, 1000);
             setTimerId(id);
         }
+    };
+    const partnerHandler = (partner) => {
+        setPartner(partner);
     };
 
     const [page, setPage] = useState(1);
@@ -102,16 +113,16 @@ function HomeComponent() {
                         <ListItemText primary="Algorithm Virtuoso" style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
                     </ListItemButton>
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
-                        <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
+                        <InputLabel style={{display: "inline-flex"}}>Select a category</InputLabel>
                         <Select
                             disabled={match}
                             style={{textAlign: "left"}}
                             value={category}
-                            label="Category"
+                            label="Select a category"
                             onChange={categoryHandler}
                         >
                             {categoryList.map((category, index) => (
-                                <MenuItem key={index} value={index}>{category}</MenuItem>
+                                <MenuItem key={index} value={category}>{category}</MenuItem>
                             ))}
                         </Select>
                     </FormControl>
@@ -157,7 +168,30 @@ function HomeComponent() {
                                     <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
                                         {timer}
                                     </Typography>
-                                    {timer === 0 ?
+                                    {timer > 0 &&
+                                        <Container>
+                                            <Stack style={{marginTop: "93px", display: "block"}}>
+                                                <CircularProgress color="inherit" size={25} style={{display: "inline-block", verticalAlign: "text-bottom"}}/>
+                                                {!partner.length &&
+                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                        finding a partner for you. . .
+                                                    </Typography>
+                                                }
+                                                {partner &&
+                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                        matching you with <span style={{ color: "#5541D7" }}>{partner}</span>. . .
+                                                    </Typography>
+                                                }
+                                            </Stack>
+                                            <ListItemButton
+                                                style={{marginTop: "15px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px"}}
+                                                onClick={(event) => matchHandler(event, false)}
+                                                >
+                                                <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
+                                            </ListItemButton>
+                                        </Container>
+                                    }
+                                    {timer === 0 &&
                                         <Container>
                                             <Typography variant="h6" style={{marginTop: "90px", marginLeft: "auto", marginRight: "auto"}}>
                                                 There is no match for your search.
@@ -167,21 +201,6 @@ function HomeComponent() {
                                                 onClick={(event) => matchHandler(event, false)}
                                             >
                                                 <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
-                                            </ListItemButton>
-                                        </Container>
-                                    :
-                                        <Container>
-                                            <Stack style={{marginTop: "93px", display: "block"}}>
-                                                <CircularProgress color="inherit" size={25} style={{display: "inline-block", verticalAlign: "text-bottom"}}/>
-                                                <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
-                                                    finding a partner for you. . .
-                                                </Typography>
-                                            </Stack>
-                                            <ListItemButton
-                                                style={{marginTop: "15px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px"}}
-                                                onClick={(event) => matchHandler(event, false)}
-                                            >
-                                                <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
                                             </ListItemButton>
                                         </Container>
                                     }
