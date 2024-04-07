@@ -46,6 +46,21 @@ services:
     networks:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
+  matching-service-app:
+    build: ./backend/matching-service # Path to the directory containing the Dockerfile
+    container_name: matching_service
+    ports:
+      - ${MATCHING_SVC_PORT}:${MATCHING_SVC_PORT} # Maps ports
+    environment:
+      - IS_DOCKER=true
+      - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
+    env_file:
+      - ./.env
+    networks:
+      - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+      
+
 networks:
   peerprep-network: # Defines a network named 'peerprep-network'.
     driver: bridge # Uses the bridge driver for the network, which is the default and most common network type in Docker.

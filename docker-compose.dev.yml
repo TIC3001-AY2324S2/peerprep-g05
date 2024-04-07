@@ -30,3 +30,12 @@ services:
       - ./backend/question-service/routes:/app/routes
       - ./backend/question-service/index.js:/app/index.js
       - ./backend/question-service/server.js:/app/server.js
+
+  matching-service-app:
+    volumes:
+      - ./backend/matching-service/controller:/app/controller
+      - ./backend/matching-service/middleware:/app/middleware
+      - ./backend/matching-service/model:/app/model
+      - ./backend/matching-service/routes:/app/routes
+      - ./backend/matching-service/index.js:/app/index.js
+      - ./backend/matching-service/server.js:/app/server.js    
