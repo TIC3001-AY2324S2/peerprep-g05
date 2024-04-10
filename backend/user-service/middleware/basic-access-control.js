@@ -26,7 +26,7 @@ export function verifyAccessToken(req, res, next) {
 }
 
 export function verifyIsAdmin(req, res, next) {
-  if (req.user.isAdmin) {
+  if (req.userInfo.isAdmin) {
     next();
   } else {
     return res.status(403).json({ message: "Not authorized to access this resource" });
@@ -34,12 +34,12 @@ export function verifyIsAdmin(req, res, next) {
 }
 
 export function verifyEmail(req, res, next) {
-  if (req.user.isAdmin) {
+  if (req.userInfo.isAdmin) {
     return next();
   }
 
   const userEmailFromBody = req.body.email;
-  const userEmailFromToken = req.user.email;
+  const userEmailFromToken = req.userInfo.email;
   if (userEmailFromBody === userEmailFromToken) {
     return next();
   }
@@ -48,12 +48,12 @@ export function verifyEmail(req, res, next) {
 }
 
 export function verifyId(req, res, next) {
-  if (req.user.isAdmin) {
+  if (req.userInfo.isAdmin) {
     return next();
   }
 
   const userIdFromBody = req.body.id;
-  const userIdFromToken = req.user.id;
+  const userIdFromToken = req.userInfo.id;
   if (userIdFromBody === userIdFromToken) {
     return next();
   }
