@@ -1,18 +1,39 @@
 .home-container {
-    text-align: center;
-    display: flex;
+  text-align: center;
+  display: flex;
+  font-family: 'Mulish', sans-serif;
 }
 
 .complexity-label {
-    position: absolute;
-    left: -3px;
+  position: absolute;
+  left: -3px;
 }
 
 .match-ellipse {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 40%;
+  transform: translate(-50%, -50%);
 }
+
 .Mui-selected {
-    color: white !important;
+  color: white !important;
+}
+
+.css-1633um2-MuiPaper-root {
+  font-family: 'Mulish', sans-serif !important;
+}
+
+.collaboration-session {
+  background-color: white;
+  height: 600px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1px solid #5541D7;
+}
+
+.collaboration-question {
+  height: 100%;
+}
+.collaboration-inner{
+  height: 100%;
 }

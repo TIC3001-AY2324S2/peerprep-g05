@@ -1,0 +1,83 @@
+.powered-by-firepad {
+  display: none !important;
+}
+
+.code-editor {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+  background-color: #11142D;
+  padding: 0 !important;
+  height: 600px;
+  border-radius: 0 10px 10px 0;
+}
+
+.top-editor {
+  display: flex;
+  justify-content: start;
+  text-align: start;
+  color: white;
+  height: 5%;
+  padding: 10px 20px;
+  font-size: 18px;
+}
+
+.top-editor span {
+  color: #766EDA;
+}
+
+.bottom-editor {
+  display: flex;
+  justify-content: end;
+  text-align: center;
+  justify-items: center;
+  padding: 10px 20px;
+  height: 5%;
+}
+
+.bottom-editor button {
+  background-color: #5541D7;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  cursor: pointer;
+  border: none;
+}
+
+/* -------------------------------------------------------------------------- */
+
+
+.matching-question {
+  margin-top: 50px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  text-align: start;
+  font-family: 'Mulish', sans-serif;
+}
+
+.matching-question h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #11142D;
+}
+
+.description-matching-question {
+  font-size: 16px;
+  color: #92929D;
+  text-align: justify;
+}
+
+.example-matching-question {
+  font-size: 16px;
+  color: #92929D;
+  margin-top: 30px;
+  background-color: #F8F9FA;
+  padding: 20px;
+}
+

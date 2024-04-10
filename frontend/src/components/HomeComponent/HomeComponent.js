@@ -1,11 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import './HomeComponent.scss';
-import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
-import { styled } from '@mui/material/styles';
-import { getCategoriesByComplexity, getQuestionsByCategory } from '../../apis/matching-service-api';
-import CollabComponent from "../CollabComponent/CollabComponent";
+import {
+    Container,
+    Typography,
+    FormControl,
+    Stack,
+    ListItemButton,
+    ListItemText,
+    InputLabel,
+    Select,
+    MenuItem,
+    CircularProgress,
+    Grid,
+    Paper,
+    Pagination
+} from '@mui/material';
+import {styled} from '@mui/material/styles';
+import {getCategoriesByComplexity, getQuestionsByCategory} from '../../apis/matching-service-api';
+import CodeEditorComponent from "../CollabComponent/CodeEditorComponent";
+import MatchingQuestion from "../CollabComponent/MatchingQuestion";
 
-const Item = styled(Paper)(({ theme }) => ({
+const Item = styled(Paper)(({theme}) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -65,7 +80,7 @@ function HomeComponent(props) {
                         clearInterval(id);
                         return counter;
                     }
-                return counter - 1;
+                    return counter - 1;
                 });
             }, 1000);
             setTimerId(id);
@@ -90,24 +105,45 @@ function HomeComponent(props) {
                 <Stack direction="row" spacing={3} style={{padding: "35px 0 25px 0"}}>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "Easy" ? {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", backgroundColor: "#3CAA91", borderRadius: "5px"} : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
+                        style={complexity === "Easy" ? {
+                            maxWidth: "185px",
+                            border: "solid 1px",
+                            borderColor: "#3CAA91",
+                            backgroundColor: "#3CAA91",
+                            borderRadius: "5px"
+                        } : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Easy")}
                     >
-                        <ListItemText primary="Interview Apprentice" style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
+                        <ListItemText primary="Interview Apprentice"
+                                      style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
                     </ListItemButton>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "Medium" ? {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", backgroundColor: "#FFA800", borderRadius: "5px"} : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
+                        style={complexity === "Medium" ? {
+                            maxWidth: "150px",
+                            border: "solid 1px",
+                            borderColor: "#FFA800",
+                            backgroundColor: "#FFA800",
+                            borderRadius: "5px"
+                        } : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Medium")}
                     >
-                        <ListItemText primary="Coding Maestro" style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
+                        <ListItemText primary="Coding Maestro"
+                                      style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
                     </ListItemButton>
                     <ListItemButton
                         disabled={match}
-                        style={complexity === "Hard" ? {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", backgroundColor: "#F04461", borderRadius: "5px"} : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
+                        style={complexity === "Hard" ? {
+                            maxWidth: "170px",
+                            border: "solid 1px",
+                            borderColor: "#F04461",
+                            backgroundColor: "#F04461",
+                            borderRadius: "5px"
+                        } : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Hard")}
                     >
-                        <ListItemText primary="Algorithm Virtuoso" style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
+                        <ListItemText primary="Algorithm Virtuoso"
+                                      style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
                     </ListItemButton>
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
                         <InputLabel style={{display: "inline-flex"}}>Select a category</InputLabel>
@@ -149,10 +185,17 @@ function HomeComponent(props) {
                             alt=""
                         />
                     )}
-                    <Typography variant="h6" align="center" style={{position: "absolute", top: "10px", left: "13px", fontSize: "17px", color: "white"}}>
+                    <Typography variant="h6" align="center" style={{
+                        position: "absolute",
+                        top: "10px",
+                        left: "13px",
+                        fontSize: "17px",
+                        color: "white"
+                    }}>
                         {currLevel}
                     </Typography>
-                    <Grid item lg={6} style={{border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px 0 0 5px"}}>
+                    <Grid item lg={6}
+                          style={{border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px 0 0 5px"}}>
                         <Item style={{height: "550px"}}>
                             <img
                                 draggable={false}
@@ -162,39 +205,73 @@ function HomeComponent(props) {
                             />
                             {match ?
                                 <Container>
-                                    <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
+                                    <Typography variant="h1" align="center" style={{
+                                        marginTop: "165px",
+                                        fontWeight: "bold",
+                                        color: "#5541D7",
+                                        opacity: "50%"
+                                    }}>
                                         {timer}
                                     </Typography>
                                     {timer > 0 &&
                                         <Container>
                                             <Stack style={{marginTop: "93px", display: "block"}}>
-                                                <CircularProgress color="inherit" size={25} style={{display: "inline-block", verticalAlign: "text-bottom"}}/>
+                                                <CircularProgress color="inherit" size={25} style={{
+                                                    display: "inline-block",
+                                                    verticalAlign: "text-bottom"
+                                                }}/>
                                                 {!partner.length &&
-                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                    <Typography variant="h6"
+                                                                style={{paddingLeft: "15px", display: "inline-block"}}>
                                                         finding a partner for you. . .
                                                     </Typography>
                                                 }
                                                 {partner &&
-                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
-                                                        matching you with <span style={{ color: "#5541D7" }}>{partner}</span>. . .
+                                                    <Typography variant="h6"
+                                                                style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                        matching you with <span
+                                                        style={{color: "#5541D7"}}>{partner}</span>. . .
                                                     </Typography>
                                                 }
                                             </Stack>
                                             <ListItemButton
-                                                style={{marginTop: "15px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px"}}
+                                                style={{
+                                                    marginTop: "15px",
+                                                    marginLeft: "auto",
+                                                    marginRight: "auto",
+                                                    width: "120px",
+                                                    textAlign: "center",
+                                                    border: "solid 1px",
+                                                    borderColor: "#5541D7",
+                                                    borderRadius: "5px"
+                                                }}
                                                 onClick={(event) => matchHandler(event, false)}
-                                                >
+                                            >
                                                 <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
                                             </ListItemButton>
                                         </Container>
                                     }
                                     {timer === 0 &&
                                         <Container>
-                                            <Typography variant="h6" style={{marginTop: "90px", marginLeft: "auto", marginRight: "auto"}}>
+                                            <Typography variant="h6" style={{
+                                                marginTop: "90px",
+                                                marginLeft: "auto",
+                                                marginRight: "auto"
+                                            }}>
                                                 There is no match for your search.
                                             </Typography>
                                             <ListItemButton
-                                                style={{marginTop: "18px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", backgroundColor: "#5541D7", borderRadius: "5px"}}
+                                                style={{
+                                                    marginTop: "18px",
+                                                    marginLeft: "auto",
+                                                    marginRight: "auto",
+                                                    width: "120px",
+                                                    textAlign: "center",
+                                                    border: "solid 1px",
+                                                    borderColor: "#5541D7",
+                                                    backgroundColor: "#5541D7",
+                                                    borderRadius: "5px"
+                                                }}
                                                 onClick={(event) => matchHandler(event, false)}
                                             >
                                                 <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
@@ -202,7 +279,7 @@ function HomeComponent(props) {
                                         </Container>
                                     }
                                 </Container>
-                            :
+                                :
                                 <Container>
                                     <img
                                         draggable={false}
@@ -210,21 +287,33 @@ function HomeComponent(props) {
                                         className={"match-ellipse"}
                                         alt=""
                                     />
-                                    <Typography variant="h5" align="center" style={{marginTop: "170px", fontWeight: "bold"}}>
-                                        Find your<br />partner to start<br />the challenge
+                                    <Typography variant="h5" align="center"
+                                                style={{marginTop: "170px", fontWeight: "bold"}}>
+                                        Find your<br/>partner to start<br/>the challenge
                                     </Typography>
                                     <ListItemButton
-                                        style={{marginTop: "151px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", backgroundColor: "#5541D7", borderRadius: "5px"}}
+                                        style={{
+                                            marginTop: "151px",
+                                            marginLeft: "auto",
+                                            marginRight: "auto",
+                                            width: "120px",
+                                            textAlign: "center",
+                                            border: "solid 1px",
+                                            borderColor: "#5541D7",
+                                            backgroundColor: "#5541D7",
+                                            borderRadius: "5px"
+                                        }}
                                         onClick={(event) => matchHandler(event, true)}
                                     >
                                         <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
                                     </ListItemButton>
-                                    <CollabComponent />
+
                                 </Container>
                             }
                         </Item>
                     </Grid>
-                    <Grid item lg={6} style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
+                    <Grid item lg={6}
+                          style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
                         <Item style={{height: "550px"}}>
                             <Container style={{margin: "30px 0"}}>
                                 <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
@@ -257,7 +346,23 @@ function HomeComponent(props) {
                         </Item>
                     </Grid>
                 </Grid>
+                <Grid container spacing={0} className={'collaboration-session'}>
+                    <Grid xs={6} className={'collaboration-question'}>
+                        <div className={'collaboration-inner'}>
+                            <MatchingQuestion
+                                {...props}
+                            />
+                        </div>
+                    </Grid>
+                    <Grid xs={6} className={'collaboration-code-editor'}>
+                        <div className={'collaboration-inner'}>
+                            <CodeEditorComponent/>
+                        </div>
+                    </Grid>
+                </Grid>
+
             </Container>
+
         </div>
     );
 }
