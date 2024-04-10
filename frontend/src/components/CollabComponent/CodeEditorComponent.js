@@ -33,9 +33,9 @@ export default function CodeEditorComponent() {
 
     return (
         <div className={'code-editor'}>
-            <div className={'top-editor'}><span>&#60;/&#62;&nbsp;</span> code</div>
+            <div className={'top-editor'}><span>&#60;/&#62;&nbsp;</span>Code</div>
             <Editor
-                height="90%"
+                height="85%"
                 defaultLanguage="javascript"
                 theme="vs-dark"
                 defaultValue=""

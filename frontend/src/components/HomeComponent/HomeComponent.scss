@@ -25,8 +25,8 @@
 
 .collaboration-session {
   background-color: white;
-  height: 600px;
-  border-radius: 10px;
+  height: 550px;
+  border-radius: 8px;
   margin-top: 20px;
   border: 1px solid #5541D7;
 }
@@ -34,6 +34,60 @@
 .collaboration-question {
   height: 100%;
 }
-.collaboration-inner{
+
+.collaboration-inner {
   height: 100%;
 }
+
+.home-section-1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 30px 0;
+}
+
+.home-section-1-difficulty {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 60%;
+  gap: 1%;
+}
+
+.css-nen11g-MuiStack-root {
+  flex-direction: row !important;
+  text-align: center;
+}
+
+.home-section-1-difficulty ListItemButton {
+  border: solid 1px;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.home-section-1-categories {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 20%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.MuiListItemText-root {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600 !important;
+  width: min-content;
+}
+.MuiTypography-root{
+ font-family: 'Mulish', sans-serif !important;
+}
+
+
+ .css-10hburv-MuiTypography-root {
+   font-weight: 600 !important;
+ }

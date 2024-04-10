@@ -9,8 +9,8 @@
   text-align: start;
   background-color: #11142D;
   padding: 0 !important;
-  height: 600px;
-  border-radius: 0 10px 10px 0;
+  height: 550px;
+  border-radius: 0 8px 8px 0;
 }
 
 .top-editor {
@@ -24,14 +24,12 @@
 }
 
 .top-editor span {
-  color: #766EDA;
+  color: #816df6;
 }
 
 .bottom-editor {
   display: flex;
   justify-content: end;
-  text-align: center;
-  justify-items: center;
   padding: 10px 20px;
   height: 5%;
 }
@@ -46,6 +44,10 @@
   border-radius: 5px;
   cursor: pointer;
   border: none;
+}
+
+.bottom-editor button:hover {
+  filter: drop-shadow(2px 2px 1px #766EDA);
 }
 
 /* -------------------------------------------------------------------------- */

@@ -102,50 +102,48 @@ function HomeComponent(props) {
                 <Typography variant="h6" align="center">
                     Step into PeerPrep's world, where every challenge is an opportunity.
                 </Typography>
-                <Stack direction="row" spacing={3} style={{padding: "35px 0 25px 0"}}>
-                    <ListItemButton
-                        disabled={match}
-                        style={complexity === "Easy" ? {
-                            maxWidth: "185px",
-                            border: "solid 1px",
-                            borderColor: "#3CAA91",
-                            backgroundColor: "#3CAA91",
-                            borderRadius: "5px"
-                        } : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "Easy")}
-                    >
-                        <ListItemText primary="Interview Apprentice"
-                                      style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
-                    </ListItemButton>
-                    <ListItemButton
-                        disabled={match}
-                        style={complexity === "Medium" ? {
-                            maxWidth: "150px",
-                            border: "solid 1px",
-                            borderColor: "#FFA800",
-                            backgroundColor: "#FFA800",
-                            borderRadius: "5px"
-                        } : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "Medium")}
-                    >
-                        <ListItemText primary="Coding Maestro"
-                                      style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
-                    </ListItemButton>
-                    <ListItemButton
-                        disabled={match}
-                        style={complexity === "Hard" ? {
-                            maxWidth: "170px",
-                            border: "solid 1px",
-                            borderColor: "#F04461",
-                            backgroundColor: "#F04461",
-                            borderRadius: "5px"
-                        } : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
-                        onClick={(event) => complexityHandler(event, "Hard")}
-                    >
-                        <ListItemText primary="Algorithm Virtuoso"
-                                      style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
-                    </ListItemButton>
-                    <FormControl style={{marginLeft: "auto", width: "500px"}}>
+                <Stack className={'home-section-1'}>
+                    <div className={'home-section-1-difficulty'}>
+                        <ListItemButton
+                            disabled={match}
+                            style={complexity === "Easy" ? {
+
+                                borderColor: "#3CAA91",
+                                backgroundColor: "#3CAA91",
+                                borderRadius: "5px"
+                            } : {border: "solid 1px #3CAA91", borderRadius: "5px"}}
+                            onClick={(event) => complexityHandler(event, "Easy")}
+                        >
+                            <ListItemText primary="Interview Apprentice"
+                                          style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
+                        </ListItemButton>
+                        <ListItemButton
+                            disabled={match}
+                            style={complexity === "Medium" ? {
+                                padding: "0 10px",
+                                borderColor: "#FFA800",
+                                backgroundColor: "#FFA800",
+                                borderRadius: "5px"
+                            } : {border: "solid 1px #FFA800", borderRadius: "5px"}}
+                            onClick={(event) => complexityHandler(event, "Medium")}
+                        >
+                            <ListItemText primary="Coding Maestro"
+                                          style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
+                        </ListItemButton>
+                        <ListItemButton
+                            disabled={match}
+                            style={complexity === "Hard" ? {
+                                borderColor: "#F04461",
+                                backgroundColor: "#F04461",
+                                borderRadius: "5px"
+                            } : {border: "solid 1px #F04461", borderRadius: "5px"}}
+                            onClick={(event) => complexityHandler(event, "Hard")}
+                        >
+                            <ListItemText primary="Algorithm Virtuoso"
+                                          style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
+                        </ListItemButton>
+                    </div>
+                    <FormControl className={'home-section-1-categories'}>
                         <InputLabel style={{display: "inline-flex"}}>Select a category</InputLabel>
                         <Select
                             disabled={match}
@@ -296,7 +294,7 @@ function HomeComponent(props) {
                                             marginTop: "151px",
                                             marginLeft: "auto",
                                             marginRight: "auto",
-                                            width: "120px",
+                                            width: "150px",
                                             textAlign: "center",
                                             border: "solid 1px",
                                             borderColor: "#5541D7",
@@ -312,6 +310,7 @@ function HomeComponent(props) {
                             }
                         </Item>
                     </Grid>
+
                     <Grid item lg={6}
                           style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
                         <Item style={{height: "550px"}}>
@@ -345,6 +344,7 @@ function HomeComponent(props) {
                             </Container>
                         </Item>
                     </Grid>
+
                 </Grid>
                 <Grid container spacing={0} className={'collaboration-session'}>
                     <Grid xs={6} className={'collaboration-question'}>
