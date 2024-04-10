@@ -3,6 +3,7 @@ import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { getCategoriesByComplexity, getQuestionsByCategory } from '../../apis/matching-service-api';
+import CollabComponent from "../CollabComponent/CollabComponent";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -218,6 +219,7 @@ function HomeComponent(props) {
                                     >
                                         <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
                                     </ListItemButton>
+                                    <CollabComponent />
                                 </Container>
                             }
                         </Item>
