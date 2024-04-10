@@ -31,6 +31,7 @@ services:
       - ./backend/question-service/index.js:/app/index.js
       - ./backend/question-service/server.js:/app/server.js
 
+
   matching-service-app:
     volumes:
       - ./backend/matching-service/controller:/app/controller
@@ -39,3 +40,9 @@ services:
       - ./backend/matching-service/routes:/app/routes
       - ./backend/matching-service/index.js:/app/index.js
       - ./backend/matching-service/server.js:/app/server.js
+
+  collaboration-service-app:
+    volumes:
+      - ./backend/collaboration-service/index.html:/app/index.html
+      - ./backend/collaboration-service/client.js:/app/client.js
+      - ./backend/collaboration-service/server.js:/app/server.js
