@@ -3,6 +3,7 @@ import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { cancelMatch, getCategoriesByComplexity, getMatchHistory, getQuestionsByCategory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
+import moment from 'moment';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -296,7 +297,7 @@ function HomeComponent(props) {
                                                 <td>{match.partner}</td>
                                                 <td>{match.category}</td>
                                                 <td>{match.complexity}</td>
-                                                <td>{match.createdAt}</td>
+                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                                             </tr>
                                         ))}
                                     </table>
