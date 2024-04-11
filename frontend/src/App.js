@@ -5,6 +5,7 @@ import './App.scss';
 import ErrorPage from './pages/error-page';
 import ForgotPage from './pages/forgot-page';
 import LoginPage from './pages/login-page';
+import HomePage from './pages/home-page';
 import { MainSelectors } from './state/selectors';
 import { MainActions } from './state/actions';
 import axios from 'axios';
@@ -86,6 +87,11 @@ const App = (props) => {
                 path="/forgot"
                 exact
                 element={<ForgotPage {...mainProps} />}
+            />
+            <Route
+                path="/home"
+                exact
+                element={<HomePage {...mainProps} />}
             />
             <Route
                 path="/admin-dashboard"

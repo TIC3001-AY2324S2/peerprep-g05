@@ -42,10 +42,28 @@ export async function findOneQuestionByComplexity(complexity) {
   ]);
 }
 
+export async function findOneQuestionByComplexityAndCategory(complexity,category) {
+  return QuestionModel.aggregate([
+    { $match: { complexity: complexity, categories: category } },
+    { $sample: { size: 1 } }
+  ]);
+}
+
 export async function findAllQuestionByComplexity(complexity) {
   return QuestionModel.find(
     {complexity: complexity }
   );
+}
+
+export async function findAllCategoryByComplexity(complexity) {
+  const result = await QuestionModel.aggregate([
+    { $match: { complexity: complexity } },
+    { $unwind: "$categories" },
+    { $group: { _id: "$categories" } },
+    { $project: { _id: 0, category: "$_id" } }
+  ]);
+
+  return result.map(item => item.category);
 }
 
 export async function createQuestion({ title, description, categories, complexity, testCase }) {

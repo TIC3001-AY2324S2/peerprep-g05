@@ -8,7 +8,7 @@ if (process.env.IS_DOCKER != "true") {
     dotenv.config({ path: '../../.env' });
 }
 
-const port = process.env.QUESTION_SVC_PORT || 3003;
+const port = process.env.MATCHING_SVC_PORT || 3003;
 
 const server = http.createServer(index);
 
