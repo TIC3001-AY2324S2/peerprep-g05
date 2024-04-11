@@ -34,6 +34,7 @@ function HomeComponent(props) {
                     return;
                 }
                 setCategoryList(response.data.categories);
+                setCategory(response.data.categories[0]);
             });
             getQuestionsByCategory(complexity, category).then((response) => {
                 console.log("questions", response)
@@ -109,12 +110,12 @@ function HomeComponent(props) {
                         <ListItemText primary="Algorithm Virtuoso" style={complexity === "Hard" ? {color: "#FFFFFF"} : {color: "#F04461"}}/>
                     </ListItemButton>
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
-                        <InputLabel style={{display: "inline-flex"}}>Select a category</InputLabel>
+                        <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
                         <Select
                             disabled={match}
                             style={{textAlign: "left"}}
                             value={category}
-                            label="Select a category"
+                            label="Category"
                             onChange={categoryHandler}
                         >
                             {categoryList.map((category, index) => (
