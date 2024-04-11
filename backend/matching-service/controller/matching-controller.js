@@ -1,4 +1,5 @@
-const mqtt = require('mqtt');
+import mqtt from 'mqtt';
+import crypto from 'crypto';
 
 // MQTT Broker connection
 const client = mqtt.connect('mqtt://localhost');
@@ -82,7 +83,6 @@ export async function cancelMatch(req, res){
 //generator hash function
 function generateHash(userA, userB) {
   const hashInput = `${userA}-${userB}-${Date.now()}`;
-  const crypto = require('crypto');
   const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
   return hash;
 }
