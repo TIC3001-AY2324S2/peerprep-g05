@@ -1,4 +1,4 @@
-import MatchingModel from "./matching-model.js";
+import MatchingModel from "./match-history-model.js";
 import dotenv from "dotenv";
 import "dotenv/config";
 
