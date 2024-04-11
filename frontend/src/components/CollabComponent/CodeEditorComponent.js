@@ -10,7 +10,7 @@ export default function CodeEditorComponent() {
     const [editorLoaded, setEditorLoaded] = useState(false);
 
 
-    function handleEditorDidMount(editor, monaco) {
+    function handleEditorDidMount(editor) {
         editorRef.current = editor;
         setEditorLoaded(true);
     }
