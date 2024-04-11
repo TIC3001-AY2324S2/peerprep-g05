@@ -6,7 +6,6 @@ import {
 export async function ormGetMatchesForUser(email) {
   try {
     const matches = await findMatchesForUser(email);
-    console.log(`email [${email}]:` + matches);
     return matches;
   } catch (err) {
     console.log(`Error ormGetMatchesForUser: ${err}`);

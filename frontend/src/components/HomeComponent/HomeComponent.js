@@ -13,6 +13,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 let currLevel = "EASY MODE";
+let client;
 
 function HomeComponent(props) {
     const [complexity, setComplexity] = useState('Easy');
@@ -23,8 +24,11 @@ function HomeComponent(props) {
     const [timer, setTimer] = useState(15);
     const [partner, setPartner] = useState('');
     const [matchHistory, setMatchHistory] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
     const isVerifyDone = props.isVerifyDone;
+
 
     useEffect(() => {
         if (isVerifyDone) {
@@ -53,16 +57,17 @@ function HomeComponent(props) {
 
     useEffect(() => {
         if (isVerifyDone) {
-            getMatchHistory(props.userInfo.email).then((response) => {
+            getMatchHistory(props.userInfo.email, page).then((response) => {
                 console.log("history", response)
                 setMatchHistory(response.data.history);
+                setTotalPages(response.data.totalPages);
                 if (response.error) {
                     console.error('Failed to fetch history:', response.data);
                     return;
                 }
             });
         }
-    }, [isVerifyDone, partner, props.userInfo.email]);
+    }, [isVerifyDone, partner, page, props.userInfo.email]);
 
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
@@ -76,7 +81,7 @@ function HomeComponent(props) {
         clearInterval(timerId);
         setTimer(15);
         if (isMatch) {
-            const client = subscribeToTopic(props.userInfo.username);
+            client = subscribeToTopic(props.userInfo.username);
             console.log(props.userInfo);
             client.on('connect', () => {
                 startMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
@@ -111,6 +116,9 @@ function HomeComponent(props) {
                 setPartner(resp.partner);
             });
         } else {
+            if (client) {
+                client.end();
+            }
             setPartner('');
             cancelMatch(props.userInfo.username, complexity, category).then((response) => {
                 console.log("cancel match:", response)
@@ -124,9 +132,6 @@ function HomeComponent(props) {
     const partnerHandler = (partner) => {
         setPartner(partner);
     };
-
-    const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
 
     return (
         <div className={"home-container"}>

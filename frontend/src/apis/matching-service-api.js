@@ -85,9 +85,9 @@ export function subscribeToTopic(username) {
     return client;
 }
 
-export function getMatchHistory(email) {
+export function getMatchHistory(email, page) {
     return axios
-        .get(`${MATCHING_SVC_HOST}/api/match/history/${email}`)
+        .get(`${MATCHING_SVC_HOST}/api/match/history/${email}?page=${page}&limit=8`)
         .then((resp) => ({ data: resp.data, error: false }))
         .catch((err) => ({
             data: err && err.response ? err.response.data : '',

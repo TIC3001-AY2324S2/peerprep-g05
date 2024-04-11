@@ -78,9 +78,31 @@ function generateHash(userA, userB) {
 // Retrieves the match history for the user
 export async function getMatchesForUser(req, res) {
   const { email } = req.params;
+  const limit = req.query.limit;
+  const page = req.query.page;
 
-  const history = await ormGetMatchesForUser(email);
+  console.log(`GET ${limit} MATCH HISTORY FOR email [${email}] PAGE ${page}`);
 
-  res.status(200).json({ history });
+  const response = await ormGetMatchesForUser(email);
 
+  if (response === null) {
+    return res.status(200).json({
+      message: `No history In Repository`,
+      history: response,
+    });
+  } else if (response.err) {
+    return res.status(400).json({message: "Error With History Repository"});
+  } else {
+    console.log(`Match history loaded!`);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const totalPages = Math.ceil(response.length / limit);
+
+    const slicedResponse = response.slice(startIndex, endIndex);
+    return res.status(200).json({
+        message: `History loaded!`,
+        history: slicedResponse,
+        totalPages: totalPages,
+    });
+  }
 }
