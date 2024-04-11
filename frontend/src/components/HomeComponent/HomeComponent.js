@@ -129,9 +129,6 @@ function HomeComponent(props) {
             })
         }
     };
-    const partnerHandler = (partner) => {
-        setPartner(partner);
-    };
 
     return (
         <div className={"home-container"}>
