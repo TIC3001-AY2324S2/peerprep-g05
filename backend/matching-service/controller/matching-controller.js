@@ -69,13 +69,13 @@ export async function startMatch(req, res){
 }
 
 
-//Cancle macth endpoint
-export async function cancleMatch(req, res){
+//Cancel macth endpoint
+export async function cancelMatch(req, res){
   const { userId, complexity, category } = req.body;
 
   userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== userId);
 
-  res.status(200).json({ message: 'Match Cancled' });
+  res.status(200).json({ message: 'Match Canceled' });
 }
 
 
