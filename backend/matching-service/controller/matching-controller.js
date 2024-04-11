@@ -1,185 +1,108 @@
-const mqtt = require('mqtt');
+import mqtt from 'mqtt';
+import crypto from 'crypto';
+import { ormCreateMatchRecordForUser, ormGetMatchesForUser } from '../model/matching-orm.js';
+import dotenv from "dotenv";
+import "dotenv/config";
+
+// Read .env from root parent folder if docker is not used
+if (process.env.IS_DOCKER != "true") {
+    dotenv.config({ path: '../../.env' });
+}
+
+const mqttBrokerUrl = process.env.DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
 
 // MQTT Broker connection
-const client = mqtt.connect('mqtt://localhost');
+const client = mqtt.connect(mqttBrokerUrl);
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
 });
 
-import {
-  ormGetMatchRecord,
-  ormCreateFindMatchRecord,
-  ormGetMatchPartner,
-  ormCreateRoom,
-  ormUpdateMatchRecordRoomId,
-} from "../model/matching-orm.js";
-
-const categoryList = [
-  'Strings',
-  'Algorithms',
-  'Brainteaser',
-  'Data Structure',
-  'Databases',
-  'Recursion',
-  'Bit Manipulation'
-];
-
-const complexity = ['easy', 'medium', 'hard'];
-
-let userQueue = {};
-
-complexity.forEach(complexity => {
-  userQueue[complexity] = {};
-
-  categoryList.forEach(category => {
-      userQueue[complexity][category.toLowerCase()] = [];
-  });
-});
-
-console.log(userQueue);
+const userQueue = {};
+const userToEmailMap = {};
 
 //Start match endpoint
 export async function startMatch(req, res){
-  const { userId, complexity, category } = req.body;
+  const { username, email, complexity, category } = req.body;
+  console.log(req.body)
 
-   client.subscribe(userId);
+  userQueue[complexity] = userQueue[complexity] ?? {};
+  userQueue[complexity][category] = userQueue[complexity][category] ?? [];
+  userToEmailMap[username] = email;
 
-   const matchingUser = userQueue[complexity][category].find(user => user !== userId);
+  console.log(userQueue);
 
-   if (matchingUser) {
-       const hash = generateHash(userId, matchingUser);
+  if (userQueue[complexity][category].length > 0) {
+    if (userQueue[complexity][category] === username) {
+      return res.status(200).json({ message: 'Already added to queue' });
+    }
 
-       // Publish hash
-       client.publish(userId, hash);
-       client.publish(matchingUser, hash);
+    const partner = userQueue[complexity][category].pop();
 
-       // Remove users from global variable
-       userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== userId && user !== matchingUser);
+    // for assignment 4 return the partner name instead of hash
+    const hash = generateHash(username, partner);
+    client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
+    client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
 
-       res.status(200).json({ message: 'Match found' });
-   } else {
-       if (!userQueue[complexity][category]) {
-           userQueue[complexity][category] = [];
-       }
-       userQueue[complexity][category].push(userId);
+    ormCreateMatchRecordForUser(email, partner, complexity, category)
+    ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
 
-       res.status(200).json({ message: 'Added to queue' });
-   }
+    console.log(`Match [${hash}] found for ${username} and ${partner}`);
+    return res.status(200).json({ message: 'Match found' });
+  } else {
+    userQueue[complexity][category].push(username);
+  }
+  return res.status(200).json({ message: 'Added to queue' });
 }
 
 
-//Cancel macth endpoint
+//Cancel match endpoint
 export async function cancelMatch(req, res){
-  const { userId, complexity, category } = req.body;
+  const { username, complexity, category } = req.body;
 
-  userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== userId);
+  if (userQueue[complexity] && userQueue[complexity][category]) {
+    userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== username);
+  }
 
-  res.status(200).json({ message: 'Match Canceled' });
+  res.status(200).json({ message: 'Match Cancelled' });
 }
 
 
 //generator hash function
 function generateHash(userA, userB) {
   const hashInput = `${userA}-${userB}-${Date.now()}`;
-  const crypto = require('crypto');
   const hash = crypto.createHash('sha256').update(hashInput).digest('hex');
   return hash;
 }
 
+// Retrieves the match history for the user
+export async function getMatchesForUser(req, res) {
+  const { email } = req.params;
+  const limit = req.query.limit;
+  const page = req.query.page;
 
-// export async function respHelloWorld(req, res) {
-//   try {
-//     console.log(req.body)
-//     return res.status(200).json({ message: `Hello World! Email:` });
-//   } catch (err) {
-//     return res.status(500).json({ message: "Internal Server Error!" });
-//   }
-// }
+  console.log(`GET ${limit} MATCH HISTORY FOR email [${email}] PAGE ${page}`);
 
-export async function getMatchRecord(req, res) {
-  const recordId = req.body.recordId;
-  if (recordId) {
-    try {
-      const response = await ormGetMatchRecord(recordId);
-      if (response) {
-        return res.status(200).json({ message: "Match record found!", record: response });
-      } else {
-        return res.status(400).json({ message: "Match record not found!" });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Database failure when getting match record!" });
-    }
+  const response = await ormGetMatchesForUser(email);
+
+  if (response === null) {
+    return res.status(200).json({
+      message: `No history In Repository`,
+      history: response,
+    });
+  } else if (response.err) {
+    return res.status(400).json({message: "Error With History Repository"});
   } else {
-    return res.status(400).json({ message: "Record ID is missing!" });
-  }
-}
+    console.log(`Match history loaded!`);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const totalPages = Math.ceil(response.length / limit);
 
-async function findMatchPartner(matchRecord, complexity, category) {
-  try {
-    const partner = await ormGetMatchPartner(matchRecord.userId, complexity, category);
-    if (partner) {
-      const room = await createRoom([matchRecord.userId, partner.userId], complexity, category);
-      await updateRoomId(partner._id, room._id);
-      await updateRoomId(matchRecord._id, room._id);
-      matchRecord.roomId = room._id;
-      partner.roomId = room._id;
-      return partner;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-    return { err };
-  }
-}
-
-async function createRoom(userIds, complexity, category) {
-  try {
-    const newRoom = await ormCreateRoom(userIds, complexity, category);
-    if (newRoom) {
-      return newRoom;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-    return { err };
-  }
-}
-
-async function updateRoomId(recordId, roomId) {
-  try {
-    const response = await ormUpdateMatchRecordRoomId(recordId, roomId);
-    if (response) {
-      return response;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.log(err);
-    return { err };
-  }
-}
-
-export async function createMatchRecord(req, res) {
-  const { userId, complexity, category } = req.body;
-  if (userId && complexity) {
-    try {
-      const newRecord = await ormCreateFindMatchRecord(userId, complexity, category);
-      const matchPartner = await findMatchPartner(newRecord, complexity, category);
-      console.log(matchPartner)
-      if (matchPartner) {        
-        return res.status(200).json({ message: "Match found!", record: newRecord, partner: matchPartner });
-      } else {
-        return res.status(200).json({ message: "Match not found!", record: newRecord });
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Database failure when creating match record!" });
-    }
-  } else {
-    return res.status(400).json({ message: "User ID or level is missing!" });
+    const slicedResponse = response.slice(startIndex, endIndex);
+    return res.status(200).json({
+        message: `History loaded!`,
+        history: slicedResponse,
+        totalPages: totalPages,
+    });
   }
 }

@@ -18,9 +18,10 @@ services:
     ports:
       - 3000:3000 # Maps ports
     environment:
-      - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
-      - DOCKER_QUESTION_SVC_URL=http://question-service-app:${QUESTION_SVC_PORT}
-      - DOCKER_MATCHING_SVC_URL=http://matching-service-app:${MATCHING_SVC_PORT}
+      - REACT_APP_DOCKER_USER_SVC_URL=http://localhost:${USER_SVC_PORT}
+      - REACT_APP_DOCKER_QUESTION_SVC_URL=http://localhost:${QUESTION_SVC_PORT}
+      - REACT_APP_DOCKER_MATCHING_SVC_URL=http://localhost:${MATCHING_SVC_PORT}
+      - REACT_APP_DOCKER_MATCHING_BROKER_SVC_URL=ws://localhost:${MATCHING_SVC_BROKER_PORT}
     networks:
       - peerprep-network # Connects the frontend-app to the 'peerprep-network' network.
 
@@ -58,6 +59,8 @@ services:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
   matching-service-app:
+    depends_on:
+      - matching-service-broker-app # Matching service requires the broker to run first
     build:
       context: ./backend/matching-service # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile
@@ -69,8 +72,20 @@ services:
     environment:
       - IS_DOCKER=true
       - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
+      - DOCKER_MATCHING_BROKER_SVC_URL=ws://matching-service-broker-app:${MATCHING_SVC_BROKER_PORT}
     env_file:
       - ./.env
+    networks:
+      - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+  # Service for the mqtt broker
+  matching-service-broker-app:
+    image: eclipse-mosquitto
+    container_name: matching_service_broker
+    ports:
+      - ${MATCHING_SVC_BROKER_PORT}:${MATCHING_SVC_BROKER_PORT} # Maps ports
+    volumes:
+      - ./backend/matching-service/mosquitto.conf:/mosquitto/config/mosquitto.conf
     networks:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 

@@ -1,14 +1,14 @@
 import express from "express";
 
-import { respHelloWorld, createMatchRecord, getMatchRecord } from "../controller/matching-controller.js";
-import { verifyIfRecordExists } from "../middleware/basic-access-control.js";
+import { cancelMatch, getMatchesForUser, startMatch } from "../controller/matching-controller.js";
+import { verifyAccessToken, verifySameEmail } from "../middleware/basic-access-control.js";
 
 const router = express.Router();
 
-router.get("/", respHelloWorld);
+router.post("/start",  verifyAccessToken, startMatch);
 
-router.post("/find", verifyIfRecordExists, createMatchRecord);
+router.post("/cancel", verifyAccessToken, cancelMatch);
 
-router.get("/find", getMatchRecord);
+router.get("/history/:email", verifyAccessToken, verifySameEmail, getMatchesForUser);
 
 export default router;
