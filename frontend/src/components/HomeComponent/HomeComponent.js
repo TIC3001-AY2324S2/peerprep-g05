@@ -67,7 +67,7 @@ function HomeComponent(props) {
                 }
             });
         }
-    }, [isVerifyDone, partner, page, props.userInfo.email]);
+    }, [isVerifyDone, partner, page, props.userInfo?.email]);
 
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
