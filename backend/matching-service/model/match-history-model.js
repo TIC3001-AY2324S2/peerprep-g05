@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 var Schema = mongoose.Schema;
 
-let MatchingModelSchema = new Schema({
+let MatchHistoryModelSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
     id: {
         type: Number,
@@ -44,7 +44,7 @@ CounterSchema.pre('save', function(next) {
 
 const counter = mongoose.model('counter', CounterSchema);
 
-MatchingModelSchema.pre('save', async function(next) {
+MatchHistoryModelSchema.pre('save', async function(next) {
     const doc = this;
     try {
         const counterDoc = await counter.findOneAndUpdate(
@@ -59,4 +59,4 @@ MatchingModelSchema.pre('save', async function(next) {
     }
 });
 
-export default mongoose.model("MatchingModel", MatchingModelSchema);
+export default mongoose.model("MatchHistoryModel", MatchHistoryModelSchema);

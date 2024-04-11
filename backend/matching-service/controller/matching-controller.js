@@ -1,6 +1,6 @@
 import mqtt from 'mqtt';
 import crypto from 'crypto';
-import { ormCreateMatchRecordForUser, ormGetMatchesForUser } from '../model/matching-orm.js';
+import { ormCreateMatchRecordForUser, ormGetMatchesForUser } from '../model/match-history-orm.js';
 import dotenv from "dotenv";
 import "dotenv/config";
 
