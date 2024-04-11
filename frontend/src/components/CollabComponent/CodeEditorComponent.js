@@ -1,35 +1,46 @@
 import './CollabComponent.scss'
 import {useRef, useEffect, useState} from 'react';
 import Editor from "@monaco-editor/react";
-import firebase from "./firebaseConfig";
+import {socket} from "../../apis/socket";
 
 
 export default function CodeEditorComponent() {
     //
     const editorRef = useRef(null);
-    const [editorLoaded, setEditorLoaded] = useState(false);
+    const [isConnected, setIsConnected] = useState(socket.connected);
+    let issocket = false;
 
+    // Reference: https://github.com/tbvjaos510/monaco-editor-socket-io/blob/master/server/public/js/monaco.js#L84
+
+    const sessionId = "amber";
 
     function handleEditorDidMount(editor) {
         editorRef.current = editor;
-        setEditorLoaded(true);
-    }
+        setIsConnected(true);
 
-    const partnerName = "partner";
-    //
-    useEffect(() => {
-        if (!editorLoaded) {
-            return;
+        socket.emit("joinSession", sessionId);
+
+        //Monaco Event
+        editor.onDidChangeModelContent(function (e) { //Text Change
+            if (issocket === false) {
+                socket.emit('code', sessionId, e)
+            } else {
+                issocket = false
+            }
+
+        })
+
+        socket.on('code', function (data) {  //Change Content Event
+            issocket = true
+            changeText(data)
+        })
+
+        function changeText(e) {
+            editor.getModel().applyEdits(e.changes) //change Content
         }
 
-        const matchId = "amber"
-        const dbRef = firebase.database().ref().child(matchId); // Can be anything in param, use unique string for
+    }
 
-
-        window.Firepad.fromMonaco(dbRef, editorRef.current, {});
-
-
-    }, [editorLoaded]);
 
     return (
         <div className={'code-editor'}>

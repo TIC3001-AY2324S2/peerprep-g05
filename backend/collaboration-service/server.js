@@ -12,7 +12,8 @@ const port = process.env.COLLABORATION_SVC_PORT || 3009;
 const httpServer = createServer();
 const io = new Server(httpServer, {
     cors: {
-        origin: ["http://127.0.0.1:5500"] // to add frontend URL e.g [..., "http://localhost:3001"]
+        origin: ["http://127.0.0.1:5500", "http://localhost:3000"] // to add frontend URL e.g [...,
+        // "http://localhost:3001"]
     }
 });
 
@@ -35,6 +36,6 @@ io.on('connection', (socket) => {
     socket.on('code', (sessionHash, codeData) => {
         console.log(`Updating session code from user ${socket.id}`);
         console.log(`sessionHash: ${sessionHash}`);
-        io.to(sessionHash).emit('code', codeData);
+        socket.broadcast.to(sessionHash).emit('code', codeData);
     });
 });
