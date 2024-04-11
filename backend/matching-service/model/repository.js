@@ -1,5 +1,4 @@
 import MatchingModel from "./matching-model.js";
-import OngoingModel from "./ongoing-model.js";
 import dotenv from "dotenv";
 import "dotenv/config";
 
@@ -24,30 +23,18 @@ let db = mongoose.connection;
 db.on("connected", () => console.log("MongoDB Connected!"));
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-export async function createFindMatchRecord(params) {
-  params._id = new mongoose.Types.ObjectId();
-
-  return new MatchingModel(params);
+export async function findMatchesForUser(email) {
+  return await MatchingModel.find({ email: email });
 }
 
-export async function findIfMatchRecordExists(userId, createdAt) {
-  return await MatchingModel.findOne({ "createdAt": { "$gte": createdAt - 1000 * 30, "$lte": createdAt }, userId: userId });
-}
+export async function createMatchRecordForUser(email, partner, complexity, category) {
+  const newRecord = new MatchingModel({
+    _id: new mongoose.Types.ObjectId(),
+    email,
+    partner,
+    complexity,
+    category,
+  });
 
-export async function findMatchRecord(recordId) {
-  return await MatchingModel.findOne({ _id: recordId, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() } });
-}
-
-export async function findMatchPartner(userId, level) {
-  return await MatchingModel.findOne({ userId: { "$ne": userId }, level: level, createdAt: { "$gte": new Date() - 1000 * 30, "$lte": new Date() }, roomId: null });
-}
-
-export async function createRoom(params) {
-  params._id = new mongoose.Types.ObjectId();
-
-  return new OngoingModel(params);
-}
-
-export async function findRoom(roomId) {
-  return await OngoingModel.findOne({ _id: roomId });
+  return await newRecord.save();
 }

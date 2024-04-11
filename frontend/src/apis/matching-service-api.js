@@ -1,7 +1,11 @@
 import axios from 'axios';
+import mqtt from 'mqtt';
 
-const QUESTION_SVC_HOST = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
-const MATCHING_SVC_HOST = process.env.DOCKER_MATCHING_SVC_URL || 'http://localhost:3003';
+const QUESTION_SVC_HOST = process.env.REACT_APP_DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
+const MATCHING_SVC_HOST = process.env.REACT_APP_DOCKER_MATCHING_SVC_URL || 'http://localhost:3003';
+const MATCHING_BROKER_SVC_HOST = process.env.REACT_APP_DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
+
+console.log(process.env);
 
 const CONTENT_TYPE_JSON = 'application/json';
 
@@ -27,6 +31,63 @@ export function getQuestionsByCategory(complexity, category) {
                 Accept: CONTENT_TYPE_JSON,
             },
         })
+        .then((resp) => ({ data: resp.data, error: false }))
+        .catch((err) => ({
+            data: err && err.response ? err.response.data : '',
+            error: true,
+            status: err && err.response ? err.response.status : '',
+        }));
+}
+
+export function startMatch(username, email, complexity, category) {
+    return axios
+        .post(`${MATCHING_SVC_HOST}/api/match/start`, {
+            username,
+            email,
+            complexity,
+            category,
+        })
+        .then((resp) => ({ data: resp.data, error: false }))
+        .catch((err) => ({
+            data: err && err.response ? err.response.data : '',
+            error: true,
+            status: err && err.response ? err.response.status : '',
+        }));
+}
+
+export function cancelMatch(username, complexity, category) {
+    return axios
+        .post(`${MATCHING_SVC_HOST}/api/match/cancel`, {
+            username,
+            complexity,
+            category,
+        })
+        .then((resp) => ({ data: resp.data, error: false }))
+        .catch((err) => ({
+            data: err && err.response ? err.response.data : '',
+            error: true,
+            status: err && err.response ? err.response.status : '',
+        }));
+}
+
+export function subscribeToTopic(username) {
+    const client = mqtt.connect(MATCHING_BROKER_SVC_HOST);
+    client.on('connect', () => {
+        console.log('Connected to MQTT broker');
+        client.subscribe('user/' + username, function (err) {
+            if (!err) {
+              console.log('Successfully subscribed to topic: user/' + username);
+            } else {
+              console.log('Error subscribing to topic: ', err);
+            }
+        });
+    });
+    return client;
+}
+
+export function getMatchHistory(email) {
+    return axios
+        .get(`${MATCHING_SVC_HOST}/api/match/history/${email}`)
         .then((resp) => ({ data: resp.data, error: false }))
         .catch((err) => ({
             data: err && err.response ? err.response.data : '',

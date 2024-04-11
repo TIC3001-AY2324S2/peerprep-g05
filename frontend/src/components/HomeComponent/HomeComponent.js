@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { getCategoriesByComplexity, getQuestionsByCategory } from '../../apis/matching-service-api';
+import { cancelMatch, getCategoriesByComplexity, getMatchHistory, getQuestionsByCategory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -18,10 +18,11 @@ function HomeComponent(props) {
     const [complexity, setComplexity] = useState('Easy');
     const [categoryList, setCategoryList] = useState([]);
     const [category, setCategory] = useState('');
-    const [match, setMatch] = useState(false);
+    const [isMatching, setIsMatching] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [timer, setTimer] = useState(15);
     const [partner, setPartner] = useState('');
+    const [matchHistory, setMatchHistory] = useState([]);
 
     const isVerifyDone = props.isVerifyDone;
 
@@ -33,8 +34,11 @@ function HomeComponent(props) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
                 }
-                setCategoryList(response.data.categories);
-                setCategory(response.data.categories[0]);
+                const sortedList = response.data.categories.sort();
+                setCategoryList(sortedList);
+                if (sortedList.length > 0) {
+                    setCategory(sortedList[0]);
+                }
             });
             getQuestionsByCategory(complexity, category).then((response) => {
                 console.log("questions", response)
@@ -47,6 +51,19 @@ function HomeComponent(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [complexity, isVerifyDone]);
 
+    useEffect(() => {
+        if (isVerifyDone) {
+            getMatchHistory(props.userInfo.email).then((response) => {
+                console.log("history", response)
+                setMatchHistory(response.data.history);
+                if (response.error) {
+                    console.error('Failed to fetch history:', response.data);
+                    return;
+                }
+            });
+        }
+    }, [isVerifyDone, partner, props.userInfo.email]);
+
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
         setComplexity(level);
@@ -55,13 +72,31 @@ function HomeComponent(props) {
         setCategory(event.target.value);
     };
     const matchHandler = (event, isMatch) => {
-        setMatch(isMatch);
+        setIsMatching(isMatch);
         clearInterval(timerId);
         setTimer(15);
         if (isMatch) {
+            const client = subscribeToTopic(props.userInfo.username);
+            console.log(props.userInfo);
+            client.on('connect', () => {
+                startMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
+                    console.log("start match:", response)
+                    if (response.error) {
+                        console.error('Failed to start match:', response.data);
+                        return;
+                    }
+                });
+            })
             const id = setInterval(() => {
                 setTimer(counter => {
                     if (counter === 0) {
+                        cancelMatch(props.userInfo.username, complexity, category).then((response) => {
+                            console.log("cancel match:", response)
+                            if (response.error) {
+                                console.error('Failed to cancel match:', response.data);
+                                return;
+                            }
+                        })
                         clearInterval(id);
                         return counter;
                     }
@@ -69,6 +104,21 @@ function HomeComponent(props) {
                 });
             }, 1000);
             setTimerId(id);
+            client.on('message', (topic, message) => {
+                const resp = JSON.parse(message);
+                console.log(`Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
+                clearInterval(id);
+                setPartner(resp.partner);
+            });
+        } else {
+            setPartner('');
+            cancelMatch(props.userInfo.username, complexity, category).then((response) => {
+                console.log("cancel match:", response)
+                if (response.error) {
+                    console.error('Failed to cancel match:', response.data);
+                    return;
+                }
+            })
         }
     };
     const partnerHandler = (partner) => {
@@ -89,21 +139,21 @@ function HomeComponent(props) {
                 </Typography>
                 <Stack direction="row" spacing={3} style={{padding: "35px 0 25px 0"}}>
                     <ListItemButton
-                        disabled={match}
+                        disabled={isMatching}
                         style={complexity === "Easy" ? {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", backgroundColor: "#3CAA91", borderRadius: "5px"} : {maxWidth: "185px", border: "solid 1px", borderColor: "#3CAA91", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Easy")}
                     >
                         <ListItemText primary="Interview Apprentice" style={complexity === "Easy" ? {color: "#FFFFFF"} : {color: "#3CAA91"}}/>
                     </ListItemButton>
                     <ListItemButton
-                        disabled={match}
+                        disabled={isMatching}
                         style={complexity === "Medium" ? {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", backgroundColor: "#FFA800", borderRadius: "5px"} : {maxWidth: "150px", border: "solid 1px", borderColor: "#FFA800", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Medium")}
                     >
                         <ListItemText primary="Coding Maestro" style={complexity === "Medium" ? {color: "#FFFFFF"} : {color: "#FFA800"}}/>
                     </ListItemButton>
                     <ListItemButton
-                        disabled={match}
+                        disabled={isMatching}
                         style={complexity === "Hard" ? {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", backgroundColor: "#F04461", borderRadius: "5px"} : {maxWidth: "170px", border: "solid 1px", borderColor: "#F04461", borderRadius: "5px"}}
                         onClick={(event) => complexityHandler(event, "Hard")}
                     >
@@ -112,7 +162,7 @@ function HomeComponent(props) {
                     <FormControl style={{marginLeft: "auto", width: "500px"}}>
                         <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
                         <Select
-                            disabled={match}
+                            disabled={isMatching}
                             style={{textAlign: "left"}}
                             value={category}
                             label="Category"
@@ -160,7 +210,7 @@ function HomeComponent(props) {
                                 className={"match-ellipse"}
                                 alt=""
                             />
-                            {match ?
+                            {isMatching ?
                                 <Container>
                                     <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
                                         {timer}
@@ -238,9 +288,15 @@ function HomeComponent(props) {
                                             <th>Complexity</th>
                                             <th>Date</th>
                                         </tr>
-                                        {/* {sessions.map((session) => (
-                                            <Container></Container>
-                                        ))} */}
+                                        {matchHistory.map(match => (
+                                            <tr>
+                                                <td>#{match.id}</td>
+                                                <td>{match.partner}</td>
+                                                <td>{match.category}</td>
+                                                <td>{match.complexity}</td>
+                                                <td>{match.createdAt}</td>
+                                            </tr>
+                                        ))}
                                     </table>
                                     <div className={'pagination'}>
                                         <Pagination
