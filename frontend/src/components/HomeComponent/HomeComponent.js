@@ -177,7 +177,6 @@ function HomeComponent(props) {
                         <ListItemButton
                             disabled={isMatching}
                             style={complexity === "Easy" ? {
-
                                 borderColor: "#3CAA91",
                                 backgroundColor: "#3CAA91",
                                 borderRadius: "5px"
@@ -268,170 +267,104 @@ function HomeComponent(props) {
                     </div>
                 </Grid>
                 {!delayedPartner ? (
-                    <Grid container justifyContent="center" spacing={0} style={{position: "relative"}}>
-                        <Grid item lg={6}
-                              style={{border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px 0 0 5px", width: "100%"}}>
-                            <Item style={{height: "550px"}}>
-                                <img
-                                    draggable={false}
-                                    src="/static/border_ellipse.png"
-                                    className={"match-ellipse"}
-                                    alt=""
-                                />
-                                {isMatching ?
-                                    <Container>
-                                        <Typography variant="h1" align="center" style={{
-                                            marginTop: "165px",
-                                            fontWeight: "bold",
-                                            color: "#5541D7",
-                                            opacity: "50%"
-                                        }}>
+                    <Grid container spacing={0} className={'home-session-1'}>
+                        <Grid lg={6} className={'matching-people'}>
+
+                            {isMatching ?
+                                <div className={'start-matching'}>
+                                    <div className={'stroke-purple-circle'}>
+                                        <Typography className={'home-countdown'}>
                                             {timer}
                                         </Typography>
-                                        {timer > 0 &&
-                                            <Container>
-                                                <Stack style={{marginTop: "93px", display: "block"}}>
-                                                    <CircularProgress color="inherit" size={25} style={{
-                                                        display: "inline-block",
-                                                        verticalAlign: "text-bottom"
-                                                    }}/>
+                                    </div>
+                                    {timer > 0 &&
+                                        <div className={'start-matching-inner'}>
+                                            <button className={'home-button-1'}
+                                                    onClick={(event) => matchHandler(event, false)}>
+                                                Cancel
+                                            </button>
+                                            <div className={'start-matching-msg'}>
+                                                <CircularProgress size={25} color="inherit"/>
+                                                <Stack>
                                                     {!partner.length &&
-                                                        <Typography variant="h6"
-                                                                    style={{
-                                                                        paddingLeft: "15px",
-                                                                        display: "inline-block"
-                                                                    }}>
+                                                        <p>
                                                             finding a partner for you. . .
-                                                        </Typography>
+                                                        </p>
                                                     }
                                                     {partner &&
-                                                        <Typography variant="h6"
-                                                                    style={{
-                                                                        paddingLeft: "15px",
-                                                                        display: "inline-block"
-                                                                    }}>
+                                                        <p>
                                                             matching you with <span
                                                             style={{color: "#5541D7"}}>{partner}</span>. . .
-                                                        </Typography>
+                                                        </p>
                                                     }
                                                 </Stack>
-                                                <ListItemButton
-                                                    style={{
-                                                        marginTop: "15px",
-                                                        marginLeft: "auto",
-                                                        marginRight: "auto",
-                                                        width: "120px",
-                                                        textAlign: "center",
-                                                        border: "solid 1px",
-                                                        borderColor: "#5541D7",
-                                                        borderRadius: "5px"
-                                                    }}
-                                                    onClick={(event) => matchHandler(event, false)}
-                                                >
-                                                    <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
-                                                </ListItemButton>
-                                            </Container>
-                                        }
-                                        {timer === 0 &&
-                                            <Container>
-                                                <Typography variant="h6" style={{
-                                                    marginTop: "90px",
-                                                    marginLeft: "auto",
-                                                    marginRight: "auto"
-                                                }}>
-                                                    There is no match for your search.
-                                                </Typography>
-                                                <ListItemButton
-                                                    style={{
-                                                        marginTop: "18px",
-                                                        marginLeft: "auto",
-                                                        marginRight: "auto",
-                                                        width: "120px",
-                                                        textAlign: "center",
-                                                        border: "solid 1px",
-                                                        borderColor: "#5541D7",
-                                                        backgroundColor: "#5541D7",
-                                                        borderRadius: "5px"
-                                                    }}
-                                                    onClick={(event) => matchHandler(event, false)}
-                                                >
-                                                    <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
-                                                </ListItemButton>
-                                            </Container>
-                                        }
-                                    </Container>
-                                    :
-                                    <Container>
-                                        <img
-                                            draggable={false}
-                                            src="/static/ellipse.png"
-                                            className={"match-ellipse"}
-                                            alt=""
-                                        />
-                                        <Typography variant="h5" align="center"
-                                                    style={{marginTop: "170px", fontWeight: "bold"}}>
-                                            Find your<br/>partner to start<br/>the challenge
-                                        </Typography>
-                                        <ListItemButton
-                                            style={{
-                                                marginTop: "151px",
-                                                marginLeft: "auto",
-                                                marginRight: "auto",
-                                                width: "150px",
-                                                textAlign: "center",
-                                                border: "solid 1px",
-                                                borderColor: "#5541D7",
-                                                backgroundColor: "#5541D7",
-                                                borderRadius: "5px"
-                                            }}
-                                            onClick={(event) => matchHandler(event, true)}
-                                        >
-                                            <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
-                                        </ListItemButton>
-
-                                    </Container>
-                                }
-                            </Item>
-                        </Grid>
-
-                        <Grid item lg={6}
-                              style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
-                            <Item style={{height: "550px"}}>
-                                <Container style={{margin: "30px 0"}}>
-                                    <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                        Session History
-                                    </Typography>
-                                    <div className="section-2">
-                                        <table>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Partner</th>
-                                                <th>Category</th>
-                                                <th>Complexity</th>
-                                                <th>Date</th>
-                                            </tr>
-                                            {matchHistory.map(match => (
-                                                <tr>
-                                                    <td>#{match.id}</td>
-                                                    <td>{match.partner}</td>
-                                                    <td>{match.category}</td>
-                                                    <td>{match.complexity}</td>
-                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                                </tr>
-                                            ))}
-                                        </table>
-                                        <div className={'pagination'}>
-                                            <Pagination
-                                                count={totalPages}
-                                                page={page}
-                                                onChange={(event, value) => setPage(value)}
-                                                color="secondary"
-                                                className="pagination-active"
-                                            />
+                                            </div>
+                                        </div>
+                                    }
+                                    {timer === 0 &&
+                                        <div className={'start-matching-timeout'}>
+                                            <button className={'home-button'}
+                                                    onClick={(event) => matchHandler(event, false)}>
+                                                Retry
+                                            </button>
+                                            <p>
+                                                There is no match for your search ˙◠˙
+                                            </p>
+                                        </div>
+                                    }
+                                </div>
+                                :
+                                <div className={'not-start-match'}>
+                                    <div className={'stroke-purple-circle'}>
+                                        <div className={'purple-circle'}>
+                                            <p>Find your partner to start the challenge</p>
                                         </div>
                                     </div>
-                                </Container>
-                            </Item>
+                                    <button className={'home-button'} onClick={(event) => matchHandler(event, true)}>
+                                        Match Now
+                                    </button>
+                                    <div className={'place-holder'}></div>
+                                </div>
+                            }
+                            {/*</Item>*/}
+                        </Grid>
+
+                        <Grid lg={6} className={'history-section'}>
+                            <div className={'history-section-inner'}>
+                                <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
+                                    Session History
+                                </Typography>
+
+                                <table className={'section-2'}>
+                                    <tr>
+                                        {/*<th>ID</th>*/}
+                                        <th>Partner</th>
+                                        <th>Category</th>
+                                        <th>Complexity</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    {matchHistory.map(match => (
+                                        <tr>
+                                            {/*<td>#{match.id}</td>*/}
+                                            <td>{match.partner}</td>
+                                            <td>{match.category}</td>
+                                            <td>{match.complexity}</td>
+                                            <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                        </tr>
+                                    ))}
+                                </table>
+                                <div className={'history-pagination'}>
+                                    <Pagination
+                                        count={totalPages}
+                                        page={page}
+                                        onChange={(event, value) => setPage(value)}
+                                        color="secondary"
+                                        className="pagination-active"
+                                    />
+                                </div>
+
+                            </div>
+
                         </Grid>
                     </Grid>) : (
                     <Grid container spacing={0} className={'collaboration-session'}>
