@@ -23,48 +23,55 @@ const userToEmailMap = {};
 
 //Start match endpoint
 export async function startMatch(req, res){
-  const { username, email, complexity, category } = req.body;
-  console.log(req.body)
+  try {
+    const { username, email, complexity, category } = req.body;
 
-  userQueue[complexity] = userQueue[complexity] ?? {};
-  userQueue[complexity][category] = userQueue[complexity][category] ?? [];
-  userToEmailMap[username] = email;
+    userQueue[complexity] = userQueue[complexity] ?? {};
+    userQueue[complexity][category] = userQueue[complexity][category] ?? [];
+    userToEmailMap[username] = email;
 
-  console.log(userQueue);
+    if (userQueue[complexity][category].length > 0) {
+      if (userQueue[complexity][category] === username) {
+        return res.status(200).json({ message: 'Already added to queue' });
+      }
 
-  if (userQueue[complexity][category].length > 0) {
-    if (userQueue[complexity][category] === username) {
-      return res.status(200).json({ message: 'Already added to queue' });
+      const partner = userQueue[complexity][category].pop();
+
+      // for assignment 4 return the partner name instead of hash
+      const hash = generateHash(username, partner);
+      client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
+      client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
+
+      ormCreateMatchRecordForUser(email, partner, complexity, category)
+      ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
+
+      console.log(`Match [${hash}] found for ${username} and ${partner}`);
+      return res.status(200).json({ message: 'Match found' });
+    } else {
+      userQueue[complexity][category].push(username);
     }
-
-    const partner = userQueue[complexity][category].pop();
-
-    // for assignment 4 return the partner name instead of hash
-    const hash = generateHash(username, partner);
-    client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
-    client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
-
-    ormCreateMatchRecordForUser(email, partner, complexity, category)
-    ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
-
-    console.log(`Match [${hash}] found for ${username} and ${partner}`);
-    return res.status(200).json({ message: 'Match found' });
-  } else {
-    userQueue[complexity][category].push(username);
+    return res.status(200).json({ message: 'Added to queue' });
+  } catch (error) {
+    console.log(`Error in startMatch: ${error}`);
+    return res.status(500).json({ message: "Error in startMatch" });
   }
-  return res.status(200).json({ message: 'Added to queue' });
 }
 
 
 //Cancel match endpoint
-export async function cancelMatch(req, res){
-  const { username, complexity, category } = req.body;
+export async function cancelMatch(req, res) {
+  try {
+    const { username, complexity, category } = req.body;
 
-  if (userQueue[complexity] && userQueue[complexity][category]) {
-    userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== username);
+    if (userQueue[complexity] && userQueue[complexity][category]) {
+      userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== username);
+    }
+
+    return res.status(200).json({ message: 'Match Cancelled' });
+  } catch (error) {
+    console.log(`Error in cancelMatch: ${error}`);
+    return res.status(500).json({ message: "Error in cancelMatch" });
   }
-
-  res.status(200).json({ message: 'Match Cancelled' });
 }
 
 
@@ -77,32 +84,37 @@ function generateHash(userA, userB) {
 
 // Retrieves the match history for the user
 export async function getMatchesForUser(req, res) {
-  const { email } = req.params;
-  const limit = req.query.limit;
-  const page = req.query.page;
+  try {
+    const { email } = req.params;
+    const limit = req.query.limit;
+    const page = req.query.page;
 
-  console.log(`GET ${limit} MATCH HISTORY FOR email [${email}] PAGE ${page}`);
+    console.log(`GET ${limit} MATCH HISTORY FOR email [${email}] PAGE ${page}`);
 
-  const response = await ormGetMatchesForUser(email);
+    const response = await ormGetMatchesForUser(email);
 
-  if (response === null) {
-    return res.status(200).json({
-      message: `No history In Repository`,
-      history: response,
-    });
-  } else if (response.err) {
-    return res.status(400).json({message: "Error With History Repository"});
-  } else {
-    console.log(`Match history loaded!`);
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const totalPages = Math.ceil(response.length / limit);
+    if (response === null) {
+      return res.status(200).json({
+        message: `No history In Repository`,
+        history: response,
+      });
+    } else if (response.err) {
+      return res.status(400).json({message: "Error With History Repository"});
+    } else {
+      console.log(`Match history loaded!`);
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+      const totalPages = Math.ceil(response.length / limit);
 
-    const slicedResponse = response.slice(startIndex, endIndex);
-    return res.status(200).json({
-        message: `History loaded!`,
-        history: slicedResponse,
-        totalPages: totalPages,
-    });
+      const slicedResponse = response.slice(startIndex, endIndex);
+      return res.status(200).json({
+          message: `History loaded!`,
+          history: slicedResponse,
+          totalPages: totalPages,
+      });
+    }
+  } catch (error) {
+    console.log(`Error in getMatchesForUser: ${error}`);
+    return res.status(500).json({ message: "Error in getMatchesForUser" });
   }
 }
