@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import './HomeComponent.scss';
-import { cancelMatch, getCategoriesByComplexity, getMatchHistory, getQuestionsByCategory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
+import {
+    cancelMatch,
+    getCategoriesByComplexity,
+    getMatchHistory,
+    getQuestionsByCategory,
+    startMatch,
+    subscribeToTopic
+} from '../../apis/matching-service-api';
 import moment from 'moment';
 import {
     Container,
@@ -43,7 +50,7 @@ function HomeComponent(props) {
     const [matchHistory, setMatchHistory] = useState([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-
+    const [matchSessionHash, setMatchSessionHash] = useState('');
     const isVerifyDone = props.isVerifyDone;
 
 
@@ -129,6 +136,7 @@ function HomeComponent(props) {
             client.on('message', (topic, message) => {
                 const resp = JSON.parse(message);
                 console.log(`Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
+                setMatchSessionHash(resp.hash);
                 clearInterval(id);
                 setPartner(resp.partner);
             });
@@ -410,13 +418,17 @@ function HomeComponent(props) {
                     <Grid xs={6} className={'collaboration-question'}>
                         <div className={'collaboration-inner'}>
                             <MatchingQuestion
+                                matchSessionHash={matchSessionHash}
                                 {...props}
                             />
                         </div>
                     </Grid>
                     <Grid xs={6} className={'collaboration-code-editor'}>
                         <div className={'collaboration-inner'}>
-                            <CodeEditorComponent/>
+                            <CodeEditorComponent
+                                matchSessionHash={matchSessionHash}
+                                {...props}
+                            />
                         </div>
                     </Grid>
                 </Grid>

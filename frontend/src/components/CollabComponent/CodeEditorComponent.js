@@ -4,34 +4,41 @@ import Editor from "@monaco-editor/react";
 import {socket} from "../../apis/socket";
 
 
-export default function CodeEditorComponent() {
+export default function CodeEditorComponent(props) {
     //
     const editorRef = useRef(null);
-    const [isConnected, setIsConnected] = useState(socket.connected);
-    let issocket = false;
+    const isConnected = useRef(false)
+    let isSocket = false;
 
     // Reference: https://github.com/tbvjaos510/monaco-editor-socket-io/blob/master/server/public/js/monaco.js#L84
 
-    const sessionId = "amber";
-
-    function handleEditorDidMount(editor) {
+    const sessionId = props.matchSessionHash;
+    const ssRef = useRef(sessionId);
+    useEffect(() => {
+        if (sessionId && sessionId !== '') {
+            socket.emit("joinSession", sessionId);
+            isConnected.current = true
+            ssRef.current = sessionId;
+        }
+    }, [sessionId]);
+    const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
-        setIsConnected(true);
-
-        socket.emit("joinSession", sessionId);
 
         //Monaco Event
-        editor.onDidChangeModelContent(function (e) { //Text Change
-            if (issocket === false) {
-                socket.emit('code', sessionId, e)
+        editor.onDidChangeModelContent(e => { //Text Change
+
+            console.log("CodeEditorComponent: onDidChangeModelContent", e, isSocket, isConnected);
+            if (isSocket === false && isConnected.current === true) {
+                console.log("CodeEditorComponent: emit code", ssRef.current, e);
+                socket.emit("code", ssRef.current, e)
             } else {
-                issocket = false
+                isSocket = false
             }
 
         })
 
         socket.on('code', function (data) {  //Change Content Event
-            issocket = true
+            isSocket = true
             changeText(data)
         })
 

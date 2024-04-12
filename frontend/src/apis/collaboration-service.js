@@ -15,5 +15,17 @@ export function getCollaborationQuestionsById(id) {
             error: true,
             status: err && err.response ? err.response.status : '',
         }));
+
+}
+
+export function getSessionInfoByHash(hash) {
+    return axios
+        .get(`${HOST}/api/collaboration/session/${hash}`)
+        .then((resp) => ({data: resp.data, error: false}))
+        .catch((err) => ({
+            data: err && err.response ? err.response.data : '',
+            error: true,
+            status: err && err.response ? err.response.status : '',
+        }));
 }
 
