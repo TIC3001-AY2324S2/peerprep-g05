@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const HOST = process.env.DOCKER_USER_SVC_URL || 'http://localhost:3001';
+const HOST = process.env.REACT_APP_DOCKER_USER_SVC_URL || 'http://localhost:3001';
 
 const CONTENT_TYPE_JSON = 'application/json';
 

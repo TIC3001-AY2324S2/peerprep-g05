@@ -19,7 +19,7 @@
 ### Quick Start
 1. Navigate to [./question-service](./question-service/) directory
 2. Install npm packages using `npm ci`.
-3. Run Question Service using `npm start`
+3. Run Question Service using `npm run dev`
 
 ### Upload Sample Qns Data for Qns Service (via MongoDBCompass)
 1. Connect the MongoDB Cloud deployment you've created on MongoDB.
@@ -29,3 +29,12 @@
 5. Load the CSV file @ [Sample Qns Repo CSV](./question-service/data)
 
 ### Complete Question Service Guide: [Question Service Guide](./question-service/README.md)
+
+## Matching Service
+
+### Quick Start
+1. Navigate to [./matching-service](./matching-service/) directory
+2. Install npm packages using `npm ci`.
+3. Run Question Service using `npm run dev`
+
+### Complete Question Service Guide: [Matching Service Guide](./matching-service/README.md)

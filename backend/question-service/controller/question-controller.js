@@ -17,8 +17,6 @@ export async function getAllQuestion(req, res) {
 
     const response = await _findAllQuestion();
 
-    console.log(response);
-
     if (response === null) {
         return res.status(200).json({
             message: `No Question In Repository`,

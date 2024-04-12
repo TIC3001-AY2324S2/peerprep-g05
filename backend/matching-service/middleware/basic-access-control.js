@@ -1,25 +1,35 @@
-import {
-    ormfindIfMatchRecordExists,
-  } from "../model/matching-orm.js";
+import axios from "axios";
 
-export async function verifyIfRecordExists(req, res, next) {
-  const { userId } = req.body;
-  if (userId) {
-    try {
-      const response = await ormfindIfMatchRecordExists(userId, new Date());
-      if (response) {
-        return res.status(400).json({ 
-          message: "Existing Record is not expired!", 
-          recordId: response._id, 
-          roomId: response.roomId });
-      } else {
-        next();
-      }
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ message: "Database failure when finding match!" });
-    }
+const USER_SVC_HOST = process.env.DOCKER_USER_SVC_URL || `http://localhost:${process.env.USER_SVC_PORT}`;
+
+export function verifyAccessToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  if (!authHeader) {
+    return res.status(401).json({ message: "Authentication failed" });
+  }
+  axios.get(`${USER_SVC_HOST}/api/auth/verify`, {
+    headers: {
+      Authorization: authHeader,
+    },
+  }).then(response => {
+    const dbUser = response.data.userInfo;
+    req.userInfo = { id: dbUser.id, username: dbUser.username, email: dbUser.email, isAdmin: dbUser.isAdmin };
+    next();
+  }).catch(error => {
+    return res.status(error.status).json({ message: error.message });
+  });
+}
+
+export function verifySameEmail(req, res, next) {
+  let email = '';
+  if (req.params.email) {
+    email = req.params.email;
+  } else if (req.body.email) {
+    email = req.body.email;
+  }
+  if (req.userInfo && email === req.userInfo.email) {
+    next();
   } else {
-    return res.status(400).json({ message: "User ID is missing!" });
+    return res.status(403).json({ message: "verifySameEmail failed" });
   }
 }

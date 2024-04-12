@@ -18,10 +18,10 @@ services:
     ports:
       - 3000:3000 # Maps ports
     environment:
-      - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
-      - DOCKER_QUESTION_SVC_URL=http://question-service-app:${QUESTION_SVC_PORT}
-      - DOCKER_MATCHING_SVC_URL=http://matching-service-app:${MATCHING_SVC_PORT}
-      - DOCKER_COLLABORATION_SVC_URL=http://collaboration-service-app:${COLLABORATION_SVC_SOCKET_PORT}
+      - REACT_APP_DOCKER_USER_SVC_URL=http://localhost:${USER_SVC_PORT}
+      - REACT_APP_DOCKER_QUESTION_SVC_URL=http://localhost:${QUESTION_SVC_PORT}
+      - REACT_APP_DOCKER_MATCHING_SVC_URL=http://localhost:${MATCHING_SVC_PORT}
+      - REACT_APP_DOCKER_MATCHING_BROKER_SVC_URL=ws://localhost:${MATCHING_SVC_BROKER_PORT}
     networks:
       - peerprep-network # Connects the frontend-app to the 'peerprep-network' network.
 
@@ -60,6 +60,8 @@ services:
 
 
   matching-service-app:
+    depends_on:
+      - matching-service-broker-app # Matching service requires the broker to run first
     build:
       context: ./backend/matching-service # Path to the directory containing the Dockerfile
       dockerfile: Dockerfile
@@ -71,20 +73,7 @@ services:
     environment:
       - IS_DOCKER=true
       - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
-    env_file:
-      - ./.env
-    networks:
-      - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
-
-  collaboration-service-app:
-    build: ./backend/collaboration-service # Path to the directory containing the Dockerfile
-    container_name: collaboration-service
-    ports:
-      - ${COLLABORATION_SVC_PORT}:${COLLABORATION_SVC_PORT} # Maps ports
-      - ${COLLABORATION_SVC_SOCKET_PORT}:${COLLABORATION_SVC_SOCKET_PORT} # Maps ports
-    environment:
-      - IS_DOCKER=true
-      - DOCKER_USER_SVC_URL=http://user-service-app:${USER_SVC_PORT}
+      - DOCKER_MATCHING_BROKER_SVC_URL=ws://matching-service-broker-app:${MATCHING_SVC_BROKER_PORT}
     env_file:
       - ./.env
     networks:
