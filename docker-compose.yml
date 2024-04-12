@@ -58,7 +58,6 @@ services:
     networks:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
-
   matching-service-app:
     depends_on:
       - matching-service-broker-app # Matching service requires the broker to run first
@@ -76,6 +75,17 @@ services:
       - DOCKER_MATCHING_BROKER_SVC_URL=ws://matching-service-broker-app:${MATCHING_SVC_BROKER_PORT}
     env_file:
       - ./.env
+    networks:
+      - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
+
+  # Service for the mqtt broker
+  matching-service-broker-app:
+    image: eclipse-mosquitto
+    container_name: matching_service_broker
+    ports:
+      - ${MATCHING_SVC_BROKER_PORT}:${MATCHING_SVC_BROKER_PORT} # Maps ports
+    volumes:
+      - ./backend/matching-service/mosquitto.conf:/mosquitto/config/mosquitto.conf
     networks:
       - peerprep-network # Connects the user-service-app to the 'peerprep-network' network.
 
