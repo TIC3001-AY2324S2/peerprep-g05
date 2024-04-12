@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const HOST = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
+const HOST = process.env.REACT_APP_DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
 
 export function getCollaborationQuestionsById(id) {
     // Send a GET request to the server to get a question by id

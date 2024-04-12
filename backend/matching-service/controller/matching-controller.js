@@ -3,6 +3,7 @@ import crypto from 'crypto';
 import { ormCreateMatchRecordForUser, ormGetMatchesForUser } from '../model/match-history-orm.js';
 import dotenv from "dotenv";
 import "dotenv/config";
+import axios from 'axios';
 
 // Read .env from root parent folder if docker is not used
 if (process.env.IS_DOCKER != "true") {
@@ -10,6 +11,8 @@ if (process.env.IS_DOCKER != "true") {
 }
 
 const mqttBrokerUrl = process.env.DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
+const questionServiceUrl = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
+const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
 
 // MQTT Broker connection
 const client = mqtt.connect(mqttBrokerUrl);
@@ -25,7 +28,6 @@ const userToEmailMap = {};
 export async function startMatch(req, res){
   try {
     const { username, email, complexity, category } = req.body;
-
     userQueue[complexity] = userQueue[complexity] ?? {};
     userQueue[complexity][category] = userQueue[complexity][category] ?? [];
     userToEmailMap[username] = email;
@@ -37,10 +39,13 @@ export async function startMatch(req, res){
 
       const partner = userQueue[complexity][category].pop();
 
-      // for assignment 4 return the partner name instead of hash
       const hash = generateHash(username, partner);
       client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
       client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
+
+      const response = await axios.get (`${questionServiceUrl}/api/question/complexity/${complexity}/category/${category}`)
+      const qid = response.id;
+      axios.post (`${collabServiceUrl}/api/collaboration/session/${hash}/qid/${qid}`)
 
       ormCreateMatchRecordForUser(email, partner, complexity, category)
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
