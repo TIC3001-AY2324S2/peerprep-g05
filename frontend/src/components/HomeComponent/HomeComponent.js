@@ -93,6 +93,14 @@ function HomeComponent(props) {
         }
     }, [isVerifyDone, partner, page, props.userInfo?.email]);
 
+    const [delayedPartner, setDelayedPartner] = useState(null);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDelayedPartner(partner);
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [partner]);
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
         setComplexity(level);
@@ -220,218 +228,231 @@ function HomeComponent(props) {
                         </Select>
                     </FormControl>
                 </Stack>
-                <Grid container justifyContent="center" spacing={0} style={{position: "relative"}}>
-                    {complexity === "Easy" && (
-                        <img
-                            draggable={false}
-                            src="/static/easy_label.png"
-                            className={"complexity-label"}
-                            alt=""
-                        />
-                    )}
-                    {complexity === "Medium" && (
-                        <img
-                            draggable={false}
-                            src="/static/medium_label.png"
-                            className={"complexity-label"}
-                            alt=""
-                        />
-                    )}
-                    {complexity === "Hard" && (
-                        <img
-                            draggable={false}
-                            src="/static/hard_label.png"
-                            className={"complexity-label"}
-                            alt=""
-                        />
-                    )}
-                    <Typography variant="h6" align="center" style={{
-                        position: "absolute",
-                        top: "10px",
-                        left: "13px",
-                        fontSize: "17px",
-                        color: "white"
-                    }}>
-                        {currLevel}
-                    </Typography>
-                    <Grid item lg={6}
-                          style={{border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px 0 0 5px"}}>
-                        <Item style={{height: "550px"}}>
+
+                <Grid container justifyContent="center" spacing={0} style={{position: "relative", zIndex: 10}}>
+                    <div className={'difficulty-tag'}>
+                        {complexity === "Easy" && (
                             <img
                                 draggable={false}
-                                src="/static/border_ellipse.png"
-                                className={"match-ellipse"}
+                                src="/static/easy_label.png"
+                                className={"complexity-label"}
                                 alt=""
                             />
-                            {isMatching ?
-                                <Container>
-                                    <Typography variant="h1" align="center" style={{
-                                        marginTop: "165px",
-                                        fontWeight: "bold",
-                                        color: "#5541D7",
-                                        opacity: "50%"
-                                    }}>
-                                        {timer}
-                                    </Typography>
-                                    {timer > 0 &&
-                                        <Container>
-                                            <Stack style={{marginTop: "93px", display: "block"}}>
-                                                <CircularProgress color="inherit" size={25} style={{
-                                                    display: "inline-block",
-                                                    verticalAlign: "text-bottom"
-                                                }}/>
-                                                {!partner.length &&
-                                                    <Typography variant="h6"
-                                                                style={{paddingLeft: "15px", display: "inline-block"}}>
-                                                        finding a partner for you. . .
-                                                    </Typography>
-                                                }
-                                                {partner &&
-                                                    <Typography variant="h6"
-                                                                style={{paddingLeft: "15px", display: "inline-block"}}>
-                                                        matching you with <span
-                                                        style={{color: "#5541D7"}}>{partner}</span>. . .
-                                                    </Typography>
-                                                }
-                                            </Stack>
-                                            <ListItemButton
-                                                style={{
-                                                    marginTop: "15px",
+                        )}
+                        {complexity === "Medium" && (
+                            <img
+                                draggable={false}
+                                src="/static/medium_label.png"
+                                className={"complexity-label"}
+                                alt=""
+                            />
+                        )}
+                        {complexity === "Hard" && (
+                            <img
+                                draggable={false}
+                                src="/static/hard_label.png"
+                                className={"complexity-label"}
+                                alt=""
+                            />
+                        )}
+                        <Typography variant="h6" align="center" style={{
+                            position: "absolute",
+                            top: "10px",
+                            left: "13px",
+                            fontSize: "17px",
+                            color: "white",
+                            marginTop: "10px"
+                        }}>
+                            {currLevel}
+                        </Typography>
+                    </div>
+                </Grid>
+                {!delayedPartner ? (
+                    <Grid container justifyContent="center" spacing={0} style={{position: "relative"}}>
+                        <Grid item lg={6}
+                              style={{border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px 0 0 5px", width: "100%"}}>
+                            <Item style={{height: "550px"}}>
+                                <img
+                                    draggable={false}
+                                    src="/static/border_ellipse.png"
+                                    className={"match-ellipse"}
+                                    alt=""
+                                />
+                                {isMatching ?
+                                    <Container>
+                                        <Typography variant="h1" align="center" style={{
+                                            marginTop: "165px",
+                                            fontWeight: "bold",
+                                            color: "#5541D7",
+                                            opacity: "50%"
+                                        }}>
+                                            {timer}
+                                        </Typography>
+                                        {timer > 0 &&
+                                            <Container>
+                                                <Stack style={{marginTop: "93px", display: "block"}}>
+                                                    <CircularProgress color="inherit" size={25} style={{
+                                                        display: "inline-block",
+                                                        verticalAlign: "text-bottom"
+                                                    }}/>
+                                                    {!partner.length &&
+                                                        <Typography variant="h6"
+                                                                    style={{
+                                                                        paddingLeft: "15px",
+                                                                        display: "inline-block"
+                                                                    }}>
+                                                            finding a partner for you. . .
+                                                        </Typography>
+                                                    }
+                                                    {partner &&
+                                                        <Typography variant="h6"
+                                                                    style={{
+                                                                        paddingLeft: "15px",
+                                                                        display: "inline-block"
+                                                                    }}>
+                                                            matching you with <span
+                                                            style={{color: "#5541D7"}}>{partner}</span>. . .
+                                                        </Typography>
+                                                    }
+                                                </Stack>
+                                                <ListItemButton
+                                                    style={{
+                                                        marginTop: "15px",
+                                                        marginLeft: "auto",
+                                                        marginRight: "auto",
+                                                        width: "120px",
+                                                        textAlign: "center",
+                                                        border: "solid 1px",
+                                                        borderColor: "#5541D7",
+                                                        borderRadius: "5px"
+                                                    }}
+                                                    onClick={(event) => matchHandler(event, false)}
+                                                >
+                                                    <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
+                                                </ListItemButton>
+                                            </Container>
+                                        }
+                                        {timer === 0 &&
+                                            <Container>
+                                                <Typography variant="h6" style={{
+                                                    marginTop: "90px",
                                                     marginLeft: "auto",
-                                                    marginRight: "auto",
-                                                    width: "120px",
-                                                    textAlign: "center",
-                                                    border: "solid 1px",
-                                                    borderColor: "#5541D7",
-                                                    borderRadius: "5px"
-                                                }}
-                                                onClick={(event) => matchHandler(event, false)}
-                                            >
-                                                <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
-                                            </ListItemButton>
-                                        </Container>
-                                    }
-                                    {timer === 0 &&
-                                        <Container>
-                                            <Typography variant="h6" style={{
-                                                marginTop: "90px",
-                                                marginLeft: "auto",
-                                                marginRight: "auto"
-                                            }}>
-                                                There is no match for your search.
-                                            </Typography>
-                                            <ListItemButton
-                                                style={{
-                                                    marginTop: "18px",
-                                                    marginLeft: "auto",
-                                                    marginRight: "auto",
-                                                    width: "120px",
-                                                    textAlign: "center",
-                                                    border: "solid 1px",
-                                                    borderColor: "#5541D7",
-                                                    backgroundColor: "#5541D7",
-                                                    borderRadius: "5px"
-                                                }}
-                                                onClick={(event) => matchHandler(event, false)}
-                                            >
-                                                <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
-                                            </ListItemButton>
-                                        </Container>
-                                    }
-                                </Container>
-                                :
-                                <Container>
-                                    <img
-                                        draggable={false}
-                                        src="/static/ellipse.png"
-                                        className={"match-ellipse"}
-                                        alt=""
-                                    />
-                                    <Typography variant="h5" align="center"
-                                                style={{marginTop: "170px", fontWeight: "bold"}}>
-                                        Find your<br/>partner to start<br/>the challenge
-                                    </Typography>
-                                    <ListItemButton
-                                        style={{
-                                            marginTop: "151px",
-                                            marginLeft: "auto",
-                                            marginRight: "auto",
-                                            width: "150px",
-                                            textAlign: "center",
-                                            border: "solid 1px",
-                                            borderColor: "#5541D7",
-                                            backgroundColor: "#5541D7",
-                                            borderRadius: "5px"
-                                        }}
-                                        onClick={(event) => matchHandler(event, true)}
-                                    >
-                                        <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
-                                    </ListItemButton>
-
-                                </Container>
-                            }
-                        </Item>
-                    </Grid>
-
-                    <Grid item lg={6}
-                          style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
-                        <Item style={{height: "550px"}}>
-                            <Container style={{margin: "30px 0"}}>
-                                <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                    Session History
-                                </Typography>
-                                <div className="section-2">
-                                    <table>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Partner</th>
-                                            <th>Category</th>
-                                            <th>Complexity</th>
-                                            <th>Date</th>
-                                        </tr>
-                                        {matchHistory.map(match => (
-                                            <tr>
-                                                <td>#{match.id}</td>
-                                                <td>{match.partner}</td>
-                                                <td>{match.category}</td>
-                                                <td>{match.complexity}</td>
-                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                            </tr>
-                                        ))}
-                                    </table>
-                                    <div className={'pagination'}>
-                                        <Pagination
-                                            count={totalPages}
-                                            page={page}
-                                            onChange={(event, value) => setPage(value)}
-                                            color="secondary"
-                                            className="pagination-active"
+                                                    marginRight: "auto"
+                                                }}>
+                                                    There is no match for your search.
+                                                </Typography>
+                                                <ListItemButton
+                                                    style={{
+                                                        marginTop: "18px",
+                                                        marginLeft: "auto",
+                                                        marginRight: "auto",
+                                                        width: "120px",
+                                                        textAlign: "center",
+                                                        border: "solid 1px",
+                                                        borderColor: "#5541D7",
+                                                        backgroundColor: "#5541D7",
+                                                        borderRadius: "5px"
+                                                    }}
+                                                    onClick={(event) => matchHandler(event, false)}
+                                                >
+                                                    <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
+                                                </ListItemButton>
+                                            </Container>
+                                        }
+                                    </Container>
+                                    :
+                                    <Container>
+                                        <img
+                                            draggable={false}
+                                            src="/static/ellipse.png"
+                                            className={"match-ellipse"}
+                                            alt=""
                                         />
-                                    </div>
-                                </div>
-                            </Container>
-                        </Item>
-                    </Grid>
+                                        <Typography variant="h5" align="center"
+                                                    style={{marginTop: "170px", fontWeight: "bold"}}>
+                                            Find your<br/>partner to start<br/>the challenge
+                                        </Typography>
+                                        <ListItemButton
+                                            style={{
+                                                marginTop: "151px",
+                                                marginLeft: "auto",
+                                                marginRight: "auto",
+                                                width: "150px",
+                                                textAlign: "center",
+                                                border: "solid 1px",
+                                                borderColor: "#5541D7",
+                                                backgroundColor: "#5541D7",
+                                                borderRadius: "5px"
+                                            }}
+                                            onClick={(event) => matchHandler(event, true)}
+                                        >
+                                            <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
+                                        </ListItemButton>
 
-                </Grid>
-                <Grid container spacing={0} className={'collaboration-session'}>
-                    <Grid xs={6} className={'collaboration-question'}>
-                        <div className={'collaboration-inner'}>
-                            <MatchingQuestion
-                                matchSessionHash={matchSessionHash}
-                                {...props}
-                            />
-                        </div>
-                    </Grid>
-                    <Grid xs={6} className={'collaboration-code-editor'}>
-                        <div className={'collaboration-inner'}>
-                            <CodeEditorComponent
-                                matchSessionHash={matchSessionHash}
-                                {...props}
-                            />
-                        </div>
-                    </Grid>
-                </Grid>
+                                    </Container>
+                                }
+                            </Item>
+                        </Grid>
+
+                        <Grid item lg={6}
+                              style={{border: "solid 1px", borderColor: "#a3a3a3", borderRadius: "0 5px 5px 0"}}>
+                            <Item style={{height: "550px"}}>
+                                <Container style={{margin: "30px 0"}}>
+                                    <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
+                                        Session History
+                                    </Typography>
+                                    <div className="section-2">
+                                        <table>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Partner</th>
+                                                <th>Category</th>
+                                                <th>Complexity</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            {matchHistory.map(match => (
+                                                <tr>
+                                                    <td>#{match.id}</td>
+                                                    <td>{match.partner}</td>
+                                                    <td>{match.category}</td>
+                                                    <td>{match.complexity}</td>
+                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                </tr>
+                                            ))}
+                                        </table>
+                                        <div className={'pagination'}>
+                                            <Pagination
+                                                count={totalPages}
+                                                page={page}
+                                                onChange={(event, value) => setPage(value)}
+                                                color="secondary"
+                                                className="pagination-active"
+                                            />
+                                        </div>
+                                    </div>
+                                </Container>
+                            </Item>
+                        </Grid>
+                    </Grid>) : (
+                    <Grid container spacing={0} className={'collaboration-session'}>
+                        <Grid sm={12} md={6} className={'collaboration-question'}>
+                            <div className={'collaboration-inner'}>
+                                <MatchingQuestion
+                                    matchSessionHash={matchSessionHash}
+                                    {...props}
+                                />
+                            </div>
+                        </Grid>
+                        <Grid sm={12} md={6} className={'collaboration-code-editor'}>
+                            <div className={'collaboration-inner'}>
+                                <CodeEditorComponent
+                                    matchSessionHash={matchSessionHash}
+                                    {...props}
+                                />
+                            </div>
+                        </Grid>
+                    </Grid>)}
+
 
             </Container>
 

@@ -53,7 +53,7 @@ export default function CodeEditorComponent(props) {
         <div className={'code-editor'}>
             <div className={'top-editor'}><span>&#60;/&#62;&nbsp;</span>Code</div>
             <Editor
-                height="85%"
+                height="90%"
                 defaultLanguage="javascript"
                 theme="vs-dark"
                 defaultValue=""

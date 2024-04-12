@@ -6,7 +6,8 @@
 
 .complexity-label {
   position: absolute;
-  left: -3px;
+  left: -4px;
+  margin-top: 10px;
 }
 
 .match-ellipse {
@@ -27,7 +28,6 @@
   background-color: white;
   height: 550px;
   border-radius: 8px;
-  margin-top: 20px;
   border: 1px solid #5541D7;
 }
 
@@ -35,7 +35,12 @@
   height: 100%;
 }
 
+.collaboration-code-editor {
+  height: 100%;
+}
+
 .collaboration-inner {
+  display: flex;
   height: 100%;
 }
 
@@ -83,11 +88,12 @@
   font-weight: 600 !important;
   width: min-content;
 }
-.MuiTypography-root{
- font-family: 'Mulish', sans-serif !important;
+
+.MuiTypography-root {
+  font-family: 'Mulish', sans-serif !important;
 }
 
 
- .css-10hburv-MuiTypography-root {
-   font-weight: 600 !important;
- }
+.css-10hburv-MuiTypography-root {
+  font-weight: 600 !important;
+}

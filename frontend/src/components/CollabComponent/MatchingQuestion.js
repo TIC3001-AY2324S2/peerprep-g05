@@ -24,7 +24,7 @@ export default function MatchingQuestion(props) {
                         console.log("get session info by hash", resp)
                         setQid(resp.data.question.questionid);
                     });
-            }, 1000);
+            }, 100);
         }
     }, [props.matchSessionHash]);
 

@@ -10,7 +10,15 @@
   background-color: #11142D;
   padding: 0 !important;
   height: 550px;
+  width: 100%;
   border-radius: 0 8px 8px 0;
+}
+@media (max-width: 899px) {
+    .code-editor {
+        border-radius: 8px;
+      margin-top: 10px;
+    }
+
 }
 
 .top-editor {
@@ -21,6 +29,7 @@
   height: 5%;
   padding: 10px 20px;
   font-size: 18px;
+  //background-color: #11142D;
 }
 
 .top-editor span {
@@ -61,6 +70,7 @@
   justify-content: start;
   text-align: start;
   font-family: 'Mulish', sans-serif;
+  width: 100%;
 }
 
 .matching-question h3 {
@@ -82,4 +92,5 @@
   background-color: #F8F9FA;
   padding: 20px;
 }
+
 
