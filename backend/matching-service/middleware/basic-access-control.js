@@ -21,9 +21,15 @@ export function verifyAccessToken(req, res, next) {
 }
 
 export function verifySameEmail(req, res, next) {
-  if (req.userInfo && req.params.email === req.userInfo.email) {
+  let email = '';
+  if (req.params.email) {
+    email = req.params.email;
+  } else if (req.body.email) {
+    email = req.body.email;
+  }
+  if (req.userInfo && email === req.userInfo.email) {
     next();
   } else {
-    return res.status(401).json({ message: "verifySameEmail failed" });
+    return res.status(403).json({ message: "verifySameEmail failed" });
   }
 }

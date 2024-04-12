@@ -5,9 +5,9 @@ import { verifyAccessToken, verifySameEmail } from "../middleware/basic-access-c
 
 const router = express.Router();
 
-router.post("/start",  verifyAccessToken, startMatch);
+router.post("/start",  verifyAccessToken, verifySameEmail, startMatch);
 
-router.post("/cancel", verifyAccessToken, cancelMatch);
+router.post("/cancel", verifyAccessToken, verifySameEmail, cancelMatch);
 
 router.get("/history/:email", verifyAccessToken, verifySameEmail, getMatchesForUser);
 
