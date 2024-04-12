@@ -55,10 +55,11 @@ export function startMatch(username, email, complexity, category) {
         }));
 }
 
-export function cancelMatch(username, complexity, category) {
+export function cancelMatch(username, email, complexity, category) {
     return axios
         .post(`${MATCHING_SVC_HOST}/api/match/cancel`, {
             username,
+            email,
             complexity,
             category,
         })

@@ -96,7 +96,7 @@ function HomeComponent(props) {
             const id = setInterval(() => {
                 setTimer(counter => {
                     if (counter === 0) {
-                        cancelMatch(props.userInfo.username, complexity, category).then((response) => {
+                        cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                             console.log("cancel match:", response)
                             if (response.error) {
                                 console.error('Failed to cancel match:', response.data);
@@ -121,7 +121,7 @@ function HomeComponent(props) {
                 client.end();
             }
             setPartner('');
-            cancelMatch(props.userInfo.username, complexity, category).then((response) => {
+            cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                 console.log("cancel match:", response)
                 if (response.error) {
                     console.error('Failed to cancel match:', response.data);
