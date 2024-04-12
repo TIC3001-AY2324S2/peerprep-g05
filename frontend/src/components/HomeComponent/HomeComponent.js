@@ -34,7 +34,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getCategoriesByComplexity(complexity).then((response) => {
-                console.log("categories", response)
+                // console.log("categories", response)
                 if (response.error) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
@@ -43,13 +43,6 @@ function HomeComponent(props) {
                 setCategoryList(sortedList);
                 if (sortedList.length > 0) {
                     setCategory(sortedList[0]);
-                }
-            });
-            getQuestionsByCategory(complexity, category).then((response) => {
-                console.log("questions", response)
-                if (response.error) {
-                    console.error('Failed to fetch questions:', response.data);
-                    return;
                 }
             });
         }
@@ -215,9 +208,24 @@ function HomeComponent(props) {
                             />
                             {isMatching ?
                                 <Container>
-                                    <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
-                                        {timer}
-                                    </Typography>
+                                    {!partner.length &&
+                                        <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
+                                            {timer}
+                                        </Typography>
+                                    }
+                                    {partner &&
+                                        <Container>
+                                            <img
+                                                draggable={false}
+                                                src="/static/ellipse.png"
+                                                className={"match-ellipse"}
+                                                alt=""
+                                            />
+                                            <Typography variant="h5" align="center" style={{marginTop: "175px", fontWeight: "bold"}}>
+                                                Preparing the<br />collab room with<br />your partner
+                                            </Typography>
+                                        </Container>
+                                    }
                                     {timer > 0 &&
                                         <Container>
                                             <Stack style={{marginTop: "93px", display: "block"}}>
@@ -228,7 +236,7 @@ function HomeComponent(props) {
                                                     </Typography>
                                                 }
                                                 {partner &&
-                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                    <Typography variant="h6" style={{marginTop: "6px", paddingLeft: "15px", display: "inline-block"}}>
                                                         matching you with <span style={{ color: "#5541D7" }}>{partner}</span>. . .
                                                     </Typography>
                                                 }
@@ -280,7 +288,7 @@ function HomeComponent(props) {
                         <Item style={{height: "550px"}}>
                             <Container style={{margin: "30px 0"}}>
                                 <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                    Session History
+                                    Matched History
                                 </Typography>
                                 <div className="section-2">
                                     <table>
