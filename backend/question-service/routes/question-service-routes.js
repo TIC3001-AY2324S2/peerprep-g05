@@ -9,8 +9,8 @@ import {
     getOneRandomQuestionByComplexityAndCategory
 } from "../controller/question-controller.js";
 
-//return all question of a given complexity and category
-router.get('/api/question/complexity/:complexity/category/:category', verifyAccessToken, getOneRandomQuestionByComplexityAndCategory);
+//return a randomly question of a given complexity and category
+router.get('/api/question/complexity/:complexity/category/:category', getOneRandomQuestionByComplexityAndCategory);
 
 //return one question of complexity (unused)
 //router.get('/api/question/complexity/:complexity', verifyAccessToken, getOneQuestionByComplexity);

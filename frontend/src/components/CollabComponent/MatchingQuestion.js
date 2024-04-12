@@ -3,6 +3,7 @@ import {getQuestionById, getQuestions} from "../../apis/crud-question";
 import {useParams} from "react-router-dom";
 import './CollabComponent.scss';
 
+const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
 
 export default function MatchingQuestion(props) {
     const {id: pathId} = useParams();

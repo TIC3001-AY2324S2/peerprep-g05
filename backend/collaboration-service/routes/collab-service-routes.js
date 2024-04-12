@@ -10,10 +10,10 @@ console.log("collab-service-routes.js");
 //adds a new session into session repository, requires hash + questionID in body
 //router.post('/api/collab/session', verifyAccessToken, addSessionInfo);
 //test version
-router.post('/api/collab/session/:hash/qid/:qid', addSessionInfo);
+router.post('/api/collaboration/session/:hash/qid/:qid', addSessionInfo);
 
 //returns session info by hash, requires hash in body
 //router.get('/api/collab/session', verifyAccessToken, getSessionInfoByHash);
-router.get('/api/collab/session/:hash', getSessionInfoByHash);
+router.get('/api/collaboration/session/:hash', getSessionInfoByHash);
 
 export default router;

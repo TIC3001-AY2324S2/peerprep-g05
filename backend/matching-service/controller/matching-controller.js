@@ -13,7 +13,9 @@ if (process.env.IS_DOCKER != "true") {
 const mqttBrokerUrl = process.env.DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
 const questionServiceUrl = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
 const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
-
+console.log(`MQTT Broker URL: ${mqttBrokerUrl}`);
+console.log(`Question Service URL: ${questionServiceUrl}`);
+console.log(`Collaboration Service URL: ${collabServiceUrl}`);
 // MQTT Broker connection
 const client = mqtt.connect(mqttBrokerUrl);
 
@@ -38,14 +40,28 @@ export async function startMatch(req, res){
       }
 
       const partner = userQueue[complexity][category].pop();
-
       const hash = generateHash(username, partner);
+
       client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
       client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
 
-      const response = await axios.get (`${questionServiceUrl}/api/question/complexity/${complexity}/category/${category}`)
-      const qid = response.id;
-      axios.post (`${collabServiceUrl}/api/collaboration/session/${hash}/qid/${qid}`)
+      console.log(`session: ${hash}, complexity: ${complexity}, category: ${category}`);
+      try{
+        const resp = await axios.get(`${questionServiceUrl}/api/question/complexity/${complexity}/category/${category}`);
+        const data = resp.data;
+        const qid = data.question[0].id;
+        console.log(`<<< posting to ${collabServiceUrl}/api/collaboration/session/${hash}/qid/${qid} >>>`);
+        await axios.post(`${collabServiceUrl}/api/collaboration/session/${hash}/qid/${qid}`);
+      } catch (err) {
+        if (err.response) {
+          console.log(`Error on collab, status: ${err.response.status}, message: ${err.response.statusText}`);
+          console.log(`Response data: ${JSON.stringify(err.response.data)}`);
+        } else if (err.request) {
+          console.log(`No response received, request was: ${JSON.stringify(err.request)}`);
+        } else {
+          console.log(`Error on collab: ${err.message}`);
+        }
+      }
 
       ormCreateMatchRecordForUser(email, partner, complexity, category)
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)

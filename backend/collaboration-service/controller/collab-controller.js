@@ -30,12 +30,12 @@ export async function getSessionInfoByHash(req, res) {
 
 export async function addSessionInfo(req, res) {
     try {
+        console.log(`ADDING NEW SESSION`);
         const newSession = {
             hash: req.params.hash,
             questionid: req.params.qid
         };
         if (newSession.hash && newSession.questionid) {
-            console.log(`ADDING NEW SESSION`);
             const resp = await _addSessionInfo (newSession.hash, newSession.questionid);
             console.log(resp);
             if (resp.err) {
