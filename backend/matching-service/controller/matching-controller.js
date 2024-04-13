@@ -12,7 +12,7 @@ if (process.env.IS_DOCKER != "true") {
 const mqttBrokerUrl = process.env.DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
 
 // MQTT Broker connection
-const client = mqtt.connect(mqttBrokerUrl);
+const client = mqtt.connect(mqttBrokerUrl, { clientId: 'backend/matching-service' });
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
@@ -20,6 +20,7 @@ client.on('connect', () => {
 
 const userQueue = {};
 const userToEmailMap = {};
+let numberOfUsersInQueue = 0;
 
 //Start match endpoint
 export async function startMatch(req, res){
@@ -36,6 +37,7 @@ export async function startMatch(req, res){
       }
 
       const partner = userQueue[complexity][category].pop();
+      numberOfUsersInQueue -= 1;
 
       // for assignment 4 return the partner name instead of hash
       const hash = generateHash(username, partner);
@@ -46,11 +48,12 @@ export async function startMatch(req, res){
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
 
       console.log(`Match [${hash}] found for ${username} and ${partner}`);
-      return res.status(200).json({ message: 'Match found! There is ' + userQueue[complexity][category].length + ' message(s) in queue' });
+      return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
     } else {
       userQueue[complexity][category].push(username);
+      numberOfUsersInQueue += 1;
     }
-    return res.status(200).json({ message: 'Added to queue! There is ' + userQueue[complexity][category].length + ' message(s) in queue' });
+    return res.status(200).json({ message: 'Added to queue! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
   } catch (error) {
     console.log(`Error in startMatch: ${error}`);
     return res.status(500).json({ message: "Error in startMatch" });
@@ -65,9 +68,10 @@ export async function cancelMatch(req, res) {
 
     if (userQueue[complexity] && userQueue[complexity][category]) {
       userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== username);
+      numberOfUsersInQueue -= 1;
     }
 
-    return res.status(200).json({ message: 'Match Cancelled! There is ' + userQueue[complexity][category].length + ' message(s) in queue' });
+    return res.status(200).json({ message: 'Match Cancelled! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
   } catch (error) {
     console.log(`Error in cancelMatch: ${error}`);
     return res.status(500).json({ message: "Error in cancelMatch" });
