@@ -41,13 +41,15 @@ export async function startMatch(req, res){
 
       // for assignment 4 return the partner name instead of hash
       const hash = generateHash(username, partner);
+      console.log(`Match [${hash}] found for ${username} and ${partner}`);
+      console.log(`Publishing message to topic user/${username}`);
+      console.log(`Publishing message to topic user/${partner}`);
       client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
       client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
 
       ormCreateMatchRecordForUser(email, partner, complexity, category)
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
 
-      console.log(`Match [${hash}] found for ${username} and ${partner}`);
       return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
     } else {
       userQueue[complexity][category].push(username);
