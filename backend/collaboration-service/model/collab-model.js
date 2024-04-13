@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 var Schema = mongoose.Schema;
 
 let CollabModelSchema = new Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+
   hash: {
     type: String,
     primaryKey: true,
@@ -10,7 +12,7 @@ let CollabModelSchema = new Schema({
     required: true,
   },
   
-  _id: mongoose.Schema.Types.ObjectId,
+
   questionid: {
     type: Number,
     required: true,

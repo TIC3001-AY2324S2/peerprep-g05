@@ -4,6 +4,29 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import app from "./index.js";
 
+let codepadValue = {
+    "changes": [
+      {
+        "range": {
+          "startLineNumber": 1,
+          "startColumn": 1,
+          "endLineNumber": 1,
+          "endColumn": 1
+        },
+        "rangeLength": 0,
+        "text": 'test!',
+        "rangeOffset": 0,
+        "forceMoveMarkers": false
+      }
+    ],
+    "eol": '\r\n',
+    "isEolChange": false,
+    "versionId": 2,
+    "isUndoing": false,
+    "isRedoing": false,
+    "isFlush": false
+  }
+
 // Read .env from root parent folder if docker is not used
 if (process.env.IS_DOCKER != "true") {
     dotenv.config({ path: '../../.env' });
@@ -33,11 +56,14 @@ io.on('connection', (socket) => {
 
         const clients = io.sockets.adapter.rooms.get(sessionHash);
         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
+        socket.broadcast.to(sessionHash).emit('code', codepadValue); // send codepad value to new user
     });
 
     socket.on('code', (sessionHash, codeData) => {
         console.log(`Updating session code from user ${socket.id}`);
         console.log(`sessionHash: ${sessionHash}`);
+        codepadValue = codeData; // store codepad value in memory
+        console.log(`<<codeData: ${JSON.stringify(codeData, null, 2)}`);
         socket.broadcast.to(sessionHash).emit('code', codeData);
     });
 });

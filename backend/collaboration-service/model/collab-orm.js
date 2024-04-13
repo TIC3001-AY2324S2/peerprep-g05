@@ -1,6 +1,7 @@
 import {
     findSessionInfoByHash,
-    addSessionInfo 
+    addSessionInfo,
+    deleteSession
 } from "./repository.js";
 
 export async function ormFindSessionInfoByHash (hash) {
@@ -27,4 +28,17 @@ export async function ormAddSessionInfo (hash , questionid) {
         console.log("ERROR: Could not add session info in repository!");
         return { err };
       }
+}
+
+export async function ormDeleteSessionByHash (hash) {
+    try {
+        const result = await deleteSession(hash);
+        if (result.deletedCount === 0) {
+          return false;
+        }
+        return true;
+      } catch (err) {
+        console.log("ERROR: Could not delete session info in repository!");
+        return { err };
+      } 
 }
