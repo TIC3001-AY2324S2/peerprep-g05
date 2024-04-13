@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { cancelMatch, getCategoriesByComplexity, getMatchHistory, getQuestionsByCategory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
+import { cancelMatch, getCategoriesByComplexity, getMatchHistory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
 import moment from 'moment';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -34,7 +34,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getCategoriesByComplexity(complexity).then((response) => {
-                console.log("categories", response)
+                // console.log("categories", response);
                 if (response.error) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
@@ -45,13 +45,6 @@ function HomeComponent(props) {
                     setCategory(sortedList[0]);
                 }
             });
-            getQuestionsByCategory(complexity, category).then((response) => {
-                console.log("questions", response)
-                if (response.error) {
-                    console.error('Failed to fetch questions:', response.data);
-                    return;
-                }
-            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [complexity, isVerifyDone]);
@@ -59,7 +52,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getMatchHistory(props.userInfo.email, page).then((response) => {
-                console.log("history", response)
+                // console.log("history", response);
                 setMatchHistory(response.data.history);
                 setTotalPages(response.data.totalPages);
                 if (response.error) {
@@ -86,7 +79,7 @@ function HomeComponent(props) {
             console.log(props.userInfo);
             client.on('connect', () => {
                 startMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
-                    console.log("start match:", response)
+                    console.log(new Date().toLocaleString() + ", start match:", response)
                     if (response.error) {
                         console.error('Failed to start match:', response.data);
                         return;
@@ -97,7 +90,7 @@ function HomeComponent(props) {
                 setTimer(counter => {
                     if (counter === 0) {
                         cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
-                            console.log("cancel match:", response)
+                            console.log(new Date().toLocaleString() + ", cancel match:", response)
                             if (response.error) {
                                 console.error('Failed to cancel match:', response.data);
                                 return;
@@ -112,7 +105,7 @@ function HomeComponent(props) {
             setTimerId(id);
             client.on('message', (topic, message) => {
                 const resp = JSON.parse(message);
-                console.log(`Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
+                console.log(new Date().toLocaleString() + `: Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
                 clearInterval(id);
                 setPartner(resp.partner);
             });
@@ -215,9 +208,24 @@ function HomeComponent(props) {
                             />
                             {isMatching ?
                                 <Container>
-                                    <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
-                                        {timer}
-                                    </Typography>
+                                    {!partner.length &&
+                                        <Typography variant="h1" align="center" style={{marginTop: "165px", fontWeight: "bold", color: "#5541D7", opacity: "50%"}}>
+                                            {timer}
+                                        </Typography>
+                                    }
+                                    {partner &&
+                                        <Container>
+                                            <img
+                                                draggable={false}
+                                                src="/static/ellipse.png"
+                                                className={"match-ellipse"}
+                                                alt=""
+                                            />
+                                            <Typography variant="h5" align="center" style={{marginTop: "175px", fontWeight: "bold"}}>
+                                                Preparing the<br />collab room with<br />your partner
+                                            </Typography>
+                                        </Container>
+                                    }
                                     {timer > 0 &&
                                         <Container>
                                             <Stack style={{marginTop: "93px", display: "block"}}>
@@ -228,7 +236,7 @@ function HomeComponent(props) {
                                                     </Typography>
                                                 }
                                                 {partner &&
-                                                    <Typography variant="h6" style={{paddingLeft: "15px", display: "inline-block"}}>
+                                                    <Typography variant="h6" style={{marginTop: "6px", paddingLeft: "15px", display: "inline-block"}}>
                                                         matching you with <span style={{ color: "#5541D7" }}>{partner}</span>. . .
                                                     </Typography>
                                                 }
@@ -280,26 +288,26 @@ function HomeComponent(props) {
                         <Item style={{height: "550px"}}>
                             <Container style={{margin: "30px 0"}}>
                                 <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                    Session History
+                                    Matched History
                                 </Typography>
                                 <div className="section-2">
                                     <table>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Partner</th>
-                                            <th>Category</th>
-                                            <th>Complexity</th>
-                                            <th>Date</th>
-                                        </tr>
-                                        {matchHistory.map(match => (
+                                        <tbody>
                                             <tr>
-                                                <td>#{match.id}</td>
-                                                <td>{match.partner}</td>
-                                                <td>{match.category}</td>
-                                                <td>{match.complexity}</td>
-                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                <th>Partner</th>
+                                                <th>Category</th>
+                                                <th>Complexity</th>
+                                                <th>Date</th>
                                             </tr>
-                                        ))}
+                                            {matchHistory.sort((a, b) => b.id - a.id).map(match => (
+                                                <tr key={match.id}>
+                                                    <td>{match.partner}</td>
+                                                    <td>{match.category}</td>
+                                                    <td>{match.complexity}</td>
+                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                     </table>
                                     <div className={'pagination'}>
                                         <Pagination
