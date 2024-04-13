@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './HomeComponent.scss';
 import { Container, Typography, FormControl, Stack, ListItemButton, ListItemText, InputLabel, Select, MenuItem, CircularProgress, Grid, Paper, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { cancelMatch, getCategoriesByComplexity, getMatchHistory, getQuestionsByCategory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
+import { cancelMatch, getCategoriesByComplexity, getMatchHistory, startMatch, subscribeToTopic } from '../../apis/matching-service-api';
 import moment from 'moment';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -292,22 +292,22 @@ function HomeComponent(props) {
                                 </Typography>
                                 <div className="section-2">
                                     <table>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Partner</th>
-                                            <th>Category</th>
-                                            <th>Complexity</th>
-                                            <th>Date</th>
-                                        </tr>
-                                        {matchHistory.map(match => (
+                                        <tbody>
                                             <tr>
-                                                <td>#{match.id}</td>
-                                                <td>{match.partner}</td>
-                                                <td>{match.category}</td>
-                                                <td>{match.complexity}</td>
-                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                <th>Partner</th>
+                                                <th>Category</th>
+                                                <th>Complexity</th>
+                                                <th>Date</th>
                                             </tr>
-                                        ))}
+                                            {matchHistory.sort((a, b) => b.id - a.id).map(match => (
+                                                <tr key={match.id}>
+                                                    <td>{match.partner}</td>
+                                                    <td>{match.category}</td>
+                                                    <td>{match.complexity}</td>
+                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
                                     </table>
                                     <div className={'pagination'}>
                                         <Pagination
