@@ -31,7 +31,7 @@ export async function startMatch(req, res){
     userToEmailMap[username] = email;
 
     if (userQueue[complexity][category].length > 0) {
-      if (userQueue[complexity][category] === username) {
+      if (userQueue[complexity][category].includes(username)) {
         return res.status(200).json({ message: 'Already added to queue' });
       }
 
