@@ -72,7 +72,7 @@ export function cancelMatch(username, email, complexity, category) {
 }
 
 export function subscribeToTopic(username) {
-    const client = mqtt.connect(MATCHING_BROKER_SVC_HOST);
+    const client = mqtt.connect(MATCHING_BROKER_SVC_HOST, { clientId: `frontend/user/${username}` });
     client.on('connect', () => {
         console.log(new Date().toLocaleString() + ': Connected to MQTT broker');
         client.subscribe('user/' + username, function (err) {
