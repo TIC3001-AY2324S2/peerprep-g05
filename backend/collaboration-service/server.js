@@ -48,9 +48,11 @@ app.listen(port, () => {
 
 //user connects, socket created for user
 io.on('connection', (socket) => {
+    let hash;
     console.log(`User ${socket.id} connected`);
 
     socket.on('joinSession', (sessionHash) => {
+        hash = sessionHash;
         socket.join(sessionHash);
         console.log(`User ${socket.id} joined session ${sessionHash}`);
 
@@ -65,6 +67,12 @@ io.on('connection', (socket) => {
         codepadValue = codeData; // store codepad value in memory
         console.log(`<<codeData: ${JSON.stringify(codeData, null, 2)}`);
         socket.broadcast.to(sessionHash).emit('code', codeData);
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`User ${socket.id} disconnected`);
+        const disconnectedMsg = "Your partner has disconnected";
+        io.to(hash).emit('disconnect', disconnectedMsg);
     });
 });
 
