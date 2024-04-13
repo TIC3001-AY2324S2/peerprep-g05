@@ -34,7 +34,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getCategoriesByComplexity(complexity).then((response) => {
-                // console.log("categories", response)
+                // console.log("categories", response);
                 if (response.error) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
@@ -52,7 +52,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getMatchHistory(props.userInfo.email, page).then((response) => {
-                console.log("history", response)
+                // console.log("history", response);
                 setMatchHistory(response.data.history);
                 setTotalPages(response.data.totalPages);
                 if (response.error) {
@@ -79,7 +79,7 @@ function HomeComponent(props) {
             console.log(props.userInfo);
             client.on('connect', () => {
                 startMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
-                    console.log("start match:", response)
+                    console.log(new Date().toLocaleString() + ", start match:", response)
                     if (response.error) {
                         console.error('Failed to start match:', response.data);
                         return;
@@ -90,7 +90,7 @@ function HomeComponent(props) {
                 setTimer(counter => {
                     if (counter === 0) {
                         cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
-                            console.log("cancel match:", response)
+                            console.log(new Date().toLocaleString() + ", cancel match:", response)
                             if (response.error) {
                                 console.error('Failed to cancel match:', response.data);
                                 return;
@@ -105,7 +105,7 @@ function HomeComponent(props) {
             setTimerId(id);
             client.on('message', (topic, message) => {
                 const resp = JSON.parse(message);
-                console.log(`Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
+                console.log(new Date().toLocaleString() + `: Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
                 clearInterval(id);
                 setPartner(resp.partner);
             });
