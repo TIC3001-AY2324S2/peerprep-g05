@@ -11,11 +11,9 @@ if (process.env.IS_DOCKER != "true") {
 }
 
 const mqttBrokerUrl = process.env.DOCKER_MATCHING_BROKER_SVC_URL || 'ws://test.mosquitto.org:9001';
+const userServiceURL = process.env.DOCKER_USER_SVC_URL || 'http://localhost:3001';
 const questionServiceUrl = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
 const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
-console.log(`MQTT Broker URL: ${mqttBrokerUrl}`);
-console.log(`Question Service URL: ${questionServiceUrl}`);
-console.log(`Collaboration Service URL: ${collabServiceUrl}`);
 // MQTT Broker connection
 const client = mqtt.connect(mqttBrokerUrl);
 
@@ -47,7 +45,9 @@ export async function startMatch(req, res){
 
       console.log(`session: ${hash}, complexity: ${complexity}, category: ${category}`);
       try{
-        const resp = await axios.get(`${questionServiceUrl}/api/question/complexity/${complexity}/category/${category}`);
+        const resp = await axios.get(`${questionServiceUrl}/api/question/complexity/${complexity}/category/${category}`,
+          { headers: { Authorization: req.headers.authorization } }
+        ); 
         const data = resp.data;
         const qid = data.question[0].id;
         console.log(`<<< posting to ${collabServiceUrl}/api/collaboration/session/${hash}/qid/${qid} >>>`);
