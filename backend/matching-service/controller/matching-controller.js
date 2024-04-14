@@ -50,12 +50,12 @@ export async function startMatch(req, res){
       ormCreateMatchRecordForUser(email, partner, complexity, category)
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
 
-      return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
+      return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
     } else {
       userQueue[complexity][category].push(username);
       numberOfUsersInQueue += 1;
     }
-    return res.status(200).json({ message: 'Added to queue! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
+    return res.status(200).json({ message: 'Added to queue! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
   } catch (error) {
     console.log(`Error in startMatch: ${error}`);
     return res.status(500).json({ message: "Error in startMatch" });
@@ -73,7 +73,7 @@ export async function cancelMatch(req, res) {
       numberOfUsersInQueue -= 1;
     }
 
-    return res.status(200).json({ message: 'Match Cancelled! There is ' + numberOfUsersInQueue + ' user(s) in the in queue' });
+    return res.status(200).json({ message: 'Match Cancelled! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
   } catch (error) {
     console.log(`Error in cancelMatch: ${error}`);
     return res.status(500).json({ message: "Error in cancelMatch" });
