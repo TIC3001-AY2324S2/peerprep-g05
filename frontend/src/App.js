@@ -15,6 +15,11 @@ import EditQuestion from "./components/EditQuestion/EditQuestion";
 import AdminPage from "./pages/admin-dashboard";
 import CollabPage from './pages/collab-page';
 
+if (typeof setImmediate === 'undefined') {
+    window.setImmediate = function (fn) {
+      return setTimeout(fn, 0);
+    };
+}
 
 const App = (props) => {
     let navigate = useNavigate();

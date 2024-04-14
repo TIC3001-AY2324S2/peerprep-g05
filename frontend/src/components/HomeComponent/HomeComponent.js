@@ -84,10 +84,10 @@ function HomeComponent(props) {
 
     useEffect(() => {
         if (delayedPartner === '') {
-            const timer = setInterval(() => {
+            const timer = setTimeout(() => {
                 setDelayedPartner(partner);
             }, 3000);
-            return () => setInterval(timer);
+            return () => setTimeout(timer);
         }
     }, [partner]);
 
