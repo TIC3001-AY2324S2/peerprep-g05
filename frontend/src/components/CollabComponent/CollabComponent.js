@@ -30,10 +30,11 @@ function CollabComponent(props) {
             getMatchForUser(props.userInfo.email, matchSessionHash).then((res) => {
                 if (res.error) {
                     props.navigate('/home');
+                } else {
+                    setComplexity(res.data.matchDetails.complexity);
+                    setCategory(res.data.matchDetails.category);
+                    setPartner(res.data.matchDetails.partner);
                 }
-                setComplexity(res.data.matchDetails.complexity);
-                setCategory(res.data.matchDetails.category);
-                setPartner(res.data.matchDetails.partner);
             });
         }
         // eslint-disable-next-line
