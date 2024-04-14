@@ -17,6 +17,7 @@ import {
 import CodeEditorComponent from "../CollabComponent/CodeEditorComponent";
 import MatchingQuestion from "../CollabComponent/MatchingQuestion";
 import { useParams } from "react-router-dom";
+import './CollabComponent.scss';
 
 function CollabComponent(props) {
     const [complexity, setComplexity] = useState('');
@@ -138,7 +139,7 @@ function CollabComponent(props) {
                     </div>
                 </Grid>
                 <Grid container spacing={0} className={'collaboration-session'}>
-                    <Grid sm={12} md={6} className={'collaboration-question'}>
+                    <Grid item xs={12} md={6} className={'collaboration-question'}>
                         <div className={'collaboration-inner'}>
                             <MatchingQuestion
                                 matchSessionHash={matchSessionHash}
@@ -146,7 +147,7 @@ function CollabComponent(props) {
                             />
                         </div>
                     </Grid>
-                    <Grid sm={12} md={6} className={'collaboration-code-editor'}>
+                    <Grid item xs={12} md={6} className={'collaboration-code-editor'}>
                         <div className={'collaboration-inner'}>
                             <CodeEditorComponent
                                 matchSessionHash={matchSessionHash}
