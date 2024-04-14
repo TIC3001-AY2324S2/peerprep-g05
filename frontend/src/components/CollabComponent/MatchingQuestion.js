@@ -1,10 +1,7 @@
 import {useState, useEffect, useCallback} from "react";
-import {getQuestionById, getQuestions} from "../../apis/crud-question";
-import {useParams} from "react-router-dom";
+import {getQuestionById} from "../../apis/crud-question";
 import './CollabComponent.scss';
 import {getSessionInfoByHash} from "../../apis/collaboration-service";
-
-const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
 
 export default function MatchingQuestion(props) {
 
@@ -13,7 +10,6 @@ export default function MatchingQuestion(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [testCases, setTestCases] = useState([{input: '', result: ''}]);
-    const [setQuestions] = useState([]);
     const {isVerifyDone} = props;
     useEffect(() => {
         if (props.matchSessionHash && props.matchSessionHash !== '') {

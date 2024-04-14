@@ -20,10 +20,8 @@ import {
     MenuItem,
     CircularProgress,
     Grid,
-    Paper,
     Pagination
 } from '@mui/material';
-import {styled} from '@mui/material/styles';
 
 let currLevel = "EASY MODE";
 let client;
@@ -65,7 +63,6 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getMatchHistory(props.userInfo.email, page).then((response) => {
-                // console.log("history", response);
                 setMatchHistory(response.data.history);
                 setTotalPages(response.data.totalPages);
                 if (response.error) {
@@ -80,6 +77,7 @@ function HomeComponent(props) {
         if (delayedPartner !== '') {
             props.navigate('/collab/' + matchSessionHash);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [delayedPartner]);
 
     useEffect(() => {
@@ -89,6 +87,7 @@ function HomeComponent(props) {
             }, 3000);
             return () => setTimeout(timer);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [partner]);
 
     useEffect(() => {

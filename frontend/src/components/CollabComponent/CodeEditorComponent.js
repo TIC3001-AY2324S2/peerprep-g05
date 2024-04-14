@@ -34,12 +34,14 @@ export default function CodeEditorComponent(props) {
             isConnected.current = true
             ssRef.current = sessionId;
         }
+        // eslint-disable-next-line
     }, [sessionId]);
 
     useEffect(() => {
         return () => {
           socket.disconnect();
         };
+        // eslint-disable-next-line
       }, []);
 
     socket.on('disconnect1', (disconnectedMsg, socketId) => {
@@ -59,12 +61,13 @@ export default function CodeEditorComponent(props) {
             setStatusColor('orange');
         } else {
             setStatusColor('green');
+            console.log(connectedMsg);
+            showSuccessBar(connectedMsg);
         }
         if (connectedId === socket.id) {
             setInitialValue(codepadValue);
         }
-        console.log(connectedMsg);
-        showSuccessBar(connectedMsg);
+
     });
 
     const handleEditorDidMount = (editor) => {

@@ -36,6 +36,7 @@ function CollabComponent(props) {
                 setPartner(res.data.matchDetails.partner);
             });
         }
+        // eslint-disable-next-line
     }, [matchSessionHash, isVerifyDone]);
 
     return (
