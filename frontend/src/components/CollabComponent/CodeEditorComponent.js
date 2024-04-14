@@ -1,7 +1,7 @@
 import './CollabComponent.scss'
 import {useRef, useEffect, useState} from 'react';
 import Editor from "@monaco-editor/react";
-import {socket} from "../../apis/socket";
+import { getSocket } from "../../apis/socket";
 import {showErrorBar} from "../../constants/snack-bar";
 
 
@@ -10,6 +10,7 @@ export default function CodeEditorComponent(props) {
     const editorRef = useRef(null);
     const isConnected = useRef(false)
     let isSocket = false;
+    const socket = getSocket();
 
     // Reference: https://github.com/tbvjaos510/monaco-editor-socket-io/blob/master/server/public/js/monaco.js#L84
 

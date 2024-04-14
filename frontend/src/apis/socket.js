@@ -1,6 +1,17 @@
-import {io} from 'socket.io-client';
+import { io } from 'socket.io-client';
 
-// "undefined" means the URL will be computed from the `window.location` object
 const URL = process.env.REACT_APP_DOCKER_COLLABORATION_SVC_SOCKET_URL || 'http://localhost:3009';
 
-export const socket = io(URL);
+let socket;
+
+function initializeSocket() {
+    socket = io(URL);
+    // You can add any additional setup code here
+}
+
+export function getSocket() {
+    if (!socket) {
+        initializeSocket();
+    }
+    return socket;
+}

@@ -53,12 +53,14 @@ app.listen(port, () => {
 //user connects, socket created for user
 io.on('connection', (socket) => {
     let hash;
-    console.log(`User ${socket.id} connected`);
+    let username;
+    console.log(`Socket [${socket.id}] connected`);
 
-    socket.on('joinSession', (sessionHash) => {
+    socket.on('joinSession', (sessionHash, name) => {
         hash = sessionHash;
         socket.join(sessionHash);
-        console.log(`User ${socket.id} joined session ${sessionHash}`);
+        username = name;
+        console.log(`User [${username}] joined session [${sessionHash}]`);
 
         const clients = io.sockets.adapter.rooms.get(sessionHash);
         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
@@ -79,7 +81,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', () => {
-        console.log(`User ${socket.id} disconnected`);
+        console.log(`Socket [${socket.id}] - User [${username}] disconnected`);
         const disconnectedMsg = "Your partner has disconnected";
         io.to(hash).emit('disconnect1', disconnectedMsg);
     });
