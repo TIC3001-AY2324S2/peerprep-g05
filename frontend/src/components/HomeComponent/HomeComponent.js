@@ -277,7 +277,7 @@ function HomeComponent(props) {
                     </div>
                 </Grid>
                 <Grid container spacing={0} className={'home-session-1'}>
-                    <Grid lg={6} className={'matching-people'}>
+                    <Grid item lg={6} className={'matching-people'}>
                         {isMatching ?
                             <div className={'start-matching'}>
                                 <div className={'stroke-purple-circle'}>
@@ -348,7 +348,7 @@ function HomeComponent(props) {
                             </div>
                         }
                     </Grid>
-                    <Grid lg={6} className={'history-section'}>
+                    <Grid  item lg={6} className={'history-section'}>
                         <div className={'history-section-inner'}>
                             <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
                                 Matched History
