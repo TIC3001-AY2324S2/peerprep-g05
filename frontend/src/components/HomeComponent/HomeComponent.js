@@ -21,7 +21,6 @@ function HomeComponent(props) {
     const [categoryList, setCategoryList] = useState([]);
     const [category, setCategory] = useState('');
     const [isMatching, setIsMatching] = useState(false);
-    const [isRetry, setIsRetry] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [timer, setTimer] = useState(15);
     const [partner, setPartner] = useState('');
@@ -73,7 +72,6 @@ function HomeComponent(props) {
     };
     const matchHandler = (event, isMatch, isRetry) => {
         setIsMatching(isMatch);
-        setIsRetry(isRetry);
         clearInterval(timerId);
         setTimer(15);
         if (isMatch) {
