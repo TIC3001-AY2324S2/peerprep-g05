@@ -24,16 +24,6 @@ import {
     Pagination
 } from '@mui/material';
 import {styled} from '@mui/material/styles';
-import CodeEditorComponent from "../CollabComponent/CodeEditorComponent";
-import MatchingQuestion from "../CollabComponent/MatchingQuestion";
-
-const Item = styled(Paper)(({theme}) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-}));
 
 let currLevel = "EASY MODE";
 let client;
@@ -50,6 +40,7 @@ function HomeComponent(props) {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [matchSessionHash, setMatchSessionHash] = useState('');
+    const [delayedPartner, setDelayedPartner] = useState('');
     const isVerifyDone = props.isVerifyDone;
 
 
@@ -85,14 +76,21 @@ function HomeComponent(props) {
         }
     }, [isVerifyDone, partner, page, props.userInfo?.email]);
 
-    const [delayedPartner, setDelayedPartner] = useState(null);
+    useEffect(() => {
+        if (delayedPartner !== '') {
+            props.navigate('/collab/' + matchSessionHash);
+        }
+    }, [delayedPartner]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setDelayedPartner(partner);
-        }, 3000);
-        return () => clearTimeout(timer);
+        if (delayedPartner === '') {
+            const timer = setInterval(() => {
+                setDelayedPartner(partner);
+            }, 3000);
+            return () => setInterval(timer);
+        }
     }, [partner]);
+
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
         setComplexity(level);
@@ -259,129 +257,110 @@ function HomeComponent(props) {
                         </Typography>
                     </div>
                 </Grid>
-                {!delayedPartner ? (
-                    <Grid container spacing={0} className={'home-session-1'}>
-                        <Grid lg={6} className={'matching-people'}>
-                            {isMatching ?
-                                <div className={'start-matching'}>
-                                    <div className={'stroke-purple-circle'}>
-                                        {partner &&
-                                        <Typography variant="h5" align="center" style={{ fontWeight: "bold"}}>
-                                                    Preparing the<br />collab room with<br />your partner
-                                        </Typography>}
-                                        {!partner &&
-                                        <Typography className={'home-countdown'}>
-                                            {timer}
-                                        </Typography>}
-                                    </div>
-                                    {timer > 0 &&
-                                        <div className={'start-matching-inner'}>
-                                            <button
-                                                className={'home-button-1'}
-                                                onClick={(event) => matchHandler(event, false, false)}
-                                                disabled={partner}
-                                            >
-                                                Cancel
-                                            </button>
-                                            <div className={'start-matching-msg'}>
-                                                <CircularProgress size={25} color="inherit"/>
-                                                <Stack>
-                                                    {!partner.length &&
-                                                        <p>
-                                                            finding a partner for you. . .
-                                                        </p>
-                                                    }
-                                                    {partner &&
-                                                        <p>
-                                                            matching you with <span
-                                                            style={{color: "#5541D7"}}>{partner}</span>. . .
-                                                        </p>
-                                                    }
-                                                </Stack>
-                                            </div>
-                                        </div>
-                                    }
-                                    {timer === 0 &&
-                                        <div className={'start-matching-timeout'}>
-                                            <button className={'home-button'}
-                                                    onClick={(event) => matchHandler(event, false, true)}>
-                                                Retry
-                                            </button>
-                                            <p>
-                                                There is no match for your search ˙◠˙
-                                            </p>
-                                        </div>
-                                    }
+                <Grid container spacing={0} className={'home-session-1'}>
+                    <Grid lg={6} className={'matching-people'}>
+                        {isMatching ?
+                            <div className={'start-matching'}>
+                                <div className={'stroke-purple-circle'}>
+                                    {partner &&
+                                    <Typography variant="h5" align="center" style={{ fontWeight: "bold"}}>
+                                                Preparing the<br />collab room with<br />your partner
+                                    </Typography>}
+                                    {!partner &&
+                                    <Typography className={'home-countdown'}>
+                                        {timer}
+                                    </Typography>}
                                 </div>
-                                :
-                                <div className={'not-start-match'}>
-                                    <div className={'stroke-purple-circle'}>
-                                        <div className={'purple-circle'}>
-                                            <p>Find your partner to start the challenge</p>
+                                {timer > 0 &&
+                                    <div className={'start-matching-inner'}>
+                                        <button
+                                            className={'home-button-1'}
+                                            onClick={(event) => matchHandler(event, false, false)}
+                                            disabled={partner}
+                                        >
+                                            Cancel
+                                        </button>
+                                        <div className={'start-matching-msg'}>
+                                            <CircularProgress size={25} color="inherit"/>
+                                            <Stack>
+                                                {!partner.length &&
+                                                    <p>
+                                                        finding a partner for you. . .
+                                                    </p>
+                                                }
+                                                {partner &&
+                                                    <p>
+                                                        matching you with <span
+                                                        style={{color: "#5541D7"}}>{partner}</span>. . .
+                                                    </p>
+                                                }
+                                            </Stack>
                                         </div>
                                     </div>
-                                    <button className={'home-button'} onClick={(event) => matchHandler(event, true, false)}>
-                                        Match Now
-                                    </button>
-                                    <div className={'place-holder'}></div>
+                                }
+                                {timer === 0 &&
+                                    <div className={'start-matching-timeout'}>
+                                        <button className={'home-button'}
+                                                onClick={(event) => matchHandler(event, false, true)}>
+                                            Retry
+                                        </button>
+                                        <p>
+                                            There is no match for your search ˙◠˙
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                            :
+                            <div className={'not-start-match'}>
+                                <div className={'stroke-purple-circle'}>
+                                    <div className={'purple-circle'}>
+                                        <p>Find your partner to start the challenge</p>
+                                    </div>
                                 </div>
-                            }
-                        </Grid>
-                        <Grid lg={6} className={'history-section'}>
-                            <div className={'history-section-inner'}>
-                                <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                    Matched History
-                                </Typography>
-                                <div className="section-2">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <th>Partner</th>
-                                                <th>Category</th>
-                                                <th>Complexity</th>
-                                                <th>Date</th>
+                                <button className={'home-button'} onClick={(event) => matchHandler(event, true, false)}>
+                                    Match Now
+                                </button>
+                                <div className={'place-holder'}></div>
+                            </div>
+                        }
+                    </Grid>
+                    <Grid lg={6} className={'history-section'}>
+                        <div className={'history-section-inner'}>
+                            <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
+                                Matched History
+                            </Typography>
+                            <div className="section-2">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Partner</th>
+                                            <th>Category</th>
+                                            <th>Complexity</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        {matchHistory.sort((a, b) => b.id - a.id).map(match => (
+                                            <tr key={match.id}>
+                                                <td>{match.partner}</td>
+                                                <td>{match.category}</td>
+                                                <td>{match.complexity}</td>
+                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                                             </tr>
-                                            {matchHistory.sort((a, b) => b.id - a.id).map(match => (
-                                                <tr key={match.id}>
-                                                    <td>{match.partner}</td>
-                                                    <td>{match.category}</td>
-                                                    <td>{match.complexity}</td>
-                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                    <div className={'pagination'}>
-                                        <Pagination
-                                            count={totalPages}
-                                            page={page}
-                                            onChange={(event, value) => setPage(value)}
-                                            color="secondary"
-                                            className="pagination-active"
-                                        />
-                                    </div>
+                                        ))}
+                                    </tbody>
+                                </table>
+                                <div className={'pagination'}>
+                                    <Pagination
+                                        count={totalPages}
+                                        page={page}
+                                        onChange={(event, value) => setPage(value)}
+                                        color="secondary"
+                                        className="pagination-active"
+                                    />
                                 </div>
                             </div>
-                        </Grid>
-                    </Grid>) : (
-                    <Grid container spacing={0} className={'collaboration-session'}>
-                        <Grid sm={12} md={6} className={'collaboration-question'}>
-                            <div className={'collaboration-inner'}>
-                                <MatchingQuestion
-                                    matchSessionHash={matchSessionHash}
-                                    {...props}
-                                />
-                            </div>
-                        </Grid>
-                        <Grid sm={12} md={6} className={'collaboration-code-editor'}>
-                            <div className={'collaboration-inner'}>
-                                <CodeEditorComponent
-                                    matchSessionHash={matchSessionHash}
-                                    {...props}
-                                />
-                            </div>
-                        </Grid>
-                    </Grid>)}
+                        </div>
+                    </Grid>
+                </Grid>
             </Container>
 
         </div>

@@ -23,6 +23,7 @@ services:
       - REACT_APP_DOCKER_MATCHING_SVC_URL=http://localhost:${MATCHING_SVC_PORT}
       - REACT_APP_DOCKER_MATCHING_BROKER_SVC_URL=ws://localhost:${MATCHING_SVC_BROKER_PORT}
       - REACT_APP_DOCKER_COLLABORATION_SVC_URL=http://localhost:${COLLABORATION_SVC_PORT}
+      - REACT_APP_DOCKER_COLLABORATION_SVC_SOCKET_URL=http://localhost:${COLLABORATION_SVC_SOCKET_PORT}
     networks:
       - peerprep-network # Connects the frontend-app to the 'peerprep-network' network.
 

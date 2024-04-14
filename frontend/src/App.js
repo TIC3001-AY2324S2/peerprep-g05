@@ -13,6 +13,7 @@ import { verifyToken } from './apis/user-service-api';
 import { showErrorBar } from './constants/snack-bar';
 import EditQuestion from "./components/EditQuestion/EditQuestion";
 import AdminPage from "./pages/admin-dashboard";
+import CollabPage from './pages/collab-page';
 
 
 const App = (props) => {
@@ -93,6 +94,11 @@ const App = (props) => {
                 path="/home"
                 exact
                 element={<HomePage {...mainProps} />}
+            />
+            <Route
+                path="/collab/:matchSessionHash"
+                exact
+                element={<CollabPage {...mainProps} />}
             />
             <Route
                 path="/admin-dashboard"

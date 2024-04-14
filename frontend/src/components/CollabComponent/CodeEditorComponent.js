@@ -43,7 +43,9 @@ export default function CodeEditorComponent(props) {
         })
 
         function changeText(e) {
-            editor.getModel().applyEdits(e.changes) //change Content
+            if (editor.getModel()) {
+                editor.getModel().applyEdits(e.changes) //change Content
+            }
         }
 
     }

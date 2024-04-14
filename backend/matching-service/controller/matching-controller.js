@@ -1,6 +1,6 @@
 import mqtt from 'mqtt';
 import crypto from 'crypto';
-import { ormCreateMatchRecordForUser, ormGetMatchesForUser } from '../model/match-history-orm.js';
+import { ormCreateMatchRecordForUser, ormGetMatchesForUser, ormGetMatchForUser } from '../model/match-history-orm.js';
 import dotenv from "dotenv";
 import "dotenv/config";
 import axios from 'axios';
@@ -69,8 +69,8 @@ export async function startMatch(req, res){
         }
       }
 
-      ormCreateMatchRecordForUser(email, partner, complexity, category)
-      ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
+      ormCreateMatchRecordForUser(hash, email, partner, complexity, category)
+      ormCreateMatchRecordForUser(hash, userToEmailMap[partner], username, complexity, category)
 
       return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
     } else {
@@ -141,6 +141,24 @@ export async function getMatchesForUser(req, res) {
           totalPages: totalPages,
       });
     }
+  } catch (error) {
+    console.log(`Error in getMatchesForUser: ${error}`);
+    return res.status(500).json({ message: "Error in getMatchesForUser" });
+  }
+}
+
+// Retrieves the match details for the user
+export async function getMatchForUser(req, res) {
+  try {
+    const { email, hash } = req.params;
+
+    const response = await ormGetMatchForUser(email, hash);
+
+    if (response === null || response.error) {
+      console.log(response);
+      return res.status(400).json({message: "Error With History Repository"});
+    }
+    return res.status(200).json({ message: `Match details found!`, matchDetails: response });
   } catch (error) {
     console.log(`Error in getMatchesForUser: ${error}`);
     return res.status(500).json({ message: "Error in getMatchesForUser" });

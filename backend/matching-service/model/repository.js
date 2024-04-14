@@ -27,9 +27,14 @@ export async function findMatchesForUser(email) {
   return await MatchingModel.find({ email: email });
 }
 
-export async function createMatchRecordForUser(email, partner, complexity, category) {
+export async function findMatchForUser(email, hash) {
+  return await MatchingModel.findOne({ email: email, hash: hash });
+}
+
+export async function createMatchRecordForUser(hash, email, partner, complexity, category) {
   const newRecord = new MatchingModel({
     _id: new mongoose.Types.ObjectId(),
+    hash,
     email,
     partner,
     complexity,
