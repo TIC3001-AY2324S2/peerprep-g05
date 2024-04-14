@@ -25,7 +25,7 @@ let UserModelSchema = new Schema({
   isAdmin: {
     type: Boolean,
     required: true,
-    default: true, // Temporary for assignment 2
+    default: false,
   },
 });
 

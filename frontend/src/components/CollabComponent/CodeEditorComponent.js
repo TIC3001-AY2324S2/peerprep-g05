@@ -26,6 +26,7 @@ export default function CodeEditorComponent(props) {
     socket.on('disconnect1', (disconnectedMsg) => {
         showErrorBar(disconnectedMsg);
     });
+
     const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
 
@@ -34,7 +35,6 @@ export default function CodeEditorComponent(props) {
 
             console.log("CodeEditorComponent: onDidChangeModelContent", e, isSocket, isConnected);
             if (isSocket === false && isConnected.current === true) {
-                console.log("CodeEditorComponent: emit code", ssRef.current, e);
                 socket.emit("code", ssRef.current, e)
             } else {
                 isSocket = false
@@ -44,7 +44,9 @@ export default function CodeEditorComponent(props) {
 
         socket.on('code', function (data) {  //Change Content Event
             isSocket = true
-            changeText(data)
+            if (data) {
+                changeText(data)
+            }
         })
 
         function changeText(e) {

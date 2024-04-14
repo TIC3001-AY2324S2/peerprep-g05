@@ -27,7 +27,9 @@ import app from "./index.js";
 //     "isRedoing": false,
 //     "isFlush": false
 //   }
-let codepadValue = {}
+let codepadValue = {
+  "ace68418272360c75d4e6e9c958b8b9b12ad22e61575c9094624127478cd299a": "ABC  TEST",
+};
 
 // Read .env from root parent folder if docker is not used
 if (process.env.IS_DOCKER != "true") {
@@ -64,15 +66,17 @@ io.on('connection', (socket) => {
         const connectedMsg = "Your partner has connected";
         console.log(`connectedMsg: ${connectedMsg}`);
         io.to(hash).emit('connected1', connectedMsg);
+        io.to(socket.id).emit('loadStorage', codepadValue[sessionHash]);
     });
 
     socket.on('code', (sessionHash, codeData) => {
-        console.log(`Updating session code from user ${socket.id}`);
-        console.log(`sessionHash: ${sessionHash}`);
-        codepadValue[sessionHash] = codeData; // store codepad value in memory
-        console.log(`<<codeData: ${JSON.stringify(codeData, null, 2)}`);
+        console.log(`Updating session [${sessionHash}] code from user ${socket.id}`);
         socket.broadcast.to(sessionHash).emit('code', codeData);
     });
+
+    socket.on('storeStorage', (sessionHash, code) => {
+        codepadValue[sessionHash] = code; // store codepad value in memory
+    })
 
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} disconnected`);
@@ -84,22 +88,3 @@ io.on('connection', (socket) => {
 httpServer.listen(frontendPort, () => {
   console.log("Socket listening on port", frontendPort);
 });
-
-// //user connects, socket created for user
-// io.on('connection', (socket) => {
-//     console.log(`User ${socket.id} connected`);
-
-//     socket.on('joinSession', (sessionHash) => {
-//         socket.join(sessionHash);
-//         console.log(`User ${socket.id} joined session ${sessionHash}`);
-
-//         const clients = io.sockets.adapter.rooms.get(sessionHash);
-//         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
-//     });
-
-//     socket.on('code', (sessionHash, codeData) => {
-//         console.log(`Updating session code from user ${socket.id}`);
-//         console.log(`sessionHash: ${sessionHash}`);
-//         io.to(sessionHash).emit('code', codeData);
-//     });
-// });

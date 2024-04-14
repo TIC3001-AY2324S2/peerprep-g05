@@ -31,7 +31,6 @@ function CollabComponent(props) {
                 if (res.error) {
                     props.navigate('/home');
                 }
-                console.log(res);
                 setComplexity(res.data.matchDetails.complexity);
                 setCategory(res.data.matchDetails.category);
                 setPartner(res.data.matchDetails.partner);

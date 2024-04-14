@@ -6,7 +6,6 @@ import {
     deleteSessionInfoByHash
 } from "../controller/collab-controller.js";
 
-console.log("collab-service-routes.js");
 //adds a new session into session repository, requires auth in header
 //router.post('/api/collab/session', verifyAccessToken, addSessionInfo);
 //test version

@@ -4,15 +4,12 @@ import {
     ormDeleteSessionByHash as _deleteSessionByHash
 } from "../model/collab-orm.js";
 
-console.log("CONTROLLER");
 
 export async function getSessionInfoByHash(req, res) {
     const hash = req.params.hash;
     console.log("SEARCHING FOR SESSION INFO WITH HASH")
 
     const response = await _findSessionInfoByHash(hash);
-
-    console.log(response);
 
     if (response === null) {
         return res.status(404).json({
@@ -38,7 +35,6 @@ export async function addSessionInfo(req, res) {
         };
         if (newSession.hash && newSession.questionid) {
             const resp = await _addSessionInfo (newSession.hash, newSession.questionid);
-            console.log(resp);
             if (resp.err) {
                 console.log(resp.err.message);
                 return res.status(409).json({
@@ -69,7 +65,6 @@ export async function deleteSessionInfoByHash(req, res) {
         if (hash) {
             console.log(`DELETING SESSION : ${hash}`);
             const response = await _deleteSessionByHash(hash);
-            console.log(response);
             if (response.err) {
                 return res.status(400).json({message: "Could not delete the session!"});
             } else if (!response) {

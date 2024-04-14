@@ -41,33 +41,11 @@ export async function getAllQuestion(req, res) {
 
 }
 
-// export async function getTotalQuestionCount(req, res) {
-//   console.log(`GET TOTAL QUESTION COUNT`);
-
-//   const response = await _getTotalQuestionCount();
-
-//   console.log(response);
-
-//   if (response === null) {
-//     return res.status(404).json({ message: `No Question In Repository` });
-//   } else if (response.err) {
-//     return res.status(400).json({ message: "Error With Question Repository" });
-//   } else {
-//     console.log(`Count Retrieved!`);
-//     return res.status(200).json({
-//       message: `Count Retrieved!`,
-//       questions: response,
-//     });
-//   }
-// }
-
 export async function getQuestionById(req, res) {
     const id = req.params.id;
     console.log(`GET QUESTION BY ID: ${id}`);
 
     const response = await _findQuestionByID(id);
-
-    console.log(response);
 
     if (response === null) {
         return res.status(404).json({
@@ -89,8 +67,6 @@ export async function getOneQuestionByComplexity(req, res) {
     console.log(`GET A QUESITON OF COMPLEXITY : ${complexity}`);
 
     const response = await _findOneQuestionByComplexity(complexity);
-
-    console.log(response);
 
     if (response === null) {
         return res.status(200).json({
@@ -114,8 +90,6 @@ export async function getOneRandomQuestionByComplexityAndCategory(req, res) {
 
     const response = await _findOneQuestionByComplexityAndCategory(complexity,category);
 
-    console.log(response);
-
     if (response === null) {
         return res.status(404).json({
             message: `Question Not Found`
@@ -137,8 +111,6 @@ export async function getAllQuestionByComplexity(req, res) {
 
     const response = await _findAllQuestionByComplexity(complexity);
 
-    console.log(response);
-
     if (response === null) {
         return res.status(200).json({
             message: `Question Not Found`
@@ -159,8 +131,6 @@ export async function getAllCategoryByComplexity(req, res) {
     console.log(`GET ALL QUESITON CATEGORIES OF COMPLEXITY : ${complexity}`);
 
     const response = await _findAllCategoryByComplexity(complexity);
-
-    console.log(response);
 
     if (response === null) {
         return res.status(404).json({
@@ -184,7 +154,6 @@ export async function createQuestion(req, res) {
         if (newQuestion) {
             console.log(`Adding new question: ${title}`);
             const resp = await _createQuestion(title, description, categories, complexity, testCase);
-            console.log(resp);
             if (resp.err) {
                 console.log(resp.err.message);
                 return res.status(409).json({
@@ -215,7 +184,6 @@ export async function deleteQuestionById(req, res) {
         if (id) {
             console.log(`DELETE USER: question Obtained: ${id}`);
             const response = await _deleteQuestion(id);
-            console.log(response);
             if (response.err) {
                 return res.status(400).json({message: "Could not delete the question!"});
             } else if (!response) {
@@ -249,8 +217,6 @@ export async function updateQuestionById(req, res) {
         if (questionInfo) {
             console.log(`Updating Question: ${id}`);
             const resp = await _updateQuestion(id, questionInfo);
-            console.log("this is resp");
-            console.log(resp);
             if (resp.err) {
                 console.log(resp.err.message);
                 return res
