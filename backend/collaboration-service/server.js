@@ -59,6 +59,9 @@ io.on('connection', (socket) => {
         const clients = io.sockets.adapter.rooms.get(sessionHash);
         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
         socket.broadcast.to(sessionHash).emit('code', codepadValue); // send codepad value to new user
+        const connectedMsg = "Your partner has connected";
+        console.log(`connectedMsg: ${connectedMsg}`);
+        io.to(hash).emit('connected1', connectedMsg);
     });
 
     socket.on('code', (sessionHash, codeData) => {
