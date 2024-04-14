@@ -115,13 +115,9 @@ export default function CodeEditorComponent(props) {
                     style={{ display: 'flex', alignItems: 'center', marginRight: '10px', color: 'white' }}
                 >
                     <div style={{
-                        width: '20px',
-                        height: '20px',
-                        borderRadius: '50%',
                         backgroundColor: statusColor,
-                        marginRight: '10px'
-                    }} />
-                    {statusMsg[statusColor]}
+                    }} className={'bottom-editor-partner-status'}/>
+                    {statusMsg[statusColor] }
                 </div>
                 <button
                     className={'leave-button'}

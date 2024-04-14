@@ -84,7 +84,7 @@ function HomeComponent(props) {
         if (delayedPartner === '') {
             const timer = setTimeout(() => {
                 setDelayedPartner(partner);
-            }, 3000);
+            }, 5000);
             return () => setTimeout(timer);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,7 +93,9 @@ function HomeComponent(props) {
     useEffect(() => {
         return () => {
             if (client) {
-                client.end(true, () => { console.log("MQTT Client disconnected. 1") });
+                client.end(true, () => {
+                    console.log("MQTT Client disconnected. 1")
+                });
             }
         }
     }, [])
@@ -125,7 +127,9 @@ function HomeComponent(props) {
                 setTimer(counter => {
                     if (counter === 0) {
                         if (client) {
-                            client.end(true, () => { console.log("MQTT Client disconnected. 2") });
+                            client.end(true, () => {
+                                console.log("MQTT Client disconnected. 2")
+                            });
                         }
                         setIsMatching(false);
                         cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
@@ -152,7 +156,9 @@ function HomeComponent(props) {
         } else {
             console.log(client);
             if (client) {
-                client.end(true, () => { console.log("MQTT Client disconnected. 3") });
+                client.end(true, () => {
+                    console.log("MQTT Client disconnected. 3")
+                });
             }
             setPartner('');
             setIsMatching(false);
@@ -271,28 +277,33 @@ function HomeComponent(props) {
                     </div>
                 </Grid>
                 <Grid container spacing={0} className={'home-session-1'}>
-                    <Grid lg={6} className={'matching-people'}>
+                    <Grid item lg={6} className={'matching-people'}>
                         {isMatching ?
                             <div className={'start-matching'}>
                                 <div className={'stroke-purple-circle'}>
+
                                     {partner &&
-                                    <Typography variant="h5" align="center" style={{ fontWeight: "bold"}}>
-                                                Preparing the<br />collab room with<br />your partner
-                                    </Typography>}
+                                        <div className={'purple-circle'}>
+                                            <p>Setting up the collaboration room with your partner</p>
+                                        </div>}
                                     {!partner &&
-                                    <Typography className={'home-countdown'}>
-                                        {timer}
-                                    </Typography>}
+                                        <div className={'home-countdown'}>
+                                            {timer}
+                                        </div>}
+
                                 </div>
                                 {timer > 0 &&
                                     <div className={'start-matching-inner'}>
-                                        <button
-                                            className={'home-button-1'}
-                                            onClick={(event) => matchHandler(event, false, false)}
-                                            disabled={partner}
-                                        >
-                                            Cancel
-                                        </button>
+                                        {!partner &&
+                                            <button
+                                                className={'home-button-1'}
+                                                onClick={(event) => matchHandler(event, false, false)}
+                                                // disabled={partner }
+                                            >
+                                                Cancel
+                                            </button>}
+                                        {partner &&
+                                            <div className={'place-holder'}></div>}
                                         <div className={'start-matching-msg'}>
                                             <CircularProgress size={25} color="inherit"/>
                                             <Stack>
@@ -337,7 +348,7 @@ function HomeComponent(props) {
                             </div>
                         }
                     </Grid>
-                    <Grid lg={6} className={'history-section'}>
+                    <Grid  item lg={6} className={'history-section'}>
                         <div className={'history-section-inner'}>
                             <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
                                 Matched History
@@ -345,20 +356,20 @@ function HomeComponent(props) {
                             <div className="section-2">
                                 <table>
                                     <tbody>
-                                        <tr>
-                                            <th>Partner</th>
-                                            <th>Category</th>
-                                            <th>Complexity</th>
-                                            <th>Date</th>
+                                    <tr>
+                                        <th>Partner</th>
+                                        <th>Category</th>
+                                        <th>Complexity</th>
+                                        <th>Date</th>
+                                    </tr>
+                                    {matchHistory.sort((a, b) => b.id - a.id).map(match => (
+                                        <tr key={match.id}>
+                                            <td>{match.partner}</td>
+                                            <td>{match.category}</td>
+                                            <td>{match.complexity}</td>
+                                            <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
                                         </tr>
-                                        {matchHistory.sort((a, b) => b.id - a.id).map(match => (
-                                            <tr key={match.id}>
-                                                <td>{match.partner}</td>
-                                                <td>{match.category}</td>
-                                                <td>{match.complexity}</td>
-                                                <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                            </tr>
-                                        ))}
+                                    ))}
                                     </tbody>
                                 </table>
                                 <div className={'pagination'}>
