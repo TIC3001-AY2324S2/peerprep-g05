@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`User ${socket.id} disconnected`);
         const disconnectedMsg = "Your partner has disconnected";
-        io.to(hash).emit('disconnect', disconnectedMsg);
+        io.to(hash).emit('disconnect1', disconnectedMsg);
     });
 });
 
