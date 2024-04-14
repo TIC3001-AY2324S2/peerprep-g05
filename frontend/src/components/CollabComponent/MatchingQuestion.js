@@ -15,7 +15,6 @@ export default function MatchingQuestion(props) {
     const [testCases, setTestCases] = useState([{input: '', result: ''}]);
     const [setQuestions] = useState([]);
     const {isVerifyDone} = props;
-    console.log("props.matchSessionHash", props.matchSessionHash);
     useEffect(() => {
         if (props.matchSessionHash && props.matchSessionHash !== '') {
             setTimeout(() => {
