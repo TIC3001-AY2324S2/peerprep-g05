@@ -2,6 +2,7 @@ import './CollabComponent.scss'
 import {useRef, useEffect, useState} from 'react';
 import Editor from "@monaco-editor/react";
 import {socket} from "../../apis/socket";
+import {showErrorBar} from "../../constants/snack-bar";
 
 
 export default function CodeEditorComponent(props) {
@@ -21,6 +22,10 @@ export default function CodeEditorComponent(props) {
             ssRef.current = sessionId;
         }
     }, [sessionId]);
+
+    socket.on('disconnect1', (disconnectedMsg) => {
+        showErrorBar(disconnectedMsg);
+    });
     const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
 
