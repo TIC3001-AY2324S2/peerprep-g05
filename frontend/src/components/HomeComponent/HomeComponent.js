@@ -21,6 +21,7 @@ function HomeComponent(props) {
     const [categoryList, setCategoryList] = useState([]);
     const [category, setCategory] = useState('');
     const [isMatching, setIsMatching] = useState(false);
+    const [isRetry, setIsRetry] = useState(false);
     const [timerId, setTimerId] = useState(null);
     const [timer, setTimer] = useState(15);
     const [partner, setPartner] = useState('');
@@ -70,8 +71,9 @@ function HomeComponent(props) {
     const categoryHandler = (event) => {
         setCategory(event.target.value);
     };
-    const matchHandler = (event, isMatch) => {
+    const matchHandler = (event, isMatch, isRetry) => {
         setIsMatching(isMatch);
+        setIsRetry(isRetry);
         clearInterval(timerId);
         setTimer(15);
         if (isMatch) {
@@ -114,6 +116,7 @@ function HomeComponent(props) {
                 client.end();
             }
             setPartner('');
+            if (isRetry) return;
             cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                 console.log("cancel match:", response)
                 if (response.error) {
@@ -242,8 +245,9 @@ function HomeComponent(props) {
                                                 }
                                             </Stack>
                                             <ListItemButton
+                                                disabled={partner}
                                                 style={{marginTop: "15px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", borderRadius: "5px"}}
-                                                onClick={(event) => matchHandler(event, false)}
+                                                onClick={(event) => matchHandler(event, false, false)}
                                                 >
                                                 <ListItemText primary="Cancel" style={{color: "#5541D7"}}/>
                                             </ListItemButton>
@@ -256,7 +260,7 @@ function HomeComponent(props) {
                                             </Typography>
                                             <ListItemButton
                                                 style={{marginTop: "18px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", backgroundColor: "#5541D7", borderRadius: "5px"}}
-                                                onClick={(event) => matchHandler(event, false)}
+                                                onClick={(event) => matchHandler(event, false, true)}
                                             >
                                                 <ListItemText primary="Retry" style={{color: "#FFFFFF"}}/>
                                             </ListItemButton>
@@ -276,7 +280,7 @@ function HomeComponent(props) {
                                     </Typography>
                                     <ListItemButton
                                         style={{marginTop: "151px", marginLeft: "auto", marginRight: "auto", width: "120px", textAlign: "center", border: "solid 1px", borderColor: "#5541D7", backgroundColor: "#5541D7", borderRadius: "5px"}}
-                                        onClick={(event) => matchHandler(event, true)}
+                                        onClick={(event) => matchHandler(event, true, false)}
                                     >
                                         <ListItemText primary="Match Now" style={{color: "#FFFFFF"}}/>
                                     </ListItemButton>
