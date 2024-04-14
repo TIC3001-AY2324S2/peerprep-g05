@@ -20,10 +20,8 @@ import {
     MenuItem,
     CircularProgress,
     Grid,
-    Paper,
     Pagination
 } from '@mui/material';
-import {styled} from '@mui/material/styles';
 
 let currLevel = "EASY MODE";
 let client;
@@ -65,7 +63,6 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getMatchHistory(props.userInfo.email, page).then((response) => {
-                // console.log("history", response);
                 setMatchHistory(response.data.history);
                 setTotalPages(response.data.totalPages);
                 if (response.error) {
@@ -80,6 +77,7 @@ function HomeComponent(props) {
         if (delayedPartner !== '') {
             props.navigate('/collab/' + matchSessionHash);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [delayedPartner]);
 
     useEffect(() => {
@@ -89,7 +87,16 @@ function HomeComponent(props) {
             }, 3000);
             return () => setTimeout(timer);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [partner]);
+
+    useEffect(() => {
+        return () => {
+            if (client) {
+                client.end(true, () => { console.log("MQTT Client disconnected. 1") });
+            }
+        }
+    }, [])
 
     const complexityHandler = (event, level) => {
         currLevel = level.toUpperCase() + " MODE";
@@ -99,10 +106,10 @@ function HomeComponent(props) {
         setCategory(event.target.value);
     };
     const matchHandler = (event, isMatch, isRetry) => {
-        setIsMatching(isMatch);
         clearInterval(timerId);
         setTimer(15);
-        if (isMatch) {
+        if (isMatch && !isMatching) {
+            setIsMatching(true);
             client = subscribeToTopic(props.userInfo.username);
             console.log(props.userInfo);
             client.on('connect', () => {
@@ -117,6 +124,10 @@ function HomeComponent(props) {
             const id = setInterval(() => {
                 setTimer(counter => {
                     if (counter === 0) {
+                        if (client) {
+                            client.end(true, () => { console.log("MQTT Client disconnected. 2") });
+                        }
+                        setIsMatching(false);
                         cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                             console.log(new Date().toLocaleString() + ", cancel match:", response)
                             if (response.error) {
@@ -139,10 +150,12 @@ function HomeComponent(props) {
                 setPartner(resp.partner);
             });
         } else {
+            console.log(client);
             if (client) {
-                client.end();
+                client.end(true, () => { console.log("MQTT Client disconnected. 3") });
             }
             setPartner('');
+            setIsMatching(false);
             if (isRetry) return;
             cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                 console.log("cancel match:", response)

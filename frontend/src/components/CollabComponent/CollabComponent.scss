@@ -5,7 +5,7 @@
 .code-editor {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   text-align: start;
   background-color: #11142D;
   padding: 0 !important;
@@ -23,7 +23,7 @@
 
 .top-editor {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   text-align: start;
   color: white;
   height: 5%;
@@ -38,7 +38,7 @@
 
 .bottom-editor {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 10px 20px;
   height: 5%;
 }
@@ -67,7 +67,7 @@
   padding: 50px;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   text-align: start;
   font-family: 'Mulish', sans-serif;
   width: 100%;

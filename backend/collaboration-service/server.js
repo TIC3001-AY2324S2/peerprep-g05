@@ -4,30 +4,9 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import app from "./index.js";
 
-// let codepadValue = {
+let codepadValue = {};
 
-//     "changes": [
-//       {
-//         "range": {
-//           "startLineNumber": 1,
-//           "startColumn": 1,
-//           "endLineNumber": 1,
-//           "endColumn": 1
-//         },
-//         "rangeLength": 0,
-//         "text": 'test!',
-//         "rangeOffset": 0,
-//         "forceMoveMarkers": false
-//       }
-//     ],
-//     "eol": '\r\n',
-//     "isEolChange": false,
-//     "versionId": 2,
-//     "isUndoing": false,
-//     "isRedoing": false,
-//     "isFlush": false
-//   }
-let codepadValue = {}
+const socketToUsernameMap = {};
 
 // Read .env from root parent folder if docker is not used
 if (process.env.IS_DOCKER != "true") {
@@ -51,55 +30,35 @@ app.listen(port, () => {
 //user connects, socket created for user
 io.on('connection', (socket) => {
     let hash;
-    console.log(`User ${socket.id} connected`);
+    console.log(`Socket [${socket.id}] connected`);
 
-    socket.on('joinSession', (sessionHash) => {
+    socket.on('joinSession', (sessionHash, name) => {
         hash = sessionHash;
         socket.join(sessionHash);
-        console.log(`User ${socket.id} joined session ${sessionHash}`);
+        socketToUsernameMap[socket.id] = name;
+        console.log(`User [${socketToUsernameMap[socket.id]}] joined session [${sessionHash}]`);
 
         const clients = io.sockets.adapter.rooms.get(sessionHash);
         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
-        socket.broadcast.to(sessionHash).emit('code', codepadValue[sessionHash]); // send codepad value to new user
         const connectedMsg = "Your partner has connected";
         console.log(`connectedMsg: ${connectedMsg}`);
-        io.to(hash).emit('connected1', connectedMsg);
+        io.to(hash).emit('connected1', connectedMsg, clients.size, socket.id, codepadValue[sessionHash]); // send codepad value to new user
+        io.to(socket.id).emit('loadStorage', codepadValue[sessionHash]);
     });
 
-    socket.on('code', (sessionHash, codeData) => {
-        console.log(`Updating session code from user ${socket.id}`);
-        console.log(`sessionHash: ${sessionHash}`);
-        codepadValue[sessionHash] = codeData; // store codepad value in memory
-        console.log(`<<codeData: ${JSON.stringify(codeData, null, 2)}`);
+    socket.on('code', (sessionHash, codeData, codeValue) => {
+        console.log(`Updating session [${sessionHash}] code from user ${socket.id}`);
+        codepadValue[sessionHash] = codeValue;
         socket.broadcast.to(sessionHash).emit('code', codeData);
     });
 
     socket.on('disconnect', () => {
-        console.log(`User ${socket.id} disconnected`);
+        console.log(`Socket [${socket.id}] - User [${socketToUsernameMap[socket.id]}] disconnected`);
         const disconnectedMsg = "Your partner has disconnected";
-        io.to(hash).emit('disconnect1', disconnectedMsg);
+        io.to(hash).emit('disconnect1', disconnectedMsg, socket.id);
     });
 });
 
 httpServer.listen(frontendPort, () => {
   console.log("Socket listening on port", frontendPort);
 });
-
-// //user connects, socket created for user
-// io.on('connection', (socket) => {
-//     console.log(`User ${socket.id} connected`);
-
-//     socket.on('joinSession', (sessionHash) => {
-//         socket.join(sessionHash);
-//         console.log(`User ${socket.id} joined session ${sessionHash}`);
-
-//         const clients = io.sockets.adapter.rooms.get(sessionHash);
-//         console.log(`Number of connected clients in session ${sessionHash}: ${clients.size}`);
-//     });
-
-//     socket.on('code', (sessionHash, codeData) => {
-//         console.log(`Updating session code from user ${socket.id}`);
-//         console.log(`sessionHash: ${sessionHash}`);
-//         io.to(sessionHash).emit('code', codeData);
-//     });
-// });

@@ -17,7 +17,6 @@ export async function createUser(req, res) {
     if (username && email && hashedPassword) {
       console.log(`CREATE USER: Email Obtained: ${email}`);
       const resp = await _createUser(username, email, hashedPassword);
-      console.log(resp);
       if (resp.err) {
         return res.status(409).json({
           message:
@@ -47,7 +46,6 @@ export async function deleteUser(req, res) {
     if (email) {
       console.log(`DELETE USER: Email Obtained: ${email}`);
       const response = await _deleteUser(email);
-      console.log(response);
       if (response.err) {
         return res.status(400).json({ message: "Could not delete the user!" });
       } else if (!response) {
@@ -79,7 +77,6 @@ export async function getUserByEmail(req, res) {
     if (email) {
       console.log(`GET USER: Email Obtained: ${email}`);
       const response = await _findUserByEmail(email);
-      console.log(response);
       if (response === null) {
         console.log(`User with ${email} not found!`);
         return res
@@ -116,7 +113,6 @@ export async function updateUser(req, res) {
     if (id && username && email && hashedPassword) {
       console.log(`UPDATE USER: ID Obtained: ${id}`);
       const response = await _updateUser(id, username, email, hashedPassword);
-      console.log(response);
       if (response.err) {
         return res.status(409).json({
           message:
@@ -154,7 +150,6 @@ export async function updateUserPrivilege(req, res) {
     if (email && isAdmin) {
       console.log(`UPDATE USER PRIVILEGE: Email Obtained: ${email}`);
       const response = await _updateUserPrivilege(email, isAdmin);
-      console.log(response);
       if (response.err) {
         return res.status(400).json({
           message: "Could not update the user privilege!",
@@ -187,8 +182,6 @@ export async function getAllUsers(req, res) {
   console.log(`GET ALL USERS`);
 
   const response = await _findAllUsers();
-
-  console.log(response);
 
   if (response === null) {
     return res.status(404).json({ message: `No users exist!` });
