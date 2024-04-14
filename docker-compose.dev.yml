@@ -42,8 +42,6 @@ services:
 
   collaboration-service-app:
     volumes:
-      - ./backend/collaboration-service/index.html:/app/index.html
-      - ./backend/collaboration-service/client.js:/app/client.js
       - ./backend/collaboration-service/server.js:/app/server.js
       - ./backend/collaboration-service/controller:/app/controller
       - ./backend/collaboration-service/middleware:/app/middleware
