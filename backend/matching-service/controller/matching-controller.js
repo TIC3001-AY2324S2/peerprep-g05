@@ -15,7 +15,7 @@ const userServiceURL = process.env.DOCKER_USER_SVC_URL || 'http://localhost:3001
 const questionServiceUrl = process.env.DOCKER_QUESTION_SVC_URL || 'http://localhost:3002';
 const collabServiceUrl = process.env.DOCKER_COLLABORATION_SVC_URL || 'http://localhost:3004';
 // MQTT Broker connection
-const client = mqtt.connect(mqttBrokerUrl);
+const client = mqtt.connect(mqttBrokerUrl, { clientId: 'backend/matching-service' });
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
@@ -23,6 +23,7 @@ client.on('connect', () => {
 
 const userQueue = {};
 const userToEmailMap = {};
+let numberOfUsersInQueue = 0;
 
 //Start match endpoint
 export async function startMatch(req, res){
@@ -33,13 +34,18 @@ export async function startMatch(req, res){
     userToEmailMap[username] = email;
 
     if (userQueue[complexity][category].length > 0) {
-      if (userQueue[complexity][category] === username) {
+      if (userQueue[complexity][category].includes(username)) {
         return res.status(200).json({ message: 'Already added to queue' });
       }
 
       const partner = userQueue[complexity][category].pop();
-      const hash = generateHash(username, partner);
+      numberOfUsersInQueue -= 1;
 
+      // for assignment 4 return the partner name instead of hash
+      const hash = generateHash(username, partner);
+      console.log(`Match [${hash}] found for ${username} and ${partner}`);
+      console.log(`Publishing message to topic user/${username}`);
+      console.log(`Publishing message to topic user/${partner}`);
       client.publish(`user/${username}`, JSON.stringify({ partner, hash}));
       client.publish(`user/${partner}`, JSON.stringify({ partner: username, hash }));
 
@@ -66,12 +72,12 @@ export async function startMatch(req, res){
       ormCreateMatchRecordForUser(email, partner, complexity, category)
       ormCreateMatchRecordForUser(userToEmailMap[partner], username, complexity, category)
 
-      console.log(`Match [${hash}] found for ${username} and ${partner}`);
-      return res.status(200).json({ message: 'Match found' });
+      return res.status(200).json({ message: 'Match found! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
     } else {
       userQueue[complexity][category].push(username);
+      numberOfUsersInQueue += 1;
     }
-    return res.status(200).json({ message: 'Added to queue' });
+    return res.status(200).json({ message: 'Added to queue! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
   } catch (error) {
     console.log(`Error in startMatch: ${error}`);
     return res.status(500).json({ message: "Error in startMatch" });
@@ -86,9 +92,10 @@ export async function cancelMatch(req, res) {
 
     if (userQueue[complexity] && userQueue[complexity][category]) {
       userQueue[complexity][category] = userQueue[complexity][category].filter(user => user !== username);
+      numberOfUsersInQueue -= 1;
     }
 
-    return res.status(200).json({ message: 'Match Cancelled' });
+    return res.status(200).json({ message: 'Match Cancelled! There is ' + numberOfUsersInQueue + ' user(s) in the queue' });
   } catch (error) {
     console.log(`Error in cancelMatch: ${error}`);
     return res.status(500).json({ message: "Error in cancelMatch" });

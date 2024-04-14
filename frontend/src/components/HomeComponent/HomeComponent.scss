@@ -208,6 +208,13 @@
   font-weight: bold;
 }
 
+.home-button-1:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  border: 1px solid #a0a0a0;
+}
+
 .start-matching {
   display: flex;
   flex-direction: column;

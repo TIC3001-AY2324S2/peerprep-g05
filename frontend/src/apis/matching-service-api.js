@@ -55,10 +55,11 @@ export function startMatch(username, email, complexity, category) {
         }));
 }
 
-export function cancelMatch(username, complexity, category) {
+export function cancelMatch(username, email, complexity, category) {
     return axios
         .post(`${MATCHING_SVC_HOST}/api/match/cancel`, {
             username,
+            email,
             complexity,
             category,
         })
@@ -71,12 +72,12 @@ export function cancelMatch(username, complexity, category) {
 }
 
 export function subscribeToTopic(username) {
-    const client = mqtt.connect(MATCHING_BROKER_SVC_HOST);
+    const client = mqtt.connect(MATCHING_BROKER_SVC_HOST, { clientId: `frontend/user/${username}` });
     client.on('connect', () => {
-        console.log('Connected to MQTT broker');
+        console.log(new Date().toLocaleString() + ': Connected to MQTT broker');
         client.subscribe('user/' + username, function (err) {
             if (!err) {
-              console.log('Successfully subscribed to topic: user/' + username);
+              console.log(new Date().toLocaleString() + ': Successfully subscribed to topic: user/' + username);
             } else {
               console.log('Error subscribing to topic: ', err);
             }

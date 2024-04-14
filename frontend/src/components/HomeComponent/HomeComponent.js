@@ -4,7 +4,6 @@ import {
     cancelMatch,
     getCategoriesByComplexity,
     getMatchHistory,
-    getQuestionsByCategory,
     startMatch,
     subscribeToTopic
 } from '../../apis/matching-service-api';
@@ -57,7 +56,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getCategoriesByComplexity(complexity).then((response) => {
-                console.log("categories", response)
+                // console.log("categories", response);
                 if (response.error) {
                     console.error('Failed to fetch categories:', response.data);
                     return;
@@ -68,13 +67,6 @@ function HomeComponent(props) {
                     setCategory(sortedList[0]);
                 }
             });
-            getQuestionsByCategory(complexity, category).then((response) => {
-                console.log("questions", response)
-                if (response.error) {
-                    console.error('Failed to fetch questions:', response.data);
-                    return;
-                }
-            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [complexity, isVerifyDone]);
@@ -82,7 +74,7 @@ function HomeComponent(props) {
     useEffect(() => {
         if (isVerifyDone) {
             getMatchHistory(props.userInfo.email, page).then((response) => {
-                console.log("history", response)
+                // console.log("history", response);
                 setMatchHistory(response.data.history);
                 setTotalPages(response.data.totalPages);
                 if (response.error) {
@@ -108,7 +100,7 @@ function HomeComponent(props) {
     const categoryHandler = (event) => {
         setCategory(event.target.value);
     };
-    const matchHandler = (event, isMatch) => {
+    const matchHandler = (event, isMatch, isRetry) => {
         setIsMatching(isMatch);
         clearInterval(timerId);
         setTimer(15);
@@ -117,7 +109,7 @@ function HomeComponent(props) {
             console.log(props.userInfo);
             client.on('connect', () => {
                 startMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
-                    console.log("start match:", response)
+                    console.log(new Date().toLocaleString() + ", start match:", response)
                     if (response.error) {
                         console.error('Failed to start match:', response.data);
                         return;
@@ -127,8 +119,8 @@ function HomeComponent(props) {
             const id = setInterval(() => {
                 setTimer(counter => {
                     if (counter === 0) {
-                        cancelMatch(props.userInfo.username, complexity, category).then((response) => {
-                            console.log("cancel match:", response)
+                        cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
+                            console.log(new Date().toLocaleString() + ", cancel match:", response)
                             if (response.error) {
                                 console.error('Failed to cancel match:', response.data);
                                 return;
@@ -143,7 +135,7 @@ function HomeComponent(props) {
             setTimerId(id);
             client.on('message', (topic, message) => {
                 const resp = JSON.parse(message);
-                console.log(`Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
+                console.log(new Date().toLocaleString() + `: Match [${resp.hash}] found for ${props.userInfo.username} and ${resp.partner}`);
                 setMatchSessionHash(resp.hash);
                 clearInterval(id);
                 setPartner(resp.partner);
@@ -153,7 +145,8 @@ function HomeComponent(props) {
                 client.end();
             }
             setPartner('');
-            cancelMatch(props.userInfo.username, complexity, category).then((response) => {
+            if (isRetry) return;
+            cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                 console.log("cancel match:", response)
                 if (response.error) {
                     console.error('Failed to cancel match:', response.data);
@@ -213,7 +206,7 @@ function HomeComponent(props) {
                         </ListItemButton>
                     </div>
                     <FormControl className={'home-section-1-categories'}>
-                        <InputLabel style={{display: "inline-flex"}}>Select a category</InputLabel>
+                        <InputLabel style={{display: "inline-flex"}}>Category</InputLabel>
                         <Select
                             disabled={isMatching}
                             style={{textAlign: "left"}}
@@ -269,18 +262,25 @@ function HomeComponent(props) {
                 {!delayedPartner ? (
                     <Grid container spacing={0} className={'home-session-1'}>
                         <Grid lg={6} className={'matching-people'}>
-
                             {isMatching ?
                                 <div className={'start-matching'}>
                                     <div className={'stroke-purple-circle'}>
+                                        {partner &&
+                                        <Typography variant="h5" align="center" style={{ fontWeight: "bold"}}>
+                                                    Preparing the<br />collab room with<br />your partner
+                                        </Typography>}
+                                        {!partner &&
                                         <Typography className={'home-countdown'}>
                                             {timer}
-                                        </Typography>
+                                        </Typography>}
                                     </div>
                                     {timer > 0 &&
                                         <div className={'start-matching-inner'}>
-                                            <button className={'home-button-1'}
-                                                    onClick={(event) => matchHandler(event, false)}>
+                                            <button
+                                                className={'home-button-1'}
+                                                onClick={(event) => matchHandler(event, false, false)}
+                                                disabled={partner}
+                                            >
                                                 Cancel
                                             </button>
                                             <div className={'start-matching-msg'}>
@@ -304,7 +304,7 @@ function HomeComponent(props) {
                                     {timer === 0 &&
                                         <div className={'start-matching-timeout'}>
                                             <button className={'home-button'}
-                                                    onClick={(event) => matchHandler(event, false)}>
+                                                    onClick={(event) => matchHandler(event, false, true)}>
                                                 Retry
                                             </button>
                                             <p>
@@ -320,51 +320,48 @@ function HomeComponent(props) {
                                             <p>Find your partner to start the challenge</p>
                                         </div>
                                     </div>
-                                    <button className={'home-button'} onClick={(event) => matchHandler(event, true)}>
+                                    <button className={'home-button'} onClick={(event) => matchHandler(event, true, false)}>
                                         Match Now
                                     </button>
                                     <div className={'place-holder'}></div>
                                 </div>
                             }
-                            {/*</Item>*/}
                         </Grid>
-
                         <Grid lg={6} className={'history-section'}>
                             <div className={'history-section-inner'}>
                                 <Typography variant="h5" align="center" style={{fontWeight: "bold"}}>
-                                    Session History
+                                    Matched History
                                 </Typography>
-
-                                <table className={'section-2'}>
-                                    <tr>
-                                        {/*<th>ID</th>*/}
-                                        <th>Partner</th>
-                                        <th>Category</th>
-                                        <th>Complexity</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    {matchHistory.map(match => (
-                                        <tr>
-                                            {/*<td>#{match.id}</td>*/}
-                                            <td>{match.partner}</td>
-                                            <td>{match.category}</td>
-                                            <td>{match.complexity}</td>
-                                            <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
-                                        </tr>
-                                    ))}
-                                </table>
-                                <div className={'history-pagination'}>
-                                    <Pagination
-                                        count={totalPages}
-                                        page={page}
-                                        onChange={(event, value) => setPage(value)}
-                                        color="secondary"
-                                        className="pagination-active"
-                                    />
+                                <div className="section-2">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>Partner</th>
+                                                <th>Category</th>
+                                                <th>Complexity</th>
+                                                <th>Date</th>
+                                            </tr>
+                                            {matchHistory.sort((a, b) => b.id - a.id).map(match => (
+                                                <tr key={match.id}>
+                                                    <td>{match.partner}</td>
+                                                    <td>{match.category}</td>
+                                                    <td>{match.complexity}</td>
+                                                    <td>{moment(match.createdAt).format('DD/MM/YYYY HH:mm:ss')}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <div className={'pagination'}>
+                                        <Pagination
+                                            count={totalPages}
+                                            page={page}
+                                            onChange={(event, value) => setPage(value)}
+                                            color="secondary"
+                                            className="pagination-active"
+                                        />
+                                    </div>
                                 </div>
-
                             </div>
-
                         </Grid>
                     </Grid>) : (
                     <Grid container spacing={0} className={'collaboration-session'}>
@@ -385,8 +382,6 @@ function HomeComponent(props) {
                             </div>
                         </Grid>
                     </Grid>)}
-
-
             </Container>
 
         </div>
