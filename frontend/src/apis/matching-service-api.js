@@ -96,3 +96,14 @@ export function getMatchHistory(email, page) {
             status: err && err.response ? err.response.status : '',
         }));
 }
+
+export function getMatchForUser(email, hash) {
+    return axios
+        .get(`${MATCHING_SVC_HOST}/api/match/history/${email}/hash/${hash}`)
+        .then((resp) => ({ data: resp.data, error: false }))
+        .catch((err) => ({
+            data: err && err.response ? err.response.data : '',
+            error: true,
+            status: err && err.response ? err.response.status : '',
+        }));
+}

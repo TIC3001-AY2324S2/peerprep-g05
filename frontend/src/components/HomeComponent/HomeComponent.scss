@@ -1,18 +1,292 @@
 .home-container {
-    text-align: center;
-    display: flex;
+  text-align: center;
+  display: flex;
+  font-family: 'Mulish', sans-serif;
 }
 
 .complexity-label {
-    position: absolute;
-    left: -3px;
+  position: absolute;
+  left: -4px;
+  margin-top: 10px;
 }
 
 .match-ellipse {
-    position: absolute;
-    top: 40%;
-    transform: translate(-50%, -50%);
+  position: absolute;
+  top: 40%;
+  transform: translate(-50%, -50%);
 }
+
 .Mui-selected {
-    color: white !important;
+  color: white !important;
+}
+
+.css-1633um2-MuiPaper-root {
+  font-family: 'Mulish', sans-serif !important;
+}
+
+.collaboration-session {
+  background-color: white;
+  height: 550px;
+  border-radius: 8px;
+  border: 1px solid #5541D7;
+}
+
+.collaboration-question {
+  height: 100%;
+}
+
+.collaboration-code-editor {
+  height: 100%;
+}
+
+.collaboration-inner {
+  display: flex;
+  height: 100%;
+}
+
+.home-section-1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 30px 0;
+}
+
+.home-section-1-difficulty {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 60%;
+  gap: 1%;
+}
+
+.css-nen11g-MuiStack-root {
+  flex-direction: row !important;
+  text-align: center;
+}
+
+.home-section-1-difficulty ListItemButton {
+  border: solid 1px;
+  justify-content: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.home-section-1-categories {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 20%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.MuiListItemText-root {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600 !important;
+  width: min-content;
+}
+
+.MuiTypography-root {
+  font-family: 'Mulish', sans-serif !important;
+}
+
+
+.css-10hburv-MuiTypography-root {
+  font-weight: 600 !important;
+}
+
+.home-session-1 {
+  background-color: white;
+  height: 550px;
+  border-radius: 8px;
+  border: 1px solid #5541D7;
+  font-family: 'Mulish', sans-serif !important;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  box-sizing: unset !important;
+}
+
+.matching-people {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 550px;
+  margin: 0;
+  border-right: 1px solid #5541D7;
+  width: 100%;
+}
+
+@media (max-width: 1199px) {
+
+  .matching-people {
+    border-right: none;
+  }
+  .history-section {
+    margin-top: 20px;
+    height: fit-content;
+    border: 1px solid #5541D7;
+    border-radius: 8px !important;
+  }
+  .history-section-inner {
+    height: fit-content;
+    font-size: x-small;
+  }
+}
+
+.purple-circle {
+  background-color: #DBD7F4;
+  border-radius: 100%;
+  flex-shrink: 0;
+  width: 213px;
+  height: 213px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.purple-circle p {
+  font-size: 24px;
+  font-weight: 700;
+  color: black;
+  padding: 15px;
+}
+
+.stroke-purple-circle {
+  border-radius: 100%;
+  flex-shrink: 0;
+  width: 240px;
+  height: 240px;
+  stroke: #5541D7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 5px solid #5541D7;
+  margin-top: 50px;
+}
+
+.not-start-match {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.home-button {
+  margin-top: 30px;
+  background-color: #5541D7;
+  color: white;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #5541D7;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.home-button-1 {
+  margin-top: 30px;
+  background-color: white;
+  color: #5541D7;
+  padding: 10px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid #5541D7;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.home-button-1:disabled {
+  background-color: #e0e0e0;
+  color: #a0a0a0;
+  cursor: not-allowed;
+  border: 1px solid #a0a0a0;
+}
+
+.start-matching {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.home-countdown {
+  font-size: 110px !important;
+  font-weight: bold !important;
+  color: #DBD7F4;
+}
+
+.start-matching-timeout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-matching-timeout p {
+  color: #92929D;
+}
+
+.start-matching-inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.start-matching-msg {
+  gap: 15px;
+  color: #92929D;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 52px;
+}
+
+.place-holder {
+  height: 52px;
+}
+
+/* -------------------------------------------------------------------------- */
+
+.history-section {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 30px;
+  height: 549px;
+  border-radius: 0 8px 8px 0;
+  width: 100%;
+  //border: 1px solid #5541D7;
+}
+
+.history-table {
+  overflow-wrap: anywhere;
+  width: 100%;
+}
+.history-section-inner {
+  font-size: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
 }

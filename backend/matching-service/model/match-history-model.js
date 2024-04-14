@@ -4,9 +4,11 @@ var Schema = mongoose.Schema;
 
 let MatchHistoryModelSchema = new Schema({
     _id: mongoose.Schema.Types.ObjectId,
-    id: {
-        type: Number,
+    hash: {
+        type: String,
         allowNull: false,
+        primaryKey: true,
+        required: true,
     },
     email: { // user's email
         type: String,
@@ -29,34 +31,6 @@ let MatchHistoryModelSchema = new Schema({
         type: String,
         required: true,
     },
-});
-
-const CounterSchema = Schema({
-    _id: { type: String, required: true },
-    email: { type: String, required: true },
-    seq: { type: Number, default: 0 }
-});
-
-CounterSchema.pre('save', function(next) {
-    this._id = `${this.email}-${this.seq}`;
-    next();
-});
-
-const counter = mongoose.model('counter', CounterSchema);
-
-MatchHistoryModelSchema.pre('save', async function(next) {
-    const doc = this;
-    try {
-        const counterDoc = await counter.findOneAndUpdate(
-            { email: doc.email },
-            { $inc: { seq: 1 } },
-            { upsert: true, new: true }
-        );
-        doc.id = counterDoc.seq;
-        next();
-    } catch (error) {
-        next(error);
-    }
 });
 
 export default mongoose.model("MatchHistoryModel", MatchHistoryModelSchema);

@@ -12,6 +12,7 @@ import {
     updateQuestion
   } from "./repository.js";
 
+console.log("repository.js");
 export async function ormFindAllQuestion() {
   try {
     const result = await findAllQuestion();
@@ -112,7 +113,7 @@ export async function ormCreateQuestion(title, description, categories, complexi
     await createQuestion({ title, description, categories, complexity, testCase });
     return true;
   } catch (err) {
-    console.log("ERROR: Could create question in repository!");
+    console.log("ERROR: Could not create question in repository!");
     return { err };
   }
 }

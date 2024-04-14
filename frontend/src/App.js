@@ -13,6 +13,13 @@ import { verifyToken } from './apis/user-service-api';
 import { showErrorBar } from './constants/snack-bar';
 import EditQuestion from "./components/EditQuestion/EditQuestion";
 import AdminPage from "./pages/admin-dashboard";
+import CollabPage from './pages/collab-page';
+
+if (typeof setImmediate === 'undefined') {
+    window.setImmediate = function (fn) {
+      return setTimeout(fn, 0);
+    };
+}
 
 const App = (props) => {
     let navigate = useNavigate();
@@ -92,6 +99,11 @@ const App = (props) => {
                 path="/home"
                 exact
                 element={<HomePage {...mainProps} />}
+            />
+            <Route
+                path="/collab/:matchSessionHash"
+                exact
+                element={<CollabPage {...mainProps} />}
             />
             <Route
                 path="/admin-dashboard"

@@ -39,3 +39,11 @@ services:
       - ./backend/matching-service/routes:/app/routes
       - ./backend/matching-service/index.js:/app/index.js
       - ./backend/matching-service/server.js:/app/server.js
+
+  collaboration-service-app:
+    volumes:
+      - ./backend/collaboration-service/server.js:/app/server.js
+      - ./backend/collaboration-service/controller:/app/controller
+      - ./backend/collaboration-service/middleware:/app/middleware
+      - ./backend/collaboration-service/model:/app/model
+      - ./backend/collaboration-service/routes:/app/routes
