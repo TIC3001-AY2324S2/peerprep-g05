@@ -131,7 +131,7 @@ function HomeComponent(props) {
                                 console.log("MQTT Client disconnected. 2")
                             });
                         }
-                        setIsMatching(false);
+                        // don't set isMatching(false) until user click retry
                         cancelMatch(props.userInfo.username, props.userInfo.email, complexity, category).then((response) => {
                             console.log(new Date().toLocaleString() + ", cancel match:", response)
                             if (response.error) {
