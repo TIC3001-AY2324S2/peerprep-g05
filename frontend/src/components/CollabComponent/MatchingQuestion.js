@@ -16,8 +16,10 @@ export default function MatchingQuestion(props) {
             setTimeout(() => {
                 getSessionInfoByHash(props.matchSessionHash)
                     .then(resp => {
-                        console.log("get session info by hash", resp)
-                        setQid(resp.data.question.questionid);
+                        if (!resp.error) {
+                            console.log("get session info by hash", resp)
+                            setQid(resp.data.question.questionid);
+                        }
                     });
             }, 100);
         }
