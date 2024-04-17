@@ -184,7 +184,10 @@ export async function getAllUsers(req, res) {
   const response = await _findAllUsers();
 
   if (response === null) {
-    return res.status(404).json({ message: `No users exist!` });
+    return res.status(200).json({
+      message: `No users found!`,
+      users: [],
+    });
   } else if (response.err) {
     return res.status(400).json({ message: "Could not find users!" });
   } else {
