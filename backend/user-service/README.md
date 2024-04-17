@@ -24,13 +24,90 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 1. Open Command Line/Terminal and navigate into the `user-service` directory.
 
-2. Run the command: `npm install`. This will install all the necessary dependencies.
+2. Run the command: `npm ci`. This will install all the necessary dependencies.
 
-3. Run the command `npm start` to start the User Service.
+3. Run the command `npm run dev` to start the User Service.
 
 4. Using applications like Postman, you can interact with the User Service on port 3001. If you wish to change this, please update the `.env` file.
 
 ## User Service API Guide
+
+### Login
+
+- This endpoint allows a user to authenticate with an email and password and returns a JWT access token. The token is valid for 1 day and can be used subsequently to access protected resources. For example usage, refer to the [Authorization header section in the Get User endpoint](#auth-header).
+- HTTP Method: `POST`
+- Endpoint: http://localhost:3001/api/auth/login/
+- Body: Required: email (string), password (string)
+
+```json
+{
+  "email": "sample@gmail.com",
+  "password": "SecurePassword"
+}
+```
+
+- Responses:
+
+| Response Code               | Result                      |
+| --------------------------- | --------------------------- |
+| 200 (OK)                    | Login Successful            |
+| 400 (Bad Request)           | Missing Fields              |
+| 401 (Unauthorized)          | Incorrect Email or Password |
+| 500 (Internal Server Error) | Database or Server Error    |
+
+### Verify Token
+
+- This endpoint allows one to verify a JWT access token to authenticate and retrieve the user's data associated with the token.
+- HTTP Method: `GET`
+- Endpoint: http://localhost:3001/api/auth/verify/
+- Body: Not Required
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+- Responses:
+
+| Response Code               | Result                                                |
+| --------------------------- | ----------------------------------------------------- |
+| 200 (OK)                    | Token Verified and Authenticated User's Data Obtained |
+| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
+| 500 (Internal Server Error) | Database or Server Error                              |
+
+### Reset Password
+
+- This endpoint allows a user to reset their password. When a POST request is made to this endpoint with a valid email, the user's password is randomly generated and updated in the database, the new password is then sent to the user's email.
+- HTTP Method: `POST`
+- Endpoint http://localhost:3001/api/auth/reset
+- Body: Required: email (string)
+- Headers: Not Required
+
+```json
+{
+  "email": "sample@gmail.com",
+}
+```
+
+- Responses:
+
+| Response Code               | Result                      |
+| --------------------------- | --------------------------- |
+| 200 (OK)                    | Reset Successful            |
+| 400 (Bad Request)           | Missing Fields              |
+| 500 (Internal Server Error) | Database or Server Error    |
+
+### Check Admin status
+
+- This endpoint allows one to check if a user is an admin or not. It returns a boolean value indicating the admin status of the user.
+- HTTP Method: GET
+- Endpoint: http://localhost:3001/api/auth/is_admin
+- Body: Not Required
+- Headers: Required: Authorization (string) - JWT token
+
+- Responses:
+
+| Response Code               | Result                                                |
+| --------------------------- | ----------------------------------------------------- |
+| 200 (OK)                    | Admin verified                                        |
+| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
+| 500 (Internal Server Error) | Database or Server Error                              |
 
 ### Create User
 
@@ -38,7 +115,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `POST`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/register
 
 - Body: Required: username (string), email (string), password (string)
 
@@ -65,7 +142,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `GET`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/
 
 - Body: Required: email (string)
 
@@ -102,7 +179,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `GET`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/all
 
 - Body: Not Required
 
@@ -124,7 +201,6 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 | 400 (Bad Request)  | Database or Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 | 403 (Forbidden)    | Access Denied for Non-admin Users                |
-| 404 (Not Found)    | No Users Exist                                   |
 
 ### Delete User
 
@@ -132,7 +208,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `DELETE`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/
 
 - Body: Required: email (string)
 
@@ -169,7 +245,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `PATCH`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/
 
 - Body: Required: id (string), username (string), email (string), password (string)
 
@@ -210,7 +286,7 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 
 - HTTP Method: `PATCH`
 
-- Endpoint: http://localhost:3001/users/
+- Endpoint: http://localhost:3001/api/user/update-privilege
 
 - Body: Required: email (string), isAdmin (boolean)
 
@@ -241,42 +317,3 @@ Notice, you may see `<password>` in this connection string. We will be replacing
 | 403 (Forbidden)             | Access Denied for Non-admin Users                |
 | 404 (Not Found)             | No Such User Exists                              |
 | 500 (Internal Server Error) | Database or Server Error                         |
-
-### Login
-
-- This endpoint allows a user to authenticate with an email and password and returns a JWT access token. The token is valid for 1 day and can be used subsequently to access protected resources. For example usage, refer to the [Authorization header section in the Get User endpoint](#auth-header).
-- HTTP Method: `POST`
-- Endpoint: http://localhost:3001/auth/login/
-- Body: Required: email (string), password (string)
-
-```json
-{
-  "email": "sample@gmail.com",
-  "password": "SecurePassword"
-}
-```
-
-- Responses:
-
-| Response Code               | Result                      |
-| --------------------------- | --------------------------- |
-| 200 (OK)                    | Login Successful            |
-| 400 (Bad Request)           | Missing Fields              |
-| 401 (Unauthorized)          | Incorrect Email or Password |
-| 500 (Internal Server Error) | Database or Server Error    |
-
-### Verify Token
-
-- This endpoint allows one to verify a JWT access token to authenticate and retrieve the user's data associated with the token.
-- HTTP Method: `GET`
-- Endpoint: http://localhost:3001/auth/verify-token/
-- Body: Not Required
-- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
-
-- Responses:
-
-| Response Code               | Result                                                |
-| --------------------------- | ----------------------------------------------------- |
-| 200 (OK)                    | Token Verified and Authenticated User's Data Obtained |
-| 401 (Unauthorized)          | Missing/Invalid/Expired JWT                           |
-| 500 (Internal Server Error) | Database or Server Error                              |
