@@ -44,7 +44,7 @@
 
 | Response Code               | Result                                                   |
 | --------------------------- | -------------------------------------------------------- |
-| 200 (OK)               | Started Matching Successfully Successfully                              |               |
+| 200 (OK)               | Started Matching Successfully                              |               |
 | 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT         |
 | 403 (Forbidden)             | Access Denied for User Accessing Others' Data |                           |
 | 500 (Internal Server Error) | Internal Server Error
@@ -80,7 +80,7 @@
 
 | Response Code               | Result                                                   |
 | --------------------------- | -------------------------------------------------------- |
-| 200 (OK)               | Cancelled Matching Successfully Successfully                              |               |
+| 200 (OK)               | Cancelled Matching Successfully                              |               |
 | 401 (Unauthorized)          | Access Denied Due to Missing/Invalid/Expired JWT         |
 | 403 (Forbidden)             | Access Denied for User Accessing Others' Data |                           |
 | 500 (Internal Server Error) | Internal Server Error
@@ -91,7 +91,7 @@
 
 - HTTP Method: `GET`
 
-- Endpoint: http://localhost:3002/api/match/:email
+- Endpoint: http://localhost:3002/api/match/history/:email
 
 - Query: 
   - `email`: Email. Example: `aaa@gmail.com`
@@ -117,6 +117,38 @@
 | Response Code      | Result                                           |
 | ------------------ | ------------------------------------------------ |
 | 200 (OK)           | All Matching Data Obtained                       |
+| 500 (Internal Server Error)  | Internal Server Error                         |
+| 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
+| 403 (Forbidden)    | Access Denied for User Accessing Others' Data    |
+
+
+### Get All Match details
+
+- This endpoint is to retrieve the match details from the database.
+
+- HTTP Method: `GET`
+
+- Endpoint: http://localhost:3002/api/match/history/:email/hash/:hash
+
+- Query: 
+  - `email`: Email. Example: `aaa@gmail.com`
+  - 'hash' : Hash.
+
+- Body: Not Required
+
+- Headers: Required: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+
+  - Explanation: This endpoint requires the client to include a JWT (JSON Web Token) in the HTTP request header for authentication and authorization. This token is generated during the authentication process (i.e., login) and contains information about the user's identity and permissions. The server verifies this token to ensure that the client is authorized to access the matching data.
+
+  - Auth Rules:
+
+    - Users: Only registered users can match with other users. The server checks if the email in the request body matches the email of the user associated with the JWT token. If it matches, the server returns the user's own data.
+
+- Responses:
+
+| Response Code      | Result                                           |
+| ------------------ | ------------------------------------------------ |
+| 200 (OK)           | All Matching details Data Obtained                       |
 | 500 (Internal Server Error)  | Internal Server Error                         |
 | 401 (Unauthorized) | Access Denied Due to Missing/Invalid/Expired JWT |
 | 403 (Forbidden)    | Access Denied for User Accessing Others' Data    |
