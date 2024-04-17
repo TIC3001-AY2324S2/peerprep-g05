@@ -100,7 +100,7 @@
   - `page`: Page number. Example: `page=1`
   - `limit`: Max number of match history per page. Example: `limit=8`
 
-- Example: http://localhost:3003/api/match/aaa@gmail.com?page=1&limit=8
+- Example: http://localhost:3003/api/match/history/aaa@gmail.com?page=1&limit=8
 
 - Body: Not Required
 
