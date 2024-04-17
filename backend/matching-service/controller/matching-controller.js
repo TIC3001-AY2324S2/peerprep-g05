@@ -157,7 +157,7 @@ export async function getMatchForUser(req, res) {
     }
     return res.status(200).json({ message: `Match details found!`, matchDetails: response });
   } catch (error) {
-    console.log(`Error in getMatchesForUser: ${error}`);
-    return res.status(500).json({ message: "Error in getMatchesForUser" });
+    console.log(`Error in getMatchForUser: ${error}`);
+    return res.status(500).json({ message: "Error in getMatchForUser" });
   }
 }
